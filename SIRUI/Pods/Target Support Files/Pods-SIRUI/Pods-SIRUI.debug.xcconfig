@@ -1,0 +1,8 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/DGActivityIndicatorView" "${PODS_ROOT}/Headers/Public/DWBubbleMenuButton" "${PODS_ROOT}/Headers/Public/MGJRouter" "${PODS_ROOT}/Headers/Public/Masonry" "${PODS_ROOT}/Headers/Public/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/pop"
+LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/DGActivityIndicatorView" "${PODS_CONFIGURATION_BUILD_DIR}/DWBubbleMenuButton" "${PODS_CONFIGURATION_BUILD_DIR}/MGJRouter" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry" "${PODS_CONFIGURATION_BUILD_DIR}/ReactiveCocoa" "${PODS_CONFIGURATION_BUILD_DIR}/pop"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"DGActivityIndicatorView" -l"DWBubbleMenuButton" -l"MGJRouter" -l"Masonry" -l"ReactiveCocoa" -l"c++" -l"pop" -framework "Foundation" -framework "UIKit"
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
+PODS_ROOT = ${SRCROOT}/Pods

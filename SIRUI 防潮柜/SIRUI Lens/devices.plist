@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>NavigationBarHidden</key>
+		<false/>
+		<key>deviceName-T</key>
+		<string>HS70X</string>
+		<key>HowTo</key>
+		<string>DryBox</string>
+		<key>hasSubDevice</key>
+		<false/>
+		<key>autoDownload</key>
+		<false/>
+		<key>clientVersionRequire</key>
+		<string>1.0.0</string>
+		<key>deviceVersion</key>
+		<string>1.0.0</string>
+		<key>jsonFromWeb</key>
+		<false/>
+		<key>type</key>
+		<integer>0</integer>
+		<key>isNative</key>
+		<true/>
+		<key>deviceFolder</key>
+		<string>DeviceListViewController</string>
+		<key>imgURL</key>
+		<string>DryBox</string>
+		<key>enName</key>
+		<string>HS70X</string>
+		<key>deviceName</key>
+		<string>HS70X</string>
+	</dict>
+</array>
+</plist>

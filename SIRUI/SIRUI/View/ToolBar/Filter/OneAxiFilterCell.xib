@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="OneAxiFilterCell">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="filterimage0.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="00v-uS-hgh">
+                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7wy-Vd-ueM">
+                        <rect key="frame" x="0.0" y="79" width="100" height="21"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196078431372548" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="cem-re-41R"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_filterSub_select" translatesAutoresizingMaskIntoConstraints="NO" id="bwO-al-YDQ">
+                        <rect key="frame" x="75" y="5" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="PYp-Xy-uId"/>
+                            <constraint firstAttribute="width" secondItem="bwO-al-YDQ" secondAttribute="height" multiplier="1:1" id="d8q-DX-wj1"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="7wy-Vd-ueM" secondAttribute="trailing" id="7VG-h4-LDd"/>
+                <constraint firstItem="00v-uS-hgh" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="EAd-PW-YGl"/>
+                <constraint firstAttribute="trailing" secondItem="00v-uS-hgh" secondAttribute="trailing" id="Erc-gx-iFD"/>
+                <constraint firstAttribute="bottom" secondItem="7wy-Vd-ueM" secondAttribute="bottom" id="Nkx-GZ-1mG"/>
+                <constraint firstItem="7wy-Vd-ueM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="WmB-3B-kii"/>
+                <constraint firstItem="00v-uS-hgh" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Wvr-by-9m8"/>
+                <constraint firstItem="bwO-al-YDQ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="ZBt-u8-rBp"/>
+                <constraint firstAttribute="trailing" secondItem="bwO-al-YDQ" secondAttribute="trailing" constant="5" id="h1V-0A-viM"/>
+                <constraint firstAttribute="bottom" secondItem="00v-uS-hgh" secondAttribute="bottom" id="pVA-1L-vFw"/>
+            </constraints>
+            <connections>
+                <outlet property="cover" destination="00v-uS-hgh" id="etT-ba-uKM"/>
+                <outlet property="imgSelect" destination="bwO-al-YDQ" id="vFB-FK-NBh"/>
+                <outlet property="lbName" destination="7wy-Vd-ueM" id="CXw-HR-5y2"/>
+            </connections>
+            <point key="canvasLocation" x="137.59999999999999" y="153.82308845577214"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="filterimage0.jpg" width="150" height="150"/>
+        <image name="icon_filterSub_select" width="50" height="50"/>
+    </resources>
+</document>

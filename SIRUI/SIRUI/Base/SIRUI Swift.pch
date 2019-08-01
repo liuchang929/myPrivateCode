@@ -1,0 +1,250 @@
+//
+//  SIRUI.pch
+//  SIRUI
+//
+//  Created by 黄雅婷 on 2019/2/26.
+//  Copyright © 2019年 JennyT. All rights reserved.
+//
+
+#ifndef SIRUI_pch
+#define SIRUI_pch
+
+#ifdef __cplusplus
+
+#import <opencv2/opencv.hpp>
+#include "opencv2/stitching.hpp"
+
+#endif
+
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import "MBProgressHUD+JDragon.h"
+#import "MotionOrientation.h"
+#import "JEBluetoothManager.h"
+#import "JECameraManager.h"
+#import "POP.h"
+#endif
+
+
+/*
+ button.tag
+ 
+ _homeToolButton.tag = 123;
+ _filterToolButton.tag = 124;
+ _beautyToolButton.tag = 125;
+ _cameraSetToolButton.tag = 126;
+ _deviceSetToolButton.tag = 127;
+ 
+ _shootSwitchButton.tag = 222;
+ _subBottomButton.tag = 223;
+ _cameraButton.tag = 224;
+ _lensSwitchButton.tag = 225;
+ _albumButton.tag = 226;
+ 
+ _subPicSingle.tag = 233;
+ _subPicPano.tag = 234;
+ _subPicNL.tag = 235;
+ 
+ _subPicSingleNormal.tag = 243;
+ _subPicSingleDelay1s.tag = 244;
+ _subPicSingleDelay2s.tag = 245;
+ _subPicSingleDelay3s.tag = 246;
+ _subPicSingleDelay4s.tag = 247;
+ _subPicSingleDelay5s.tag = 248;
+ _subPicSingleDelay10s.tag = 249;
+ 
+ _subPicPano90d.tag = 253;
+ _subPicPano180d.tag = 254;
+ _subPicPano360d.tag = 255;
+ _subPicPano3x3.tag = 256;
+ 
+ _subPicNLSquare.tag = 263;
+ _subPicNLRectangle.tag = 264;
+ 
+ _subVideoNormal.tag = 273;
+ _subVideoMovingZoom.tag = 274;
+ _subVideoSlowMotion.tag = 275;
+ _subVideoLocusTimeLapse.tag = 276;
+ _subVideoTimeLapse.tag = 277;
+ 
+ _faceTrackBtn.tag = 283;
+ _thingTrackBtn.tag = 284;
+ _bluetoothSign.tag = 285;
+ 
+ swi.充电 = 293;
+ swi.俯仰 = 294;
+ 
+ */
+
+/*
+ *  屏幕尺寸
+ */
+#define HEIGHT UIScreen.mainScreen.bounds.size.height
+#define WIDTH  UIScreen.mainScreen.bounds.size.width
+
+/*
+ *  适配X系列以上机型，X的height为812
+ */
+#define SAFE_AREA_TOP_HEIGHT (HEIGHT > 811.0 ? 88 : 64)
+#define ITS_X_SERIES (HEIGHT > 811.0 ? YES : NO)
+
+/*
+ *  APP信息
+ */
+#define APP_VERSION @"1.0.1 (beta)"
+
+/*
+ *  设备信息
+ */
+#define DEVICE_NAME_ARRAY           @[@"SiRui Swift M1", @"SiRui Swift P1"]   //设备 名字 列表
+/* SRES02, SiRui Swift M1 手机版  SRES05, SiRui Swift P1 微单版  */
+#define DEVICE_PHONE_NAME_ARRAY     @[@"SiRui Swift M1"]                        //手机版
+#define DEVICE_CAMERA_NAME_ARRAY    @[@"SiRui Swift P1"]                        //微单版
+#define DEVICE_GIF_ARRAY            @[@"gif_device_xp3", @"gif_device_camera"]  //设备 gif 列表
+#define M1_DEVICE                   NSLocalizedString(@"SIRUI Swift M1 3 Axis Stabilizer", nil)
+#define P1_DEVICE                   NSLocalizedString(@"SIRUI Swift P1 3 Axis Stabilizer", nil)
+
+/*
+ *  自定义相册名称 系统 && 沙盒
+ */
+#define kImageAlbumName  NSLocalizedString(@"SIRUI Image",nil)
+#define kVideoAlbumName  NSLocalizedString(@"SIRUI Video",nil)
+#define kDVideoAlbumName NSLocalizedString(@"SIRUI DelayVideo",nil)
+
+#define sOriginalPhotoSandbox   @"OriginalPhoto"
+#define sThumbnailPhotoSandbox  @"ThumbnailPhoto"
+#define sLapsePointSandbox      @"LapsePoint"
+#define sVideoSandbox           @"Video"
+#define sVideoPreviewSandbox    @"VideoPreview"
+
+/*
+ *  系统统一颜色定义
+ */
+#define MAIN_BACKGROUND_COLOR   [UIColor blackColor]
+#define MAIN_TEXT_COLOR         [UIColor whiteColor]
+#define MAIN_FACE_COLOR         [UIColor greenColor]
+#define MAIN_BLUE_COLOR         [UIColor colorWithRed:0 green:0.5 blue:1 alpha:1]           //浅蓝色
+#define MAIN_TABBAR_COLOR       [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1]
+
+/*
+ *  本地保存相关
+ */
+//上一次连接过的设备
+#define USER_SET_SaveLastDevice_String(UUID) [[NSUserDefaults standardUserDefaults] setObject:UUID forKey:@"SaveLastDevice"]
+#define USER_GET_SaveLastDevice_String [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveLastDevice"]
+//辅助线
+#define USER_SET_SaveAuxLines_Integer(num) [[NSUserDefaults standardUserDefaults] setInteger:num forKey:@"SaveAuxLines"]
+#define USER_GET_SaveAuxLines_Integer [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveAuxLines"]
+//闪光灯
+#define USER_SET_SaveFlashMode_Integer(num) [[NSUserDefaults standardUserDefaults] setInteger:num forKey:@"SaveFlashMode"]
+#define USER_GET_SaveFlashMode_Integer [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveFlashMode"]
+//视频分辨率
+#define USER_SET_SaveVideoResolution_Integer(num) [[NSUserDefaults standardUserDefaults] setInteger:num forKey:@"SaveVideoResolution"]
+#define USER_GET_SaveVideoResolution_Integer [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveVideoResolution"]
+//自定义功能
+#define USER_SET_SaveFunctionMode_Integer(num) [[NSUserDefaults standardUserDefaults] setInteger:num forKey:@"SaveFunctionMode"]
+#define USER_GET_SaveFunctionMode_Integer [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveFunctionMode"]
+//延时 时间比例 设置 —— 用于自定义功能快速启动
+#define USER_SET_SaveTimelapseProportion_Integer(num) [[NSUserDefaults standardUserDefaults] setInteger:num forKey:@"SaveTimelapseProportion"]
+#define USER_GET_SaveTimelapseProportion_Interger [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveTimelapseProportion"]
+//APP新版本信息和现版本信息、、固件版本信息、服务器固件新版本信息、硬件固件版本信息和蓝牙固件版本信息
+#define USER_SET_SaveVersionAPP_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionAPP"]
+#define USER_SET_SaveVersionNewAPP_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionNewAPP"]
+#define USER_SET_SaveVersionFirmware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionFirmware"]
+#define USER_SET_SaveVersionNewFirmware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionNewFirmware"]
+#define USER_SET_SaveVersionHardware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionHardware"]
+#define USER_SET_SaveVersionBluetooth_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionBluetooth"]
+#define USER_GET_SaveVersionAPP_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionAPP"]
+#define USER_GET_SaveVersionNewAPP_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionNewAPP"]
+#define USER_GET_SaveVersionFirmware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionFirmware"]
+#define USER_GET_SaveVersionNewFirmware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionNewFirmware"]
+#define USER_GET_SaveVersionHardware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionHardware"]
+#define USER_GET_SaveVersionBluetooth_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionBluetooth"]
+//充电开关机状态
+#define USER_SET_SaveChargingSwitchState_BOOL(bool) [[NSUserDefaults standardUserDefaults] setBool:bool forKey:@"SaveChargingSwitchState"]
+#define USER_GET_SaveChargingSwitchState_BOOL [[NSUserDefaults standardUserDefaults] boolForKey:@"SaveChargingSwitchState"]
+//俯仰轴推动反向
+#define USER_SET_SavePitchOrientationOpposite_BOOL(bool) [[NSUserDefaults standardUserDefaults] setBool:bool forKey:@"SavePitchOrientationOpposite"]
+#define USER_GET_SavePitchOrientationOpposite_BOOL [[NSUserDefaults standardUserDefaults] boolForKey:@"SavePitchOrientationOpposite"]
+//航向轴推动速度
+#define USER_SET_SaveAxisPushSpeed_Interger(num) [[NSUserDefaults standardUserDefaults] setInteger:(num) forKey:@"SaveAxisPushSpeed"]
+#define USER_GET_SaveAxisPushSpeed_Interger [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveAxisPushSpeed"]
+//俯仰轴推动速度
+#define USER_SET_SavePitchPushSpeed_Interger(num) [[NSUserDefaults standardUserDefaults] setInteger:(num) forKey:@"SavePitchPushSpeed"]
+#define USER_GET_SavePitchPushSpeed_Interger [[NSUserDefaults standardUserDefaults] integerForKey:@"SavePitchPushSpeed"]
+
+/*
+ *  自定义系统HUD文字提示
+ */
+#define HUD_SHOW_DELAY_TIME 0.5
+#define SHOW_HUD_DELAY(showText, showInView, delay)         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:showInView animated:YES];hud.mode = MBProgressHUDModeText;hud.transform = [MotionOrientation sharedInstance].affineTransform;hud.labelText = showText;[hud hide:YES afterDelay:delay];
+
+/*
+ *  跟踪分辨率
+ */
+//#define Track_Quality_Change @"Track_Quality_Change"
+
+
+
+//Sight 
+#define ImageNamed(_pointer) [UIImage imageNamed:_pointer]
+#define KImageName(name) [UIImage imageNamed:(name)]
+//#define W(x) x.size.width
+//#define H(x) x.size.height
+#define TOP_OF(a, h) a.frame.origin.y-h
+#define BOTTOM_OF(b) H(b.frame)+b.frame.origin.y
+#define RIGHT_OF(w)  W(w.frame)+w.frame.origin.x
+#define LEFT_OF(w)  w.frame.origin.x
+#define themeColor [UIColor colorWithRed:0 green:177.0/255.0 blue:1.0 alpha:1.0]
+#define kTitleColor [UIColor colorWithRed:0 green:177.0/255.0 blue:1.0 alpha:1.0]
+#define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
+#define kNavgationHeight 64.0
+#define FilterScrollHight 72.0f // 滤镜scrollView的高度
+#define FilterImageHight 58.0f // 滤镜图片高度
+#define THREE_AXI_VIDEO_RESOLUTION @"THREE_AXI_VIDEO_RESOLUTION"
+#define CUSTOM_BTN_MODE @"SETTING_CUSTOM_BTN_MODE"
+#define PANO_PROGRESS @"PANO_PROGRESS"
+#define kServiceUUID     @"FFF0" //设备服务的UUID
+#define kWriteUUID       @"FFF1" //写数据
+#define kReadUUID1       @"FFF2" //读数据
+#define kReadUUID2       @"FFF3" //读数据
+#define kScreenWidth  [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+#define kScreenBounds [UIScreen mainScreen].bounds
+#define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
+#define SCREEN_WIDTH  [[UIScreen mainScreen] bounds].size.width
+
+static inline void deleteFilesAt(NSString *directory, NSString *suffixName)
+{
+    NSError *err = nil;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSDirectoryEnumerator *dirEnum = [fileManager enumeratorAtPath:directory];
+    
+    NSString *toDelFile;
+    
+    while (toDelFile = [dirEnum nextObject])
+    {
+        NSComparisonResult result = [[toDelFile pathExtension] compare:suffixName options:NSCaseInsensitiveSearch|NSNumericSearch];
+        
+        if (result == NSOrderedSame)
+        {
+            NSLog(@"removing file：%@", toDelFile);
+            
+            if(![fileManager removeItemAtPath:[directory stringByAppendingPathComponent:toDelFile] error:&err])
+            {
+                NSLog(@"Error: %@", [err localizedDescription]);
+            }
+        }
+    }
+}
+
+static inline void deleteTempDirectory()
+{
+    NSString *dir = NSTemporaryDirectory();
+    deleteFilesAt(dir, @"mp4");
+    deleteFilesAt(dir, @"mov");
+}
+#endif /* SIRUI_pch */

@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  SIRUI
+
+  Created by 黄雅婷 on 2019/3/28.
+  Copyright © 2019 JennyT. All rights reserved.
+*/
+
+//CFBundleDisplayName = "SIRUI Swift";
+"NSBluetoothPeripheralUsageDescription" = "请求访问您的蓝牙用于连接设备";
+"NSCameraUsageDescription" = "请求访问您的摄像头用于拍摄";
+"NSMicrophoneUsageDescription" = "请求访问您的麦克风用于给视频添加声音";
+"NSPhotoLibraryUsageDescription" = "请求访问您的相册用于将图片和视频保存到本地";

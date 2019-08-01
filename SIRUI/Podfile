@@ -1,0 +1,10 @@
+platform :ios, '9.0'
+target 'SIRUI' do
+
+pod 'Masonry'
+pod 'pop'
+pod 'ReactiveCocoa', '~> 2.4.6'
+pod 'DWBubbleMenuButton'
+pod 'DGActivityIndicatorView'
+pod 'MGJRouter'
+end

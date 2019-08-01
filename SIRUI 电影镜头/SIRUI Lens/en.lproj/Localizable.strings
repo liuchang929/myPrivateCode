@@ -1,0 +1,427 @@
+/*
+ Localizable.strings
+ SiRuiIOT
+ 
+ Created by a on 16/9/19.
+ 
+ */
+
+"电影镜头" = "Lens";
+"正在连接设备" = "Connecting Device";
+"选择设备" = "Chosing Device";
+"三角形" = "triangle";
+"圆形"   = "circle";
+"直线"   = "line";
+"矩形"   = "rectangle";
+"半径"   = "radius";
+"高"   = "height";
+"宽"   = "width";
+"长"   = "length";
+"毫米"   = "mm";
+"厘米"   = "cm";
+"米"     = "m";
+"速度" = "speed";
+"正在重置蓝牙设备" = "bluetooth resetting";
+"蓝牙未打开"      = "bluetooth powered off";
+"蓝牙异常"        = "bluetooth state unknown";
+"你的设备不支持蓝牙"= "bluetooth unsupport";
+"蓝牙未授权" = "bluetooth unauthorized";
+"连接超时" = "connect timeout";
+"对焦" = "focus";
+"曝光" = "EXP";
+"白平衡" = "WB";
+"防抖" = "OIS";
+"闪光灯" = "Torch";
+"自动" = "Auto";
+"手动" = "Manual";
+"防潮柜" = "My Device";
+"资讯" = "News";
+"商店" = "Mall";
+"进入拍摄" = "Start Recording";
+"秒" = "second";
+"高" = "high";
+"中" = "medium";
+"低" = "low";
+"如何使用？" = "How to?";
+"分享应用" = "Share This Application";
+"我的资料" = "Personal Information";
+"我的作品" = "My Stories";
+"售后服务" = "Sale support";
+"全景结束" = "Panorama Compose Finished";
+"请先连接云台" = "Smart Holder is disconnect";
+"请将手机保持竖直放置" = "please hold your device vertically";
+"保存视频失败" = "save video fail";
+"保存视频成功" = "save video success";
+"图片合成中\n请稍后...." = "Composing";
+"人脸跟踪模式开启" = "Face Tracking on";
+"多人跟踪模式关闭" = "Multi Face Tracking on";
+"光流开启" = "Light Flow Tracking on";
+"光流关闭" = "Light Flow Tracking off";
+"全景结束!!!\n请不要移动手机" = "Compose Finished";
+"正在合成照片" = "Composing";
+"图片合成失败\n请让手机拍照距离物体大于一米" = "Composed Fail\nPlease put your camera far from the target";
+"图片合成成功" = "Compose Finished";
+"分享" = "Share";
+"请安装微信客户端" = "Please install WeChat";
+"这是用智能云台拍摄的" = "It's taking by SiRui Smart Holder";
+"上传失败，请检查网络设置" = "Upload failed";
+"我用思锐智能云台拍了一张神奇的照片" = "It's taking by SiRui Smart Holder";
+"点开用你的手机查看吧" = "";
+"这是用智能云台拍摄的!" = "It's taking by SiRui Smart Holder!";
+"其他分享" = "Other";
+"发现应用更新" = "Application Updates";
+"BP360-01" = "BP360-01";
+
+"请看前置" = "look at the front";
+"拍摄已完成,正在合成中···" = "Shot done, synthesizing...";
+"请勿移动" = "Please do not move";
+"视频已保存" = "Video saved";
+"正在上传..." = "Uploading...";
+"上传失败" = "Upload failed";
+"上传成功" = "Upload completed";
+"正在合成视频，请等待..." = "Video is being created, please wait……";
+"导出成功" = " Export completed";
+"导出失败" = "Export fail";
+
+"验证设备" = "Device verification";
+"验证设备中…" = "Device verifying…";
+"验证设备已达到上限" = "The devices connected have exceeded the maximum limit";
+"验证设备通过" = "Device verified";
+"将二维码放入框内,即可自动扫描" = "Put the qr code into the box and automatically scan it";
+
+"该用户未激活认证，是否重新发送邮件激活" = "The user hasn’t activated, resend the e-mail for activation";
+"已发送" = "Send success";
+
+//Account
+"Account Success" = "Account Success";//code == 0
+"Verification code error" = "Verification code error";//R005
+"User does not exist" = "User does not exist";
+"The mailbox is registered" = "The mailbox is registered";
+"Other errors" = "Other errors";
+"Activation successful" = "Activation successful";
+"The user is not logged in" = "The user is not logged in";
+"wrong user name or password" = "wrong user name or password";
+"The user already exists" = "The user already exists";
+"Unauthenticated users" = "Unauthenticated users";
+"Verification code timed out" = "Verification code timed out";
+"Required data is empty" = "Required data is empty";
+"Foreign key data does not exist" = "Foreign key data does not exist";
+"The input password is inconsistent" = "The input password is inconsistent";
+"Verification code does not allow retransmission in a short time" = "Verification code does not allow retransmission in a short time";
+
+
+"Please fill in the complete information" = "Please fill in the complete information";
+"please enter a valid email address" = "please enter a valid email address";
+"Please fill in the email address" = "Please fill in the email address";
+"Tips" = "Tips";
+"Send successful, please check the message immediately and change the password" = "Send successful, please check the message immediately and change the password";
+
+
+
+
+"Server exception" = "Server exception";
+"Request timed out" = "Request timed out";
+"Please enter a valid password" = "Please enter a valid password";
+"Before and after the password is inconsistent" = "Before and after the password is inconsistent";
+"Registered successfully! Please check the mailbox and activate the account" = "Registered successfully! Please check the mailbox and activate the account";
+
+
+
+
+
+
+
+
+//new UserManagement
+"Please enter a valid email address or mobile number" = "Please enter a valid email address or mobile number";
+"Please select your location" = "Please select your location";
+"Failed to upload pictures" = "Failed to upload pictures";
+"Successfully registered!" = "Successfully registered!";
+"Are you sure you are logged out?" = "Are you sure you are logged out?";
+"Help Center" = "Help Center";
+"Give us a score" = "Give us a score";
+"edit info" = "edit info";
+"about us" = "about us";
+"Feedback" = "Feedback";
+"clear cache" = "clear cache";
+"sign out" = "sign out";
+"Successfully modified!" = "Successfully modified!";
+"Re-login" = "Re-login";
+"Clear success!" = "Clear success!";
+"The current cache is:" = "The current cache is:";
+"Do you clear the current cache?" = "Do you clear the current cache?";
+"Successfully sent!" = "Successfully sent!";
+"Network connection failed, please try again" = "Network connection failed";
+"Loading failed, please try again" = "Loading failed, please try again";
+"Please select the image source" = "Please select the image source";
+"camera" = "camera";
+"Album" = "Album";
+"Personal information" = "Personal information";
+"Turn off the Flash Light" = "Turn off the Flash Light";
+"Turn on the Flash Light" = "Turn on the Flash Light";
+"Put the QR Code/Barcode inside the frame for scanning" = "Put the QR Code/Barcode inside the frame for scanning";
+"productScanTips" = "Enter the activation code by manual\n please click->";
+
+
+
+
+
+
+
+
+
+
+
+
+
+//SR-Cabinet
+//view
+"Alert! The Moisture Proof ark is being vibrated"="Alert! The Moisture Proof ark is being vibrated";
+"Alert! The Moisture Proof ark is being moved"="Alert! The Moisture Proof ark is being moved";
+"Alert! The password for the Moisture Proof ark is entered incorrectly"="Alert! The password for the Moisture Proof ark is entered incorrectly";
+"issue an alert"="issue an alert";
+"Details"="Details";
+"ConnectingDevice"="Connect equipment";
+"Configure the device's network"="Connect the equipment to WIFI";
+"Directly scan to bind the device"="Directly scan to bind the device";
+"WifiAccount"="Set Wifi account";
+"WifiPassword"="Please enter Wifi password";
+"Configure"="Done";
+"HumiditySettingRange"="Set the range of humidity";
+"SaveSettings"="save";
+"ModifyName"="Modify the device name";
+"Please enter the name of the cabinet"="Please set your cabinet name.";
+"The last step"="The last step";
+"Name your moisture proof ark"="Name your moisture proof ark";
+"Wi-fi account"="Wi-fi account";
+"Confirm"="Confirm";
+"Cancel"="Cancel";
+"Refresh to get the device name"="Please refresh the device name";
+"OpenCabinet"="Open cabinet";
+"SetHumidity"="Set humidity";
+"Locked"="Locked";
+"Unlock"="Unlock";
+"Unknown"="Unknown";
+"Temparature"="Temperature";
+"Humidity"="Humidity";
+"OpeningLog"="open log";
+"AlarmLog"="Alarm log";
+"ClosingLog"="close log";
+"EmptyList"="No device available, please click “+” on the top right corner to add the device.";
+"UnknownLockState"="(Unable to get device lock status)";
+"UnLockState"="(The device is not locked)";
+"LockState"="(The device has been locked)";
+"The device has not yet configured the network, first configured the device's network"="The device has not yet configured the network, first configured the device's network";
+"The moment of closing the door"="The moment of closing the door";
+"Scan"="Scan";
+"QRCodePrompt"="Place the QR code / barcode in the box and scan it automatically";
+"Turn on the flash"="Turn on the flash";
+"Turn off the flash"="Turn off the flash";
+"Get device ID error"="Get device ID error";
+"online"="Online";
+"offline"="Offline";
+"Unknown state"="Unknown state";
+"SIRUI-Cabinet"="SIRUI Cabinet";
+"Recent log"="Recent log";
+"Custom"="Custom";
+"Click to select the query time period"="Click to select the query time period";
+"DeviceIMEI"="Device IMEI";
+"Please select date"="Please select date";
+"Click to select the start time"="Click to select the start time";
+"Click to select the end time"="Click to select the end time";
+"Done"="Done";
+"Sure"="sure";
+"Starting time"="Starting time";
+"End time"="End time";
+
+
+
+//alert or hint
+"TimeCue"="The end time must be greater than the start time";
+"Iknow"="Understood";
+"No equipment available"="No equipment available";
+"my SR-Cabinet"="my SIRUI Cabinet";
+"Warning message"="Warning message";
+"Failed to get the name"="Failed to get the name";
+"Please enter a name"="Please enter a name";
+"Modified name successfully!"="Modified name successfully!";
+"Wait for timeout"="Wait for timeout";
+"No records"="No records";
+"Unable to push the alarm message"="Unable to push the alarm message";
+"Please go to system Settings to open the app to push"="Please go to system Settings - Notifications -SiRui SMARTER - Allow Notifications";
+"The device is offline, please check the equipment status"="The device is offline";
+"Please unlock the device"="Please unlock the device";
+"Please enter the moistureproof ark names"="Please enter the moistureproof ark names";
+"password can not be blank"="password can not be blank";
+"Wi-fi is not available"="Wi-fi is not available";
+"Please configure the wi-fi network"="Please configure the wi-fi network";
+"Successfully open the door"="Successfully open the door";
+"The request timeout"="The request timeout";
+"No records"="No records";
+"Access time error"="Access time error";
+"The total number of records"="The total number of records";
+"The total number of records: 0"="The total number of records: 0";
+"There is no record"="There is no record";
+"Error password alarm"="Alarm for wrong passwords";
+"The device is moved by the alarm"="Alarm for moving";
+"Vibration alarm"="Vibration alarm";
+"The alarm time of the device"="The alarm time of the device";
+"The moment to open the door"="The moment to open the door";
+"prompt"="Reminder";
+"Please go to - > [privacy Settings - - camera - iotplatform] open access switch"="Please go to - > [privacy Settings - - camera - SiRui Smarter] open access switch";
+"warning"="warning";
+"Did not detect your camera, please test it on a real machine"="Did not detect your camera, please test it on a real machine";
+"The album can not be accessed for system reasons"="The album can not be accessed for system reasons";
+//"Waiting for the feedback device timeout"="Wait for a timeout";
+"No equipment"="No equipment";
+"The data length is out of range"="The data length is out of range";
+"The device is not connected"="The device is not connected";
+"Please confirm the current device status before adding the device"="Please confirm the current device status before adding the device";
+"When configuring the network of the device, press the 'Password reset / wifi reset' button for the humidity cabinet for more than 5 seconds and wait for 'bi'"="Please press and hold the 'Password Reset / WIFI Reset' button on the cabinet for over 5 seconds until it beeps.";
+
+
+"The device ID does not exist"="The device ID does not exist";
+"Server exception"="Server exception";
+"Can not operate off-line equipment"="Can not operate off-line equipment";
+"Please enter the time"="Please enter the time";
+"This time period is not recorded"="This time period is not recorded";
+//"Failed to obtain humidity Control Cabinet  data, please try again later"="Failed to obtain humidity Control Cabinet  data, please try again later";
+//"Equipment has been offline"="Equipment has been offline";
+"Being loaded.."="Being loaded..";
+"NetworkFailInfo"="The network request failed, please check your network settings";
+"AbnormalNetwork"=" Abnormal network, please check.";
+//"OfflineInfo"="The current device is offline";
+"EnterPassword"="Please enter your password";
+"EnterValidPassword"="Please enter a password from 6 to 12 digits";
+"EnterSafePassword"="Please enter the cabinet password";
+"PasswordLengthInfo"="Password length can not exceed 12 digits";
+"ThreeInputError"="Enter the password three times incorrectly. Please enter it manually";
+"Loading..."="Loading...";
+"The connection is canceled"="The connection is canceled";
+"Successfully updated!"="Successfully updated!";
+
+
+
+
+
+
+
+//-----------返回编码------------
+"Success"="Success";
+"Fail"="Fail";
+/*特指对设备的操作命令反馈回来的消息*/
+"DeviceSuccess"="Successful operation!";
+"DeviceFail"="operation failed";
+
+"Data error"="Data error";
+"Device not connected"="Device not connected";
+"UnknownReturnEncode"="Unknown return encode";
+"Verification code is missing"="Verification code is missing";
+"Time zone is missing"="Time zone is missing";
+"Device number is missing"="Device number is missing";
+"Password is missing"="Password is missing";
+"Time stamp is missing"="Time stamp is missing";
+"Humidity is missing"="Humidity is missing";
+"Page is missing"="Page is missing";
+"Lack of opening and closing requests"="Lack of opening and closing requests";
+"wrong format"="wrong format";
+"Parameter error or missing"="Parameter error or missing";
+"User name error or password error"="User name error or password error";
+
+
+
+
+
+//后续添加...
+"The cabinet is open and can not be locked"="The cabinet is open and can not be locked";
+"Connection network failed"="Connection network failed";
+"Please reconnect to the network"="Please reconnect to the network";
+"You receive an alert from the SR-Cabinet"="You receive an alert from the SR-Cabinet";
+"The third party push service can not register the notification, please start the app later try to register the notification push"="The third party push service can not register the notification, please start the app later try to register the notification push";
+"name"="name";
+"name"="name";
+"name"="name";
+
+
+
+///新增功能1.0(增加切图，九宫格)
+"Save to album"="Save to album";
+"Save failed"="Save failed";
+"Saved successfully"="Saved successfully";
+"Can not access album"="Can not access album";
+"Please go to the settings to find the app and open the permission to access the photo"="Please go to the settings to find the app and open the permission to access the photo";
+
+
+//360 pano
+"全景" = "Panorama";
+"全鱼眼" = "Full FE";
+"鱼眼" = "FE";
+
+//HC
+"调整曝光并开始全景(%d)" = "Exposure adjusting and start(%d)";
+
+"Origin" = "Origin";
+"Toaster" = "Toaster";
+"Amaro" = "Amaro";
+"LordKelvin" = "LordKelvin";
+"Nashville" = "Nashville";
+"Walden" = "Walden";
+"XproII" = "XproII";
+"Hefe" = "Hefe";
+"Brannan" = "Brannan";
+"Sierra" = "Sierra";
+"Valencia" = "Valencia";
+"Earlybird" = "Earlybird";
+"1977" = "1977";
+"Inkwell" = "Inkwell";
+"Lomofi" = "Lomofi";
+"Hudson" = "Hudson";
+"Sutro" = "Sutro";
+"Rise" = "Rise";
+"Beauty" = "Beauty";
+"save video success" = "save video success";
+"save video fail" = "save video fail";
+
+"connected"="connected";
+
+"please connect device first" = "please connect device first";
+
+"save origin image?" = "save origin image?";
+"How to" = "How to";
+"please view tutorials in the setting" = "please view tutorials in the setting";
+
+"正在保存照片" = "saving images";
+"Pano Error" = "Pano capture error, please keep your device horizontally";
+
+"已扫描的设备"="scaned devices";
+"正在扫描设备"="scanning devices";
+
+"上传失败" = "uplaod failed";
+"上传成功" = "upload success";
+"正在上传..." = "uploading...";
+
+"正常" = "Normal";
+"延时摄影" = "TimeLapse";
+"慢动作" = "Slo-Mo";
+
+"全景" = "Panorama";
+"单拍" = "Normal";
+
+"跟踪区域太小" = "Tracking area too small";
+"跟踪区域太大" = "Tracking area too large";
+
+"请打开蓝牙" = "Please turn on bluetooth";
+
+"照片质量" = "Photo quality";
+"录像质量" = "Video quality";
+"定时提示音" = "Timing prompt tone";
+"美颜等级" = "Beauty level";
+"拼接质量" = "Stitching quality";
+
+"高" = "high";
+"中" = "middle";
+"低" = "low";
+"通用" = "general";
+"非思锐二维码" = "Not smart qr code";
+"取消" = "Cancel";
+"设置" = "setting";

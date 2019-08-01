@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C68" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BindViewController">
+            <connections>
+                <outlet property="backgoundView" destination="PoE-ff-Bdk" id="TiD-I0-zJn"/>
+                <outlet property="configueButton" destination="IMA-Kz-GlM" id="aIX-9a-EbA"/>
+                <outlet property="scanButton" destination="JY5-sB-2BU" id="wbc-NA-Zii"/>
+                <outlet property="subtitleLabel" destination="3a9-JJ-xPu" id="y1V-oi-JAa"/>
+                <outlet property="titleLabel" destination="zht-dG-mQc" id="jhg-u0-MSK"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PoE-ff-Bdk">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="绑定设备前请确定当前的设备状态" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zht-dG-mQc">
+                    <rect key="frame" x="0.0" y="70" width="375" height="55"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="55" id="ovd-EL-At2"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IMA-Kz-GlM">
+                    <rect key="frame" x="22" y="550" width="331" height="45"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="kYK-2C-liU"/>
+                    </constraints>
+                    <state key="normal" title="首次使用配置设备上网">
+                        <color key="titleColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="ConfigureInternetAction:" destination="-1" eventType="touchUpInside" id="gLu-do-zPj"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JY5-sB-2BU">
+                    <rect key="frame" x="22" y="602" width="331" height="45"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="xK2-0X-nNf"/>
+                    </constraints>
+                    <state key="normal" title="设备已联网? 请直接扫描绑定设备">
+                        <color key="titleColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="ScanAction:" destination="-1" eventType="touchUpInside" id="Na0-fa-KXr"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请按下防潮柜的“密码重置/wifi重置”按钮超过5秒，等待“bi”一声" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3a9-JJ-xPu">
+                    <rect key="frame" x="29" y="140" width="346" height="110"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="110" id="Dix-aU-E8j"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="timer_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="E0l-FG-QR7">
+                    <rect key="frame" x="0.0" y="183" width="26" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="PoE-ff-Bdk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0rl-Qd-ciQ"/>
+                <constraint firstItem="PoE-ff-Bdk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="31c-5j-FYT"/>
+                <constraint firstItem="JY5-sB-2BU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="22" id="92g-j1-hp7"/>
+                <constraint firstItem="zht-dG-mQc" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="K4C-67-rnq"/>
+                <constraint firstAttribute="trailing" secondItem="IMA-Kz-GlM" secondAttribute="trailing" constant="22" id="LCJ-OE-OXc"/>
+                <constraint firstAttribute="bottom" secondItem="JY5-sB-2BU" secondAttribute="bottom" constant="20" id="QC8-ko-VE5"/>
+                <constraint firstAttribute="bottom" secondItem="PoE-ff-Bdk" secondAttribute="bottom" id="VyE-Jt-eAH"/>
+                <constraint firstAttribute="trailing" secondItem="PoE-ff-Bdk" secondAttribute="trailing" id="XEr-Cn-mng"/>
+                <constraint firstItem="IMA-Kz-GlM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="22" id="c1O-NW-Qhf"/>
+                <constraint firstItem="zht-dG-mQc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="70" id="cJi-Ba-FFL"/>
+                <constraint firstAttribute="trailing" secondItem="zht-dG-mQc" secondAttribute="trailing" id="d7x-K7-RId"/>
+                <constraint firstItem="3a9-JJ-xPu" firstAttribute="top" secondItem="zht-dG-mQc" secondAttribute="bottom" constant="15" id="iFs-xH-4dL"/>
+                <constraint firstAttribute="trailing" secondItem="JY5-sB-2BU" secondAttribute="trailing" constant="22" id="iQ5-7Y-IeJ"/>
+                <constraint firstItem="JY5-sB-2BU" firstAttribute="top" secondItem="IMA-Kz-GlM" secondAttribute="bottom" constant="7" id="m2S-Oz-d37"/>
+                <constraint firstAttribute="trailing" secondItem="3a9-JJ-xPu" secondAttribute="trailing" id="o5z-ZV-c8U"/>
+                <constraint firstItem="3a9-JJ-xPu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="29" id="qOm-hz-XuT"/>
+            </constraints>
+            <point key="canvasLocation" x="-227.5" y="-7.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="timer_icon.png" width="85" height="85"/>
+    </resources>
+</document>

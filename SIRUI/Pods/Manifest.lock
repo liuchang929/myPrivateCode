@@ -1,0 +1,42 @@
+PODS:
+  - DGActivityIndicatorView (2.1.1)
+  - DWBubbleMenuButton (1.0.1)
+  - Masonry (1.1.0)
+  - MGJRouter (0.10.0)
+  - pop (1.0.12)
+  - ReactiveCocoa (2.4.7):
+    - ReactiveCocoa/UI (= 2.4.7)
+  - ReactiveCocoa/Core (2.4.7):
+    - ReactiveCocoa/no-arc
+  - ReactiveCocoa/no-arc (2.4.7)
+  - ReactiveCocoa/UI (2.4.7):
+    - ReactiveCocoa/Core
+
+DEPENDENCIES:
+  - DGActivityIndicatorView
+  - DWBubbleMenuButton
+  - Masonry
+  - MGJRouter
+  - pop
+  - ReactiveCocoa (~> 2.4.6)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - DGActivityIndicatorView
+    - DWBubbleMenuButton
+    - Masonry
+    - MGJRouter
+    - pop
+    - ReactiveCocoa
+
+SPEC CHECKSUMS:
+  DGActivityIndicatorView: ff2c76073d79692f724863c8dd38685866a03cb6
+  DWBubbleMenuButton: 4d9bdbb9d662bdf65c93ceb7fc65901871143d1e
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MGJRouter: 15d94541eb2cc81eff7d577337288feb7ae9575f
+  pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
+  ReactiveCocoa: eb38dee0a0e698f73a9b25e5c1faea2bb4c79240
+
+PODFILE CHECKSUM: 9fe70ecff31bf46513a67bc6f062db477affd045
+
+COCOAPODS: 1.6.1

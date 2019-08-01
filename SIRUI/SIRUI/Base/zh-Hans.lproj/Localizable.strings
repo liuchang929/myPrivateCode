@@ -1,0 +1,187 @@
+/*
+  Localizable.strings
+  SIRUI
+
+  Created by 黄雅婷 on 2019/3/28.
+  Copyright © 2019 JennyT. All rights reserved.
+*/
+
+"Please close to the device" = "请靠近设备";
+"Click to activate the camera app" = "长按进入相机";
+"Devices" = "设备";
+"Media Library" = "媒体库";
+"Photos" = "照片";
+"Videos" = "视频";
+"News" = "新闻";
+"Information" = "提示";
+"YES" = "确定";
+"NO" = "取消";
+"Confirm" = "确认";
+"Update" = "确定";
+"Cancel" = "取消";
+"Firmware Update" = "固件升级";
+"Firmware Updated" = "固件升级完成";
+"The current firmware upgrade package is empty. Please retrieve server data again." = "当前固件升级包数据为空，请重新获取服务器数据。";
+"Failed to request information from server" = "向服务器请求信息失败";
+
+"Bluetooth Required" = "蓝牙请求";
+"Please turn on the mobile Bluetooth" = "请打开手机蓝牙";
+"Tracking will not function in the current mode" = "当前模式下不允许跟踪";
+"Back" = "返回";
+"Next" = "下一步";
+"Edit" = "编辑";
+"Select" = "选择";
+"Pano starting..." = "全景合成即将开始...";
+"Grid Line" = "辅助线";
+"Flash" = "闪光灯";
+"Video Resolution" = "录像分辨率";
+"Allow the Gimbal to function while charging" = "允许充电时使用设备";
+"Reverse Tilting Motion" = "俯仰轴推动反向";
+"Acceleration calibration" = "加速度校准";
+"Firmware Version" = "当前固件版本";
+"Hardware Version" = "当前硬件版本";
+"Bluetooth Version" = "蓝牙固件版本";
+"APP Version" = "当前APP版本";
+"Your firmware version is up to date" = "当前固件版本是最新版本";
+"Network Error" = "网络错误";
+//合成
+"Start stitching..." = "开始合成...";
+"Blending..." = "整合图片...";
+"Stiching..." = "合成...";
+"Saving final image..." = "保存合成完毕的照片...";
+"Finished" = "合成结束";
+"SaveingOrigin pano images..." = "保存合成的原图...";
+"Preparing images..." = "图片准备中...";
+"Image Compositing Failed\nPlease keep your phone 1 meter or farther away from the shooting object." = "图片合成失败\n请让手机拍照距离物体大于一米";
+"Match images..." = "图片匹配...";
+"Estimate cameraParams..." = "参数估算...";
+"Warp images and their masks..." = "修改和拼接图片...";
+"Warping %zu/%zu image..." = "变形 %zu/%zu";
+"Compositing %zu/%zu images..." = "合成 %zu/%zu";
+
+
+"Saved" = "保存成功";
+"Failed" = "保存失败";
+"Two Key Shooting Points Minimum" = "至少要两个关键点";
+"Ten Key Shooting Points Maximum" = "最多只能十个关键点";
+"Please connect the device" = "请先连接设备";
+"Setting Saved" = "参数保存成功";
+"Acceleration Calibration" = "加速度校准";
+"The consequences might be quite serious if acceleration calibration failed. Are you sure to continue to calibrate?" = "加速度校准失败可能会导致很严重的后果，是否确认继续校准";
+"Delete Photo" = "删除照片";
+"Delete Video" = "删除视频";
+"Confirm to delete the selected photos?" = "确认要删除当前照片?";
+"Confirm to delete the selected videos?" = "确认要删除当前视频?";
+"Confirm to delete all the selected photos?" = "确认要删除所有选中的照片吗?";
+"Confirm to delete all the selected videos?" = "确认要删除所有选中的视频吗?";
+"Deleted" = "删除成功";
+"Deleting Failed" = "删除失败";
+"Save Photo" = "保存照片";
+"Save Video" = "保存视频";
+"Confirm to save the current photo?" = "确认保存当前照片到相册?";
+"Confirm to save the current video?" = "确认保存当前视频到相册?";
+"Please adjust the angle to overlap the two grid lines" = "请调整角度至二条坐标线重叠";
+"Calibrated" = "校准成功";
+"Tilting:%.0f°\n Rolling:%.0f°" = "俯仰轴:%.0f°\n横滚轴:%.0f°";
+"Search device" = "设备搜索";
+"Bluetooth connected" = "蓝牙已连接";
+"There is no bluetooth nearby" = "附近没有蓝牙设备";
+"Single" = "单拍";
+"Pano" = "全景";
+"Sodoku" = "九宫图";
+"Normal" = "普通";
+"Motion Zoom" = "移动变焦";
+"Slow Motion" = "慢动作";
+"Path Lapse" = "轨迹延时";
+"Path Shoot" = "轨迹拍摄";
+"Time Lapse" = "延时拍摄";
+"Video is too short for editing" = "视频时长过短，不允许编辑";
+//滤镜名字
+"Origin" = "原图";
+"Toaster" = "Toaster";
+"Amaro" = "Amaro";
+"LordKelvin" = "LordKelvin";
+"Nashville" = "Nashville";
+"Walden" = "Walden";
+"XproII" = "XproII";
+"Hefe" = "Hefe";
+"Brannan" = "Brannan";
+"Sierra" = "Sierra";
+"Valencia" = "Valencia";
+"Earlybird" = "Earlybird";
+"Inkwell" = "Inkwell";
+"Lomofi" = "Lomofi";
+"Hudson" = "Hudson";
+"Sutro" = "Sutro";
+"Rise" = "Rise";
+"Exposure" = "Exposure";
+"Janpanese&Korean" = "日韩";
+"Modern" = "现代";
+"Funk" = "放克";
+"Eastern" = "东部";
+"Black&White" = "黑白";
+"Western" = "西部";
+"Old School" = "老派";
+"Glow" = "光晕";
+"Sharp" = "锐化";
+"Gaussian Blur" = "高斯模糊";
+"Distorting Mirror" = "哈哈镜";
+"Fisheye" = "鱼眼效果";
+"Sketch" = "素描";
+"Vintage" = "怀旧";
+"Times" = "岁月";
+"Fade" = "褪色";
+"Mono" = "单色";
+"Developing" = "冲印";
+"Chrome Yellow" = "铬黄";
+"Tone" = "色调";
+//辅助线
+"None" = "无";
+"Grid+Diagonal" = "方格+对角线";
+"Grid" = "方格";
+"Center point" = "中心点";
+//闪光灯
+"Off" = "关闭";
+"On" = "开启";
+"Auto" = "自动";
+
+"Camera Settings" = "相机设置";
+"Device Settings" = "设备设置";
+"Path lapse settings" = "轨迹延时设置";
+"Gimbal Speed :" = "云台速度 :";
+"Time scale :" = "时间比例 :";
+"Time scale: 1s = " = "时间比例: 1s = ";
+"Press the Fn button twice to start" = "双击Fn键启动";
+"Front/Rear Camera Switch" = "前后置摄像头切换";
+"Video/Image Switch" = "视频或拍照模式切换";
+"Flash On/Off" = "闪光灯开关";
+"Beauty Mode On/Off" = "美颜功能开关";
+"Filters Mode On" = "启动滤镜功能";
+"Face Track On/Off" = "启动或关闭人脸追踪";
+"Shooting Objects Track On/Off" = "启动或关闭对象追踪";
+"90°Pano Shot" = "启动90度全景拍摄";
+"180°Pano Shot" = "启动180度全景拍摄";
+"360°Pano Shot" = "启动360度全景拍摄";
+"Activate Sudoku Mode 1" = "启动九宫格拍摄‐模式1";
+"Activate Sudoku Mode 2" = "启动九宫格拍摄‐模式2";
+"Motion Zoom On" = "启动移动变焦拍摄";
+"Slow Motion Shot" = "启动慢动作拍摄";
+"Time Lapse Shot" = "启动延时拍摄";
+"Path Lapse Shot" = "启动轨迹延时拍摄";
+"3x3 Ultra Wide Angle Pano Shot" = "启动3x3超广角全景拍摄";
+"Track loss" = "目标丢失";
+"Video Clip" = "视频剪辑";
+"Video playback" = "视频播放";
+"Video Processing..." = "视频处理中...";
+"Video filters" = "视频滤镜";
+"Image filters" = "图片滤镜";
+"Original" = "原始";
+"Save" = "保存";
+"Connect device %@" = "连接名称为%@的外设";
+//设备名
+"SIRUI Swift M1 3 Axis Stabilizer" = "思锐Swift M1三轴折叠手机稳定器";
+"SIRUI Swift P1 3 Axis Stabilizer" = "思锐Swift P1三轴微单稳定器";
+
+"Version update" = "版本更新";
+"There is a new version update. Is it updated?" = "当前有新版本更新，是否更新？";
+"There is a new version update." = "当前有新版本更新";

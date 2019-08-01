@@ -1,0 +1,961 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BA10AD1822AF442300CD0FB3 /* SRShootSwicher.m in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD1622AF442300CD0FB3 /* SRShootSwicher.m */; };
+		BA10AD9C22AF461900CD0FB3 /* POPCGUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD6D22AF461900CD0FB3 /* POPCGUtils.mm */; };
+		BA10AD9D22AF461900CD0FB3 /* POPMath.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD7222AF461900CD0FB3 /* POPMath.mm */; };
+		BA10AD9E22AF461900CD0FB3 /* POPSpringAnimation.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD7522AF461900CD0FB3 /* POPSpringAnimation.mm */; };
+		BA10AD9F22AF461900CD0FB3 /* POPCustomAnimation.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD7622AF461900CD0FB3 /* POPCustomAnimation.mm */; };
+		BA10ADA022AF461900CD0FB3 /* POPAnimationTracer.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD7922AF461900CD0FB3 /* POPAnimationTracer.mm */; };
+		BA10ADA122AF461900CD0FB3 /* POPAnimationExtras.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD7B22AF461900CD0FB3 /* POPAnimationExtras.mm */; };
+		BA10ADA222AF461900CD0FB3 /* POPDecayAnimation.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD7D22AF461900CD0FB3 /* POPDecayAnimation.mm */; };
+		BA10ADA322AF461900CD0FB3 /* POPPropertyAnimation.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD8522AF461900CD0FB3 /* POPPropertyAnimation.mm */; };
+		BA10ADA422AF461900CD0FB3 /* POPAnimation.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD8722AF461900CD0FB3 /* POPAnimation.mm */; };
+		BA10ADA522AF461900CD0FB3 /* POPGeometry.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD8822AF461900CD0FB3 /* POPGeometry.mm */; };
+		BA10ADA622AF461900CD0FB3 /* POPBasicAnimation.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD8922AF461900CD0FB3 /* POPBasicAnimation.mm */; };
+		BA10ADA722AF461900CD0FB3 /* TransformationMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD8C22AF461900CD0FB3 /* TransformationMatrix.cpp */; };
+		BA10ADA822AF461900CD0FB3 /* POPAnimator.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD9222AF461900CD0FB3 /* POPAnimator.mm */; };
+		BA10ADA922AF461900CD0FB3 /* POPAnimatableProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD9322AF461900CD0FB3 /* POPAnimatableProperty.mm */; };
+		BA10ADAA22AF461900CD0FB3 /* POPAnimationRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD9522AF461900CD0FB3 /* POPAnimationRuntime.mm */; };
+		BA10ADAB22AF461900CD0FB3 /* POPAnimationEvent.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD9622AF461900CD0FB3 /* POPAnimationEvent.mm */; };
+		BA10ADAC22AF461900CD0FB3 /* POPLayerExtras.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD9722AF461900CD0FB3 /* POPLayerExtras.mm */; };
+		BA10ADAD22AF461900CD0FB3 /* POPVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA10AD9822AF461900CD0FB3 /* POPVector.mm */; };
+		BA10ADB022AFA7C600CD0FB3 /* photoShutter2.caf in Resources */ = {isa = PBXBuildFile; fileRef = BA10ADAF22AFA7C500CD0FB3 /* photoShutter2.caf */; };
+		BA7607CC22A4F2C900412FC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7607CB22A4F2C900412FC1 /* AppDelegate.m */; };
+		BA7607D422A4F2CB00412FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA7607D322A4F2CB00412FC1 /* Assets.xcassets */; };
+		BA7607D722A4F2CB00412FC1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA7607D522A4F2CB00412FC1 /* LaunchScreen.storyboard */; };
+		BA7607DA22A4F2CB00412FC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7607D922A4F2CB00412FC1 /* main.m */; };
+		BA7607E422A4F2CB00412FC1 /* SIRUI_LensTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7607E322A4F2CB00412FC1 /* SIRUI_LensTests.m */; };
+		BA7607EF22A4F2CB00412FC1 /* SIRUI_LensUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7607EE22A4F2CB00412FC1 /* SIRUI_LensUITests.m */; };
+		BA76080822A4F34600412FC1 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7607FE22A4F34600412FC1 /* UIColor+Hex.m */; };
+		BA76080922A4F34600412FC1 /* WCLRecordEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76080122A4F34600412FC1 /* WCLRecordEncoder.m */; };
+		BA76080A22A4F34600412FC1 /* MoiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76080222A4F34600412FC1 /* MoiveViewController.m */; };
+		BA76080B22A4F34600412FC1 /* WCLRecordEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76080622A4F34600412FC1 /* WCLRecordEngine.m */; };
+		BA76081222A4F3FE00412FC1 /* SRDeviceUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76081122A4F3FE00412FC1 /* SRDeviceUtils.m */; };
+		BA76083022A4F45900412FC1 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = BA76081422A4F45900412FC1 /* LICENSE */; };
+		BA76083122A4F45900412FC1 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76081722A4F45900412FC1 /* NSLayoutConstraint+MASDebugAdditions.m */; };
+		BA76083222A4F45900412FC1 /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082022A4F45900412FC1 /* ViewController+MASAdditions.m */; };
+		BA76083322A4F45900412FC1 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082422A4F45900412FC1 /* MASCompositeConstraint.m */; };
+		BA76083422A4F45900412FC1 /* MASConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082522A4F45900412FC1 /* MASConstraintMaker.m */; };
+		BA76083522A4F45900412FC1 /* MASLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082622A4F45900412FC1 /* MASLayoutConstraint.m */; };
+		BA76083622A4F45900412FC1 /* NSArray+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082722A4F45900412FC1 /* NSArray+MASAdditions.m */; };
+		BA76083722A4F45900412FC1 /* View+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082822A4F45900412FC1 /* View+MASAdditions.m */; };
+		BA76083822A4F45900412FC1 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082B22A4F45900412FC1 /* MASConstraint.m */; };
+		BA76083922A4F45900412FC1 /* MASViewConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082D22A4F45900412FC1 /* MASViewConstraint.m */; };
+		BA76083A22A4F45900412FC1 /* MASViewAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76082E22A4F45900412FC1 /* MASViewAttribute.m */; };
+		BA76083B22A4F45900412FC1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BA76082F22A4F45900412FC1 /* README.md */; };
+		BA76084322A4FB2200412FC1 /* SRDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA76084222A4FB2200412FC1 /* SRDeviceViewController.m */; };
+		BA8C8AAA22AE470A00FA1406 /* SRHowToViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA8C8AA622AE470A00FA1406 /* SRHowToViewController.xib */; };
+		BA8C8AAB22AE470A00FA1406 /* SRDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA8C8AA722AE470A00FA1406 /* SRDeviceViewController.xib */; };
+		BA8C8AAC22AE470A00FA1406 /* SRHowToViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8C8AA822AE470A00FA1406 /* SRHowToViewController.m */; };
+		BA8C8AAF22AE488C00FA1406 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BA8C8AB122AE488C00FA1406 /* Localizable.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BA7607E022A4F2CB00412FC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA7607BF22A4F2C900412FC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BA7607C622A4F2C900412FC1;
+			remoteInfo = "SIRUI Lens";
+		};
+		BA7607EB22A4F2CB00412FC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA7607BF22A4F2C900412FC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BA7607C622A4F2C900412FC1;
+			remoteInfo = "SIRUI Lens";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		BA10AD1622AF442300CD0FB3 /* SRShootSwicher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRShootSwicher.m; sourceTree = "<group>"; };
+		BA10AD1722AF442300CD0FB3 /* SRShootSwicher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRShootSwicher.h; sourceTree = "<group>"; };
+		BA10AD6722AF461900CD0FB3 /* POPMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPMath.h; sourceTree = "<group>"; };
+		BA10AD6822AF461900CD0FB3 /* POPDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPDefines.h; sourceTree = "<group>"; };
+		BA10AD6922AF461900CD0FB3 /* POPAnimationInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationInternal.h; sourceTree = "<group>"; };
+		BA10AD6A22AF461900CD0FB3 /* POPAnimationExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationExtras.h; sourceTree = "<group>"; };
+		BA10AD6B22AF461900CD0FB3 /* POPAnimationEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationEvent.h; sourceTree = "<group>"; };
+		BA10AD6C22AF461900CD0FB3 /* POPBasicAnimationInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPBasicAnimationInternal.h; sourceTree = "<group>"; };
+		BA10AD6D22AF461900CD0FB3 /* POPCGUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPCGUtils.mm; sourceTree = "<group>"; };
+		BA10AD6E22AF461900CD0FB3 /* POPPropertyAnimationInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPPropertyAnimationInternal.h; sourceTree = "<group>"; };
+		BA10AD6F22AF461900CD0FB3 /* POPDecayAnimationInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPDecayAnimationInternal.h; sourceTree = "<group>"; };
+		BA10AD7022AF461900CD0FB3 /* POPSpringAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPSpringAnimation.h; sourceTree = "<group>"; };
+		BA10AD7122AF461900CD0FB3 /* POPBasicAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPBasicAnimation.h; sourceTree = "<group>"; };
+		BA10AD7222AF461900CD0FB3 /* POPMath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPMath.mm; sourceTree = "<group>"; };
+		BA10AD7322AF461900CD0FB3 /* POPAnimationPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationPrivate.h; sourceTree = "<group>"; };
+		BA10AD7422AF461900CD0FB3 /* POPAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAction.h; sourceTree = "<group>"; };
+		BA10AD7522AF461900CD0FB3 /* POPSpringAnimation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPSpringAnimation.mm; sourceTree = "<group>"; };
+		BA10AD7622AF461900CD0FB3 /* POPCustomAnimation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPCustomAnimation.mm; sourceTree = "<group>"; };
+		BA10AD7722AF461900CD0FB3 /* POPCustomAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPCustomAnimation.h; sourceTree = "<group>"; };
+		BA10AD7822AF461900CD0FB3 /* POPPropertyAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPPropertyAnimation.h; sourceTree = "<group>"; };
+		BA10AD7922AF461900CD0FB3 /* POPAnimationTracer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPAnimationTracer.mm; sourceTree = "<group>"; };
+		BA10AD7A22AF461900CD0FB3 /* POPCGUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPCGUtils.h; sourceTree = "<group>"; };
+		BA10AD7B22AF461900CD0FB3 /* POPAnimationExtras.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPAnimationExtras.mm; sourceTree = "<group>"; };
+		BA10AD7C22AF461900CD0FB3 /* POPGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPGeometry.h; sourceTree = "<group>"; };
+		BA10AD7D22AF461900CD0FB3 /* POPDecayAnimation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPDecayAnimation.mm; sourceTree = "<group>"; };
+		BA10AD7E22AF461900CD0FB3 /* POPSpringAnimationInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPSpringAnimationInternal.h; sourceTree = "<group>"; };
+		BA10AD7F22AF461900CD0FB3 /* POPDecayAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPDecayAnimation.h; sourceTree = "<group>"; };
+		BA10AD8022AF461900CD0FB3 /* POPSpringSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPSpringSolver.h; sourceTree = "<group>"; };
+		BA10AD8122AF461900CD0FB3 /* POPAnimatableProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimatableProperty.h; sourceTree = "<group>"; };
+		BA10AD8222AF461900CD0FB3 /* POPAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimator.h; sourceTree = "<group>"; };
+		BA10AD8322AF461900CD0FB3 /* POPAnimationRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationRuntime.h; sourceTree = "<group>"; };
+		BA10AD8422AF461900CD0FB3 /* POP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POP.h; sourceTree = "<group>"; };
+		BA10AD8522AF461900CD0FB3 /* POPPropertyAnimation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPPropertyAnimation.mm; sourceTree = "<group>"; };
+		BA10AD8622AF461900CD0FB3 /* POPLayerExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPLayerExtras.h; sourceTree = "<group>"; };
+		BA10AD8722AF461900CD0FB3 /* POPAnimation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPAnimation.mm; sourceTree = "<group>"; };
+		BA10AD8822AF461900CD0FB3 /* POPGeometry.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPGeometry.mm; sourceTree = "<group>"; };
+		BA10AD8922AF461900CD0FB3 /* POPBasicAnimation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPBasicAnimation.mm; sourceTree = "<group>"; };
+		BA10AD8A22AF461900CD0FB3 /* POPAnimatablePropertyTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimatablePropertyTypes.h; sourceTree = "<group>"; };
+		BA10AD8C22AF461900CD0FB3 /* TransformationMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformationMatrix.cpp; sourceTree = "<group>"; };
+		BA10AD8D22AF461900CD0FB3 /* TransformationMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformationMatrix.h; sourceTree = "<group>"; };
+		BA10AD8E22AF461900CD0FB3 /* FloatConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatConversion.h; sourceTree = "<group>"; };
+		BA10AD8F22AF461900CD0FB3 /* UnitBezier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitBezier.h; sourceTree = "<group>"; };
+		BA10AD9022AF461900CD0FB3 /* POPAnimationTracerInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationTracerInternal.h; sourceTree = "<group>"; };
+		BA10AD9122AF461900CD0FB3 /* POPAnimationEventInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationEventInternal.h; sourceTree = "<group>"; };
+		BA10AD9222AF461900CD0FB3 /* POPAnimator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPAnimator.mm; sourceTree = "<group>"; };
+		BA10AD9322AF461900CD0FB3 /* POPAnimatableProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPAnimatableProperty.mm; sourceTree = "<group>"; };
+		BA10AD9422AF461900CD0FB3 /* POPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimation.h; sourceTree = "<group>"; };
+		BA10AD9522AF461900CD0FB3 /* POPAnimationRuntime.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPAnimationRuntime.mm; sourceTree = "<group>"; };
+		BA10AD9622AF461900CD0FB3 /* POPAnimationEvent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPAnimationEvent.mm; sourceTree = "<group>"; };
+		BA10AD9722AF461900CD0FB3 /* POPLayerExtras.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPLayerExtras.mm; sourceTree = "<group>"; };
+		BA10AD9822AF461900CD0FB3 /* POPVector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = POPVector.mm; sourceTree = "<group>"; };
+		BA10AD9922AF461900CD0FB3 /* POPVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPVector.h; sourceTree = "<group>"; };
+		BA10AD9A22AF461900CD0FB3 /* POPAnimatorPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimatorPrivate.h; sourceTree = "<group>"; };
+		BA10AD9B22AF461900CD0FB3 /* POPAnimationTracer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POPAnimationTracer.h; sourceTree = "<group>"; };
+		BA10ADAF22AFA7C500CD0FB3 /* photoShutter2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = photoShutter2.caf; sourceTree = "<group>"; };
+		BA7607C722A4F2C900412FC1 /* SIRUI Lens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SIRUI Lens.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA7607CA22A4F2C900412FC1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BA7607CB22A4F2C900412FC1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BA7607D322A4F2CB00412FC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BA7607D622A4F2CB00412FC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BA7607D822A4F2CB00412FC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BA7607D922A4F2CB00412FC1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BA7607DF22A4F2CB00412FC1 /* SIRUI LensTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SIRUI LensTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA7607E322A4F2CB00412FC1 /* SIRUI_LensTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SIRUI_LensTests.m; sourceTree = "<group>"; };
+		BA7607E522A4F2CB00412FC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BA7607EA22A4F2CB00412FC1 /* SIRUI LensUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SIRUI LensUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA7607EE22A4F2CB00412FC1 /* SIRUI_LensUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SIRUI_LensUITests.m; sourceTree = "<group>"; };
+		BA7607F022A4F2CB00412FC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BA7607FE22A4F34600412FC1 /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
+		BA76080022A4F34600412FC1 /* WCLRecordEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCLRecordEncoder.h; sourceTree = "<group>"; };
+		BA76080122A4F34600412FC1 /* WCLRecordEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCLRecordEncoder.m; sourceTree = "<group>"; };
+		BA76080222A4F34600412FC1 /* MoiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoiveViewController.m; sourceTree = "<group>"; };
+		BA76080322A4F34600412FC1 /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
+		BA76080522A4F34600412FC1 /* WCLRecordEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCLRecordEngine.h; sourceTree = "<group>"; };
+		BA76080622A4F34600412FC1 /* WCLRecordEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCLRecordEngine.m; sourceTree = "<group>"; };
+		BA76080722A4F34600412FC1 /* MoiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiveViewController.h; sourceTree = "<group>"; };
+		BA76081022A4F3FE00412FC1 /* SRDeviceUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRDeviceUtils.h; sourceTree = "<group>"; };
+		BA76081122A4F3FE00412FC1 /* SRDeviceUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRDeviceUtils.m; sourceTree = "<group>"; };
+		BA76081422A4F45900412FC1 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		BA76081622A4F45900412FC1 /* MASCompositeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASCompositeConstraint.h; sourceTree = "<group>"; };
+		BA76081722A4F45900412FC1 /* NSLayoutConstraint+MASDebugAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+MASDebugAdditions.m"; sourceTree = "<group>"; };
+		BA76081822A4F45900412FC1 /* MASConstraint+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MASConstraint+Private.h"; sourceTree = "<group>"; };
+		BA76081922A4F45900412FC1 /* MASLayoutConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASLayoutConstraint.h; sourceTree = "<group>"; };
+		BA76081A22A4F45900412FC1 /* NSArray+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+MASShorthandAdditions.h"; sourceTree = "<group>"; };
+		BA76081B22A4F45900412FC1 /* MASConstraintMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASConstraintMaker.h; sourceTree = "<group>"; };
+		BA76081C22A4F45900412FC1 /* View+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASAdditions.h"; sourceTree = "<group>"; };
+		BA76081D22A4F45900412FC1 /* NSArray+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+MASAdditions.h"; sourceTree = "<group>"; };
+		BA76081E22A4F45900412FC1 /* MASUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASUtilities.h; sourceTree = "<group>"; };
+		BA76081F22A4F45900412FC1 /* MASViewAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASViewAttribute.h; sourceTree = "<group>"; };
+		BA76082022A4F45900412FC1 /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
+		BA76082122A4F45900412FC1 /* MASViewConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASViewConstraint.h; sourceTree = "<group>"; };
+		BA76082222A4F45900412FC1 /* MASConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASConstraint.h; sourceTree = "<group>"; };
+		BA76082322A4F45900412FC1 /* NSLayoutConstraint+MASDebugAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+MASDebugAdditions.h"; sourceTree = "<group>"; };
+		BA76082422A4F45900412FC1 /* MASCompositeConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASCompositeConstraint.m; sourceTree = "<group>"; };
+		BA76082522A4F45900412FC1 /* MASConstraintMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASConstraintMaker.m; sourceTree = "<group>"; };
+		BA76082622A4F45900412FC1 /* MASLayoutConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASLayoutConstraint.m; sourceTree = "<group>"; };
+		BA76082722A4F45900412FC1 /* NSArray+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+MASAdditions.m"; sourceTree = "<group>"; };
+		BA76082822A4F45900412FC1 /* View+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+MASAdditions.m"; sourceTree = "<group>"; };
+		BA76082922A4F45900412FC1 /* View+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASShorthandAdditions.h"; sourceTree = "<group>"; };
+		BA76082A22A4F45900412FC1 /* Masonry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Masonry.h; sourceTree = "<group>"; };
+		BA76082B22A4F45900412FC1 /* MASConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASConstraint.m; sourceTree = "<group>"; };
+		BA76082C22A4F45900412FC1 /* ViewController+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+MASAdditions.h"; sourceTree = "<group>"; };
+		BA76082D22A4F45900412FC1 /* MASViewConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASViewConstraint.m; sourceTree = "<group>"; };
+		BA76082E22A4F45900412FC1 /* MASViewAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASViewAttribute.m; sourceTree = "<group>"; };
+		BA76082F22A4F45900412FC1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		BA76084122A4FB2200412FC1 /* SRDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRDeviceViewController.h; sourceTree = "<group>"; };
+		BA76084222A4FB2200412FC1 /* SRDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRDeviceViewController.m; sourceTree = "<group>"; };
+		BA8C8AA622AE470A00FA1406 /* SRHowToViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRHowToViewController.xib; sourceTree = "<group>"; };
+		BA8C8AA722AE470A00FA1406 /* SRDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRDeviceViewController.xib; sourceTree = "<group>"; };
+		BA8C8AA822AE470A00FA1406 /* SRHowToViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRHowToViewController.m; sourceTree = "<group>"; };
+		BA8C8AA922AE470A00FA1406 /* SRHowToViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRHowToViewController.h; sourceTree = "<group>"; };
+		BA8C8AB022AE488C00FA1406 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BA8C8AB222AE48E000FA1406 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		BA8C8AB322AE48E000FA1406 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		BA8C8AB422AE48E400FA1406 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		BA8C8AB522AE48E400FA1406 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BA7607C422A4F2C900412FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA7607DC22A4F2CB00412FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA7607E722A4F2CB00412FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BA10AD6622AF461900CD0FB3 /* pop */ = {
+			isa = PBXGroup;
+			children = (
+				BA10AD6722AF461900CD0FB3 /* POPMath.h */,
+				BA10AD6822AF461900CD0FB3 /* POPDefines.h */,
+				BA10AD6922AF461900CD0FB3 /* POPAnimationInternal.h */,
+				BA10AD6A22AF461900CD0FB3 /* POPAnimationExtras.h */,
+				BA10AD6B22AF461900CD0FB3 /* POPAnimationEvent.h */,
+				BA10AD6C22AF461900CD0FB3 /* POPBasicAnimationInternal.h */,
+				BA10AD6D22AF461900CD0FB3 /* POPCGUtils.mm */,
+				BA10AD6E22AF461900CD0FB3 /* POPPropertyAnimationInternal.h */,
+				BA10AD6F22AF461900CD0FB3 /* POPDecayAnimationInternal.h */,
+				BA10AD7022AF461900CD0FB3 /* POPSpringAnimation.h */,
+				BA10AD7122AF461900CD0FB3 /* POPBasicAnimation.h */,
+				BA10AD7222AF461900CD0FB3 /* POPMath.mm */,
+				BA10AD7322AF461900CD0FB3 /* POPAnimationPrivate.h */,
+				BA10AD7422AF461900CD0FB3 /* POPAction.h */,
+				BA10AD7522AF461900CD0FB3 /* POPSpringAnimation.mm */,
+				BA10AD7622AF461900CD0FB3 /* POPCustomAnimation.mm */,
+				BA10AD7722AF461900CD0FB3 /* POPCustomAnimation.h */,
+				BA10AD7822AF461900CD0FB3 /* POPPropertyAnimation.h */,
+				BA10AD7922AF461900CD0FB3 /* POPAnimationTracer.mm */,
+				BA10AD7A22AF461900CD0FB3 /* POPCGUtils.h */,
+				BA10AD7B22AF461900CD0FB3 /* POPAnimationExtras.mm */,
+				BA10AD7C22AF461900CD0FB3 /* POPGeometry.h */,
+				BA10AD7D22AF461900CD0FB3 /* POPDecayAnimation.mm */,
+				BA10AD7E22AF461900CD0FB3 /* POPSpringAnimationInternal.h */,
+				BA10AD7F22AF461900CD0FB3 /* POPDecayAnimation.h */,
+				BA10AD8022AF461900CD0FB3 /* POPSpringSolver.h */,
+				BA10AD8122AF461900CD0FB3 /* POPAnimatableProperty.h */,
+				BA10AD8222AF461900CD0FB3 /* POPAnimator.h */,
+				BA10AD8322AF461900CD0FB3 /* POPAnimationRuntime.h */,
+				BA10AD8422AF461900CD0FB3 /* POP.h */,
+				BA10AD8522AF461900CD0FB3 /* POPPropertyAnimation.mm */,
+				BA10AD8622AF461900CD0FB3 /* POPLayerExtras.h */,
+				BA10AD8722AF461900CD0FB3 /* POPAnimation.mm */,
+				BA10AD8822AF461900CD0FB3 /* POPGeometry.mm */,
+				BA10AD8922AF461900CD0FB3 /* POPBasicAnimation.mm */,
+				BA10AD8A22AF461900CD0FB3 /* POPAnimatablePropertyTypes.h */,
+				BA10AD8B22AF461900CD0FB3 /* WebCore */,
+				BA10AD9022AF461900CD0FB3 /* POPAnimationTracerInternal.h */,
+				BA10AD9122AF461900CD0FB3 /* POPAnimationEventInternal.h */,
+				BA10AD9222AF461900CD0FB3 /* POPAnimator.mm */,
+				BA10AD9322AF461900CD0FB3 /* POPAnimatableProperty.mm */,
+				BA10AD9422AF461900CD0FB3 /* POPAnimation.h */,
+				BA10AD9522AF461900CD0FB3 /* POPAnimationRuntime.mm */,
+				BA10AD9622AF461900CD0FB3 /* POPAnimationEvent.mm */,
+				BA10AD9722AF461900CD0FB3 /* POPLayerExtras.mm */,
+				BA10AD9822AF461900CD0FB3 /* POPVector.mm */,
+				BA10AD9922AF461900CD0FB3 /* POPVector.h */,
+				BA10AD9A22AF461900CD0FB3 /* POPAnimatorPrivate.h */,
+				BA10AD9B22AF461900CD0FB3 /* POPAnimationTracer.h */,
+			);
+			path = pop;
+			sourceTree = "<group>";
+		};
+		BA10AD8B22AF461900CD0FB3 /* WebCore */ = {
+			isa = PBXGroup;
+			children = (
+				BA10AD8C22AF461900CD0FB3 /* TransformationMatrix.cpp */,
+				BA10AD8D22AF461900CD0FB3 /* TransformationMatrix.h */,
+				BA10AD8E22AF461900CD0FB3 /* FloatConversion.h */,
+				BA10AD8F22AF461900CD0FB3 /* UnitBezier.h */,
+			);
+			path = WebCore;
+			sourceTree = "<group>";
+		};
+		BA7607BE22A4F2C900412FC1 = {
+			isa = PBXGroup;
+			children = (
+				BA7607C922A4F2C900412FC1 /* SIRUI Lens */,
+				BA7607E222A4F2CB00412FC1 /* SIRUI LensTests */,
+				BA7607ED22A4F2CB00412FC1 /* SIRUI LensUITests */,
+				BA7607C822A4F2C900412FC1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BA7607C822A4F2C900412FC1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BA7607C722A4F2C900412FC1 /* SIRUI Lens.app */,
+				BA7607DF22A4F2CB00412FC1 /* SIRUI LensTests.xctest */,
+				BA7607EA22A4F2CB00412FC1 /* SIRUI LensUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BA7607C922A4F2C900412FC1 /* SIRUI Lens */ = {
+			isa = PBXGroup;
+			children = (
+				BA10ADAF22AFA7C500CD0FB3 /* photoShutter2.caf */,
+				BA76084C22A4FEFC00412FC1 /* Base */,
+				BA7607CA22A4F2C900412FC1 /* AppDelegate.h */,
+				BA7607CB22A4F2C900412FC1 /* AppDelegate.m */,
+				BA76084122A4FB2200412FC1 /* SRDeviceViewController.h */,
+				BA76084222A4FB2200412FC1 /* SRDeviceViewController.m */,
+				BA8C8AA722AE470A00FA1406 /* SRDeviceViewController.xib */,
+				BA8C8AA922AE470A00FA1406 /* SRHowToViewController.h */,
+				BA8C8AA822AE470A00FA1406 /* SRHowToViewController.m */,
+				BA8C8AA622AE470A00FA1406 /* SRHowToViewController.xib */,
+				BA76080C22A4F3D700412FC1 /* Tools */,
+				BA7607FC22A4F34600412FC1 /* 电影镜头 */,
+				BA76081322A4F45900412FC1 /* Masonry */,
+				BA10AD6622AF461900CD0FB3 /* pop */,
+				BA7607D322A4F2CB00412FC1 /* Assets.xcassets */,
+				BA7607D522A4F2CB00412FC1 /* LaunchScreen.storyboard */,
+				BA7607D822A4F2CB00412FC1 /* Info.plist */,
+				BA7607D922A4F2CB00412FC1 /* main.m */,
+				BA8C8AB122AE488C00FA1406 /* Localizable.strings */,
+			);
+			path = "SIRUI Lens";
+			sourceTree = "<group>";
+		};
+		BA7607E222A4F2CB00412FC1 /* SIRUI LensTests */ = {
+			isa = PBXGroup;
+			children = (
+				BA7607E322A4F2CB00412FC1 /* SIRUI_LensTests.m */,
+				BA7607E522A4F2CB00412FC1 /* Info.plist */,
+			);
+			path = "SIRUI LensTests";
+			sourceTree = "<group>";
+		};
+		BA7607ED22A4F2CB00412FC1 /* SIRUI LensUITests */ = {
+			isa = PBXGroup;
+			children = (
+				BA7607EE22A4F2CB00412FC1 /* SIRUI_LensUITests.m */,
+				BA7607F022A4F2CB00412FC1 /* Info.plist */,
+			);
+			path = "SIRUI LensUITests";
+			sourceTree = "<group>";
+		};
+		BA7607FC22A4F34600412FC1 /* 电影镜头 */ = {
+			isa = PBXGroup;
+			children = (
+				BA76080722A4F34600412FC1 /* MoiveViewController.h */,
+				BA76080222A4F34600412FC1 /* MoiveViewController.m */,
+				BA7607FD22A4F34600412FC1 /* WCLRecordVideo */,
+			);
+			path = "电影镜头";
+			sourceTree = "<group>";
+		};
+		BA7607FD22A4F34600412FC1 /* WCLRecordVideo */ = {
+			isa = PBXGroup;
+			children = (
+				BA7607FE22A4F34600412FC1 /* UIColor+Hex.m */,
+				BA7607FF22A4F34600412FC1 /* WCLRecordEncoder */,
+				BA76080322A4F34600412FC1 /* UIColor+Hex.h */,
+				BA76080422A4F34600412FC1 /* WCLRecordEngine */,
+			);
+			path = WCLRecordVideo;
+			sourceTree = "<group>";
+		};
+		BA7607FF22A4F34600412FC1 /* WCLRecordEncoder */ = {
+			isa = PBXGroup;
+			children = (
+				BA76080022A4F34600412FC1 /* WCLRecordEncoder.h */,
+				BA76080122A4F34600412FC1 /* WCLRecordEncoder.m */,
+			);
+			path = WCLRecordEncoder;
+			sourceTree = "<group>";
+		};
+		BA76080422A4F34600412FC1 /* WCLRecordEngine */ = {
+			isa = PBXGroup;
+			children = (
+				BA76080522A4F34600412FC1 /* WCLRecordEngine.h */,
+				BA76080622A4F34600412FC1 /* WCLRecordEngine.m */,
+			);
+			path = WCLRecordEngine;
+			sourceTree = "<group>";
+		};
+		BA76080C22A4F3D700412FC1 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				BA76081022A4F3FE00412FC1 /* SRDeviceUtils.h */,
+				BA76081122A4F3FE00412FC1 /* SRDeviceUtils.m */,
+				BA10AD1722AF442300CD0FB3 /* SRShootSwicher.h */,
+				BA10AD1622AF442300CD0FB3 /* SRShootSwicher.m */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		BA76081322A4F45900412FC1 /* Masonry */ = {
+			isa = PBXGroup;
+			children = (
+				BA76081422A4F45900412FC1 /* LICENSE */,
+				BA76081522A4F45900412FC1 /* Masonry */,
+				BA76082F22A4F45900412FC1 /* README.md */,
+			);
+			path = Masonry;
+			sourceTree = "<group>";
+		};
+		BA76081522A4F45900412FC1 /* Masonry */ = {
+			isa = PBXGroup;
+			children = (
+				BA76081622A4F45900412FC1 /* MASCompositeConstraint.h */,
+				BA76081722A4F45900412FC1 /* NSLayoutConstraint+MASDebugAdditions.m */,
+				BA76081822A4F45900412FC1 /* MASConstraint+Private.h */,
+				BA76081922A4F45900412FC1 /* MASLayoutConstraint.h */,
+				BA76081A22A4F45900412FC1 /* NSArray+MASShorthandAdditions.h */,
+				BA76081B22A4F45900412FC1 /* MASConstraintMaker.h */,
+				BA76081C22A4F45900412FC1 /* View+MASAdditions.h */,
+				BA76081D22A4F45900412FC1 /* NSArray+MASAdditions.h */,
+				BA76081E22A4F45900412FC1 /* MASUtilities.h */,
+				BA76081F22A4F45900412FC1 /* MASViewAttribute.h */,
+				BA76082022A4F45900412FC1 /* ViewController+MASAdditions.m */,
+				BA76082122A4F45900412FC1 /* MASViewConstraint.h */,
+				BA76082222A4F45900412FC1 /* MASConstraint.h */,
+				BA76082322A4F45900412FC1 /* NSLayoutConstraint+MASDebugAdditions.h */,
+				BA76082422A4F45900412FC1 /* MASCompositeConstraint.m */,
+				BA76082522A4F45900412FC1 /* MASConstraintMaker.m */,
+				BA76082622A4F45900412FC1 /* MASLayoutConstraint.m */,
+				BA76082722A4F45900412FC1 /* NSArray+MASAdditions.m */,
+				BA76082822A4F45900412FC1 /* View+MASAdditions.m */,
+				BA76082922A4F45900412FC1 /* View+MASShorthandAdditions.h */,
+				BA76082A22A4F45900412FC1 /* Masonry.h */,
+				BA76082B22A4F45900412FC1 /* MASConstraint.m */,
+				BA76082C22A4F45900412FC1 /* ViewController+MASAdditions.h */,
+				BA76082D22A4F45900412FC1 /* MASViewConstraint.m */,
+				BA76082E22A4F45900412FC1 /* MASViewAttribute.m */,
+			);
+			path = Masonry;
+			sourceTree = "<group>";
+		};
+		BA76084C22A4FEFC00412FC1 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BA7607C622A4F2C900412FC1 /* SIRUI Lens */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA7607F322A4F2CB00412FC1 /* Build configuration list for PBXNativeTarget "SIRUI Lens" */;
+			buildPhases = (
+				BA7607C322A4F2C900412FC1 /* Sources */,
+				BA7607C422A4F2C900412FC1 /* Frameworks */,
+				BA7607C522A4F2C900412FC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SIRUI Lens";
+			productName = "SIRUI Lens";
+			productReference = BA7607C722A4F2C900412FC1 /* SIRUI Lens.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BA7607DE22A4F2CB00412FC1 /* SIRUI LensTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA7607F622A4F2CB00412FC1 /* Build configuration list for PBXNativeTarget "SIRUI LensTests" */;
+			buildPhases = (
+				BA7607DB22A4F2CB00412FC1 /* Sources */,
+				BA7607DC22A4F2CB00412FC1 /* Frameworks */,
+				BA7607DD22A4F2CB00412FC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BA7607E122A4F2CB00412FC1 /* PBXTargetDependency */,
+			);
+			name = "SIRUI LensTests";
+			productName = "SIRUI LensTests";
+			productReference = BA7607DF22A4F2CB00412FC1 /* SIRUI LensTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BA7607E922A4F2CB00412FC1 /* SIRUI LensUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA7607F922A4F2CB00412FC1 /* Build configuration list for PBXNativeTarget "SIRUI LensUITests" */;
+			buildPhases = (
+				BA7607E622A4F2CB00412FC1 /* Sources */,
+				BA7607E722A4F2CB00412FC1 /* Frameworks */,
+				BA7607E822A4F2CB00412FC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BA7607EC22A4F2CB00412FC1 /* PBXTargetDependency */,
+			);
+			name = "SIRUI LensUITests";
+			productName = "SIRUI LensUITests";
+			productReference = BA7607EA22A4F2CB00412FC1 /* SIRUI LensUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BA7607BF22A4F2C900412FC1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = xml;
+				TargetAttributes = {
+					BA7607C622A4F2C900412FC1 = {
+						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+					BA7607DE22A4F2CB00412FC1 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = BA7607C622A4F2C900412FC1;
+					};
+					BA7607E922A4F2CB00412FC1 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = BA7607C622A4F2C900412FC1;
+					};
+				};
+			};
+			buildConfigurationList = BA7607C222A4F2C900412FC1 /* Build configuration list for PBXProject "SIRUI Lens" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+				"zh-Hant",
+			);
+			mainGroup = BA7607BE22A4F2C900412FC1;
+			productRefGroup = BA7607C822A4F2C900412FC1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BA7607C622A4F2C900412FC1 /* SIRUI Lens */,
+				BA7607DE22A4F2CB00412FC1 /* SIRUI LensTests */,
+				BA7607E922A4F2CB00412FC1 /* SIRUI LensUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BA7607C522A4F2C900412FC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA7607D722A4F2CB00412FC1 /* LaunchScreen.storyboard in Resources */,
+				BA7607D422A4F2CB00412FC1 /* Assets.xcassets in Resources */,
+				BA8C8AAA22AE470A00FA1406 /* SRHowToViewController.xib in Resources */,
+				BA8C8AAF22AE488C00FA1406 /* Localizable.strings in Resources */,
+				BA10ADB022AFA7C600CD0FB3 /* photoShutter2.caf in Resources */,
+				BA8C8AAB22AE470A00FA1406 /* SRDeviceViewController.xib in Resources */,
+				BA76083B22A4F45900412FC1 /* README.md in Resources */,
+				BA76083022A4F45900412FC1 /* LICENSE in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA7607DD22A4F2CB00412FC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA7607E822A4F2CB00412FC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BA7607C322A4F2C900412FC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA76083822A4F45900412FC1 /* MASConstraint.m in Sources */,
+				BA10ADA622AF461900CD0FB3 /* POPBasicAnimation.mm in Sources */,
+				BA76083622A4F45900412FC1 /* NSArray+MASAdditions.m in Sources */,
+				BA10ADA422AF461900CD0FB3 /* POPAnimation.mm in Sources */,
+				BA76081222A4F3FE00412FC1 /* SRDeviceUtils.m in Sources */,
+				BA76083122A4F45900412FC1 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
+				BA10ADAD22AF461900CD0FB3 /* POPVector.mm in Sources */,
+				BA10ADA522AF461900CD0FB3 /* POPGeometry.mm in Sources */,
+				BA76083A22A4F45900412FC1 /* MASViewAttribute.m in Sources */,
+				BA76080822A4F34600412FC1 /* UIColor+Hex.m in Sources */,
+				BA10AD1822AF442300CD0FB3 /* SRShootSwicher.m in Sources */,
+				BA10ADA022AF461900CD0FB3 /* POPAnimationTracer.mm in Sources */,
+				BA76083922A4F45900412FC1 /* MASViewConstraint.m in Sources */,
+				BA76084322A4FB2200412FC1 /* SRDeviceViewController.m in Sources */,
+				BA10AD9D22AF461900CD0FB3 /* POPMath.mm in Sources */,
+				BA7607DA22A4F2CB00412FC1 /* main.m in Sources */,
+				BA10AD9E22AF461900CD0FB3 /* POPSpringAnimation.mm in Sources */,
+				BA10ADA922AF461900CD0FB3 /* POPAnimatableProperty.mm in Sources */,
+				BA8C8AAC22AE470A00FA1406 /* SRHowToViewController.m in Sources */,
+				BA76083422A4F45900412FC1 /* MASConstraintMaker.m in Sources */,
+				BA10ADA122AF461900CD0FB3 /* POPAnimationExtras.mm in Sources */,
+				BA10ADAC22AF461900CD0FB3 /* POPLayerExtras.mm in Sources */,
+				BA76083522A4F45900412FC1 /* MASLayoutConstraint.m in Sources */,
+				BA76083722A4F45900412FC1 /* View+MASAdditions.m in Sources */,
+				BA10ADAA22AF461900CD0FB3 /* POPAnimationRuntime.mm in Sources */,
+				BA10ADA722AF461900CD0FB3 /* TransformationMatrix.cpp in Sources */,
+				BA76083322A4F45900412FC1 /* MASCompositeConstraint.m in Sources */,
+				BA10ADA322AF461900CD0FB3 /* POPPropertyAnimation.mm in Sources */,
+				BA76080922A4F34600412FC1 /* WCLRecordEncoder.m in Sources */,
+				BA76083222A4F45900412FC1 /* ViewController+MASAdditions.m in Sources */,
+				BA10ADA222AF461900CD0FB3 /* POPDecayAnimation.mm in Sources */,
+				BA7607CC22A4F2C900412FC1 /* AppDelegate.m in Sources */,
+				BA76080B22A4F34600412FC1 /* WCLRecordEngine.m in Sources */,
+				BA76080A22A4F34600412FC1 /* MoiveViewController.m in Sources */,
+				BA10AD9C22AF461900CD0FB3 /* POPCGUtils.mm in Sources */,
+				BA10ADAB22AF461900CD0FB3 /* POPAnimationEvent.mm in Sources */,
+				BA10ADA822AF461900CD0FB3 /* POPAnimator.mm in Sources */,
+				BA10AD9F22AF461900CD0FB3 /* POPCustomAnimation.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA7607DB22A4F2CB00412FC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA7607E422A4F2CB00412FC1 /* SIRUI_LensTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA7607E622A4F2CB00412FC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA7607EF22A4F2CB00412FC1 /* SIRUI_LensUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BA7607E122A4F2CB00412FC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BA7607C622A4F2C900412FC1 /* SIRUI Lens */;
+			targetProxy = BA7607E022A4F2CB00412FC1 /* PBXContainerItemProxy */;
+		};
+		BA7607EC22A4F2CB00412FC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BA7607C622A4F2C900412FC1 /* SIRUI Lens */;
+			targetProxy = BA7607EB22A4F2CB00412FC1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BA7607D522A4F2CB00412FC1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA7607D622A4F2CB00412FC1 /* Base */,
+				BA8C8AB222AE48E000FA1406 /* zh-Hans */,
+				BA8C8AB422AE48E400FA1406 /* zh-Hant */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		BA8C8AB122AE488C00FA1406 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA8C8AB022AE488C00FA1406 /* en */,
+				BA8C8AB322AE48E000FA1406 /* zh-Hans */,
+				BA8C8AB522AE48E400FA1406 /* zh-Hant */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BA7607F122A4F2CB00412FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BA7607F222A4F2CB00412FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BA7607F422A4F2CB00412FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JA4T9W56QS;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/SIRUI\\ Lens/pop";
+				INFOPLIST_FILE = "SIRUI Lens/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/SIRUI\\ Lens/pop";
+				PRODUCT_BUNDLE_IDENTIFIER = com.srui.cameraLens;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		BA7607F522A4F2CB00412FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JA4T9W56QS;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/SIRUI\\ Lens/pop";
+				INFOPLIST_FILE = "SIRUI Lens/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/SIRUI\\ Lens/pop";
+				PRODUCT_BUNDLE_IDENTIFIER = com.srui.cameraLens;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		BA7607F722A4F2CB00412FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JA4T9W56QS;
+				INFOPLIST_FILE = "SIRUI LensTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sirui.moistureproofBox.SIRUI-LensTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SIRUI Lens.app/SIRUI Lens";
+			};
+			name = Debug;
+		};
+		BA7607F822A4F2CB00412FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JA4T9W56QS;
+				INFOPLIST_FILE = "SIRUI LensTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sirui.moistureproofBox.SIRUI-LensTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SIRUI Lens.app/SIRUI Lens";
+			};
+			name = Release;
+		};
+		BA7607FA22A4F2CB00412FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JA4T9W56QS;
+				INFOPLIST_FILE = "SIRUI LensUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sirui.moistureproofBox.SIRUI-LensUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SIRUI Lens";
+			};
+			name = Debug;
+		};
+		BA7607FB22A4F2CB00412FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JA4T9W56QS;
+				INFOPLIST_FILE = "SIRUI LensUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sirui.moistureproofBox.SIRUI-LensUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SIRUI Lens";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BA7607C222A4F2C900412FC1 /* Build configuration list for PBXProject "SIRUI Lens" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA7607F122A4F2CB00412FC1 /* Debug */,
+				BA7607F222A4F2CB00412FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA7607F322A4F2CB00412FC1 /* Build configuration list for PBXNativeTarget "SIRUI Lens" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA7607F422A4F2CB00412FC1 /* Debug */,
+				BA7607F522A4F2CB00412FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA7607F622A4F2CB00412FC1 /* Build configuration list for PBXNativeTarget "SIRUI LensTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA7607F722A4F2CB00412FC1 /* Debug */,
+				BA7607F822A4F2CB00412FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA7607F922A4F2CB00412FC1 /* Build configuration list for PBXNativeTarget "SIRUI LensUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA7607FA22A4F2CB00412FC1 /* Debug */,
+				BA7607FB22A4F2CB00412FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BA7607BF22A4F2C900412FC1 /* Project object */;
+}

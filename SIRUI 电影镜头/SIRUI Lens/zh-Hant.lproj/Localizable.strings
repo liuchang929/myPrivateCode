@@ -1,0 +1,404 @@
+/*
+ Localizable.strings
+ SiRuiIOT
+ 
+ Created by a on 16/9/19.
+ 
+ */
+
+"电影镜头" = "電影鏡頭";
+"正在连接设备" = "正在連接設備";
+"选择设备" = "選擇設備";
+"三角形" = "三角形";
+"圆形"   = "圓形";
+"直线"   = "直線";
+"矩形"   = "矩形";
+"半径"   = "半徑";
+"高"     = "高";
+"宽"     = "寬";
+"长"   = "長";
+"毫米"   = "毫米";
+"厘米"   = "釐米";
+"米"     = "米";
+"速度" = "速度";
+"正在重置蓝牙设备" = "正在重置藍牙設備";
+"蓝牙未打开"      = "藍牙未打開";
+"蓝牙异常"        = "藍牙異常";
+"你的设备不支持蓝牙"= "你的設備不支持藍牙";
+"蓝牙未授权" = "藍牙未授權";
+"连接超时" = "連接超時";
+"对焦" = "對焦";
+"曝光" = "曝光";
+"白平衡" = "白平衡";
+"闪光灯" = "闪光灯";
+"防抖" = "防抖";
+"自动" = "自動";
+"手动" = "手動";
+"设备" = "防潮柜";
+"资讯" = "資訊";
+"商店" = "商店";
+"进入拍摄" = "進入拍攝";
+"秒" = "second";
+"高" = "高";
+"中" = "中";
+"低" = "低";
+"如何使用？" = "如何使用？";
+"分享应用" = "分享应用";
+"我的资料" = "我的资料";
+"我的作品" = "我的作品";
+"售后服务" = "售后服务";
+"全景结束" = "全景結束";
+"请先连接云台" = "請先連接雲台";
+"请将手机保持竖直放置" = "请将手机保持竖直放置";
+"图片合成中\n请稍后...." = "圖片合成中\n請稍後....";
+"人脸跟踪模式开启" = "人臉跟蹤模式開啟";
+"多人跟踪模式关闭" = "多人跟蹤模式關閉";
+"光流开启" = "光流開啟";
+"光流关闭" = "光流關閉";
+"全景结束!!!\n请不要移动手机" = "全景結束!!!\n請不要移動手機";
+"正在合成照片" = "正在合成照片";
+"图片合成失败\n请让手机拍照距离物体大于一米" = "圖片合成失敗\n請讓手機拍照距離大於一米";
+"图片合成成功" = "圖片合成成功";
+"分享" = "分享";
+"请安装微信客户端" = "請安裝微信客戶端";
+"这是用智能云台拍摄的" = "這是用思銳智能雲台拍攝的";
+"上传失败，请检查网络设置" = "上傳失敗，請檢查網絡設置";
+"我用思锐智能云台拍了一张神奇的照片" = "我用思銳智能雲台拍了一張神奇的照片";
+"点开用你的手机查看吧" = "點開用您的手機查看吧";
+"这是用智能云台拍摄的!" = "這是用思銳智能雲台拍攝的!";
+"其他分享" = "其他分享";
+"发现应用更新" = "发现应用更新";
+"BP360-01" = "360智能雲台";
+"保存视频失败" = "保存视频失败";
+"保存视频成功" = "保存视频成功";
+
+"请看前置" = "請看前置";
+"拍摄已完成,正在合成中···" = "拍攝已完成，正在合成中...";
+"请勿移动" = "請勿移動";
+"视频已保存" = "視頻已保存";
+"正在上传..." = "正在上傳";
+"上传失败" = "上傳失敗";
+"上传成功" = "上傳成功";
+"正在合成视频，请等待..." = "正在合成視頻，請等待...";
+"导出成功" = "導出成功";
+"导出失败" = "導出失敗";
+
+"验证设备" = "驗證設備";
+"验证设备中…" = "設備驗證中…";
+"验证设备已达到上限" = "驗證設備已達到上限";
+"验证设备通过" = "驗證設備通過";
+"将二维码放入框内,即可自动扫描" = "將二維碼放入框內，即可自動掃描";
+
+//Account
+"Account Success" = "登陸成功";//code == 0
+"Verification code error" = "驗證碼錯誤";//R005
+"User does not exist" = "用戶不存在";
+"The mailbox is registered" = "郵箱已註冊";
+"Other errors" = "其他錯誤";
+"Activation successful" = "激活成功";
+"The user is not logged in" = "用戶未登陸";
+"wrong user name or password" = "用戶名或密碼錯誤";
+"The user already exists" = "用戶已存在";
+"Unauthenticated users" = "未認證用戶";
+"Verification code timed out" = "驗證碼超時";
+"Required data is empty" = "必填數據為空";
+"Foreign key data does not exist" = "外鍵數據不存在";
+"The input password is inconsistent" = "輸入的密碼不一致";
+"Verification code does not allow retransmission in a short time" = " 驗證碼短時間內不允許重發";
+
+
+"Please fill in the complete information" = "請填寫完整信息";
+"please enter a valid email address" = "請輸入有效的郵箱地址";
+"Please fill in the email address" = "請填寫郵箱地址";
+"Tips" = "溫馨提示";
+"Send successful, please check the message immediately and change the password" = "發送成功，請立即查看郵箱並修改密碼";
+
+
+
+
+"Server exception" = "服務器異常";
+"Request timed out" = "請求超時";
+"Please enter a valid password" = "請輸入有效的密碼";
+"Before and after the password is inconsistent" = "前後密碼不一致";
+"Registered successfully! Please check the mailbox and activate the account" = "註冊成功！請查看郵箱並激活帳號";
+
+
+
+
+
+
+
+
+//new UserManagement
+"Please enter a valid email address or mobile number" = "請輸入有效的郵箱地址或手機號碼";
+"Please select your location" = "請選擇所在地區";
+"Failed to upload pictures" = "上傳圖片失敗";
+"Successfully registered!" = "註冊成功!";
+"Are you sure you are logged out?" = "您確定要退出登陸嗎？";
+"Help Center" = "幫助中心";
+"Give us a score" = "給我們打分";
+"edit info" = "個人信息";
+"about us" = "關於我們";
+"Feedback" = "意見反饋";
+"clear cache" = "清除緩存";
+"sign out" = "退出登錄";
+"Successfully modified!" = "修改成功!";
+"Re-login" = "重新登陸";
+"Clear success!" = "清除成功！";
+"The current cache is:" = "當前緩存為：";
+"Do you clear the current cache?" = "是否清除當前緩存？";
+"Successfully sent!" = "發送成功!";
+"Network connection failed, please try again" = "網絡連接失敗，請檢查網絡設置";
+"Loading failed, please try again" = "加載失敗，請重試";
+"Please select the image source" = "請選擇圖片來源";
+"camera" = "照相機";
+"Album" = "相冊";
+"Personal information" = "個人信息";
+"Turn off the Flash Light" = "關閉閃光燈";
+"Turn on the Flash Light" = "打開閃光燈";
+"Put the QR Code/Barcode inside the frame for scanning" = "將二維碼/條碼放入框內, 即可自動掃描";
+"productScanTips" = "選擇手動輸入產品激活碼\n請點擊->";
+
+
+
+
+
+
+
+
+
+
+
+
+
+//SR-Cabinet
+//view
+"Alert! The Moisture Proof ark is being vibrated"="警報！！防潮櫃發生震動";
+"Alert! The Moisture Proof ark is being moved"="警報！！防潮櫃發生移動";
+"Alert! The password for the Moisture Proof ark is entered incorrectly"="警報！！防潮櫃密碼輸入錯誤";
+"issue an alert"="發出警報";
+"Details"="詳情";
+"ConnectingDevice"="連接設備";
+"Configure the device's network"="配置設備聯網";
+"Directly scan to bind the device"="設備已聯網? 請直接掃描綁定設備";
+"WifiAccount"="當前未接入Wi-Fi網絡，請檢查Wi-Fi設置";
+"WifiPassword"="請輸入Wi-Fi密碼";
+"Configure"="一鍵配置";
+"HumiditySettingRange"="設置濕度的範圍";
+"SaveSettings"="保存設置";
+"ModifyName"="修改防潮櫃名稱";
+"Please enter the name of the cabinet"="請自定義您的防潮櫃名稱";
+"The last step"="最後一步";
+"Name your moisture proof ark"="你已成功添加防潮櫃";
+"Wi-fi account"="wifi賬號";
+"Confirm"="確認";
+"Cancel"="取消";
+"Refresh to get the device name"="刷新獲取設備名";
+"OpenCabinet"="遠程開門";
+"SetHumidity"="設置濕度";
+"Locked"="鎖死";
+"Unlock"="解鎖";
+"Unknown"="未知";
+"Temparature"="溫度";
+"Humidity"="濕度";
+"OpeningLog"="開門記錄";
+"AlarmLog"="警報記錄";
+"ClosingLog"="關門記錄";
+"EmptyList"="當前設備為空，請點擊右上角添加設備";
+"UnknownLockState"="(暫時未能獲取防潮櫃鎖死狀態)";
+"UnLockState"="(防潮櫃未鎖死)";
+"LockState"="(防潮櫃已被鎖死)";
+"The device has not yet configured the network, first configured the device's network"="請先配置設備上網";
+"The moment of closing the door"="關門時間";
+"Scan"="掃一掃";
+"QRCodePrompt"="將二維碼/條碼放入框內, 即可自動掃描";
+"Turn on the flash"="打開閃光燈";
+"Turn off the flash"="關閉閃光燈";
+"Get device ID error"="獲取設備錯誤";
+"online"="在線";
+"offline"="離線";
+"Unknown state"="未知狀態";
+"SIRUI-Cabinet"="思銳";
+"Recent log"="最近記錄";
+"Custom"="自定義";
+"Click to select the query time period"="點擊選擇查詢時間段";
+"DeviceIMEI"="設備IMEI";
+"Please select date"="請選擇日期";
+"Click to select the start time"="點擊選擇開始時間";
+"Click to select the end time"="點擊選擇結束時間";
+"Done"="完成";
+"Sure"="確定";
+"Starting time"="開始時間";
+"End time"="結束時間";
+
+
+
+//alert or hint
+"TimeCue"="結束時間必須大於開始時間";
+"Iknow"="我知道了";
+"No equipment available"="當前無設備";
+"my SR-Cabinet"="我的思銳防潮櫃";
+"Warning message"="警報消息";
+"Failed to get the name"="獲取名稱出錯";
+"Please enter a name"="請輸入名稱";
+"Modified name successfully!"="修改名稱成功!";
+"Wait for timeout"="等待反饋超時";
+"No records"="暫無記錄";
+"Unable to push the alarm message"="無法推送警報消息";
+"Please go to system Settings to open the app to push"="請前往系統設置-通知- SiRui SMARTER-允許通知";
+"The device is offline, please check the equipment status"="設備離線，請檢查設備狀態";
+"Please unlock the device"="請先解鎖設備";
+"Please enter the moistureproof ark names"="請輸入您的防潮櫃名稱";
+"password can not be blank"="密碼不能為空";
+"Wi-fi is not available"="當前Wi-Fi不可用";
+"Please configure the wi-fi network"="請先配置Wi-Fi網絡";
+"Successfully open the door"="開門成功";
+"The request timeout"="請求超時";
+"No records"="暫無記錄";
+"Access time error"="獲取時間出錯";
+"The total number of records"="總記錄數";
+"The total number of records: 0"="總記錄數:0條";
+"There is no record"="已無記錄";
+"Error password alarm"="錯誤密碼報警";
+"The device is moved by the alarm"="設備移動報警";
+"Vibration alarm"="震動報警";
+"The alarm time of the device"="設備警報時間";
+"The moment to open the door"="開門時間";
+"prompt"="提示";
+"Please go to - > [privacy Settings - - camera - iotplatform] open access switch"="請去-> [設置 - 隱私 - 相機 - SiRui SMARTER] 打開訪問開關";
+"warning"="警告";
+"Did not detect your camera, please test it on a real machine"="未檢測到您的攝像頭, 請在真機上測試";
+"The album can not be accessed for system reasons"="因為系統原因, 無法訪問相冊";
+//"Waiting for the feedback device timeout"="等待设备反馈超时";
+"No equipment"="沒有設備";
+"The data length is out of range"="數據長度超出範圍";
+"The device is not connected"="設備未連接";
+"Please confirm the current device status before adding the device"="添加設備前請確定當前的設備狀態";
+"When configuring the network of the device, press the 'Password reset / wifi reset' button for the humidity cabinet for more than 5 seconds and wait for 'bi'"="請按下防潮櫃的“密碼重置/wifi重置”按鈕超過5秒，等待“bi”一聲";
+"The device ID does not exist"="該設備ID不存在";
+"Server exception"="服務器異常";
+"Can not operate off-line equipment"="離線設備不能操作";
+"Please enter the time"="請輸入時間";
+"This time period is not recorded"="該時間段無記錄";
+//"Failed to obtain humidity Control Cabinet  data, please try again later"="暂时未能获取防潮柜数据，请稍后再试";
+//"Equipment has been offline"="设备已离线";
+"Being loaded.."="正在加載..";
+"NetworkFailInfo"="網絡請求失敗，請檢查您的網絡設置";
+"AbnormalNetwork"="網絡異常，請稍後再試";
+//"OfflineInfo"="当前设备离线，请连接后查看";
+"EnterPassword"="請輸入密碼";
+"EnterValidPassword"="密碼有效長度為6至12位";
+"EnterSafePassword"="請輸入保險箱密碼";
+"PasswordLengthInfo"="密碼長度不能超過12位";
+"ThreeInputError"="連續輸入三次密碼錯誤，請手動輸入";
+"Loading..."="加載中...";
+"The connection is canceled"="連接已被取消";
+"Successfully updated!"="更新成功";
+
+
+
+
+
+
+
+//-----------返回编码------------
+"Success"="操作成功";
+"Fail"="操作失敗";
+/*特指对设备的操作命令反馈回来的消息*/
+"DeviceSuccess"="操作設備成功";
+"DeviceFail"="操作設備失敗";
+
+"Data error"="數據出錯";
+"Device not connected"="設備沒連接";
+"UnknownReturnEncode"="未知的返回編碼";
+"Verification code is missing"="缺少驗證碼";
+"Time zone is missing"="缺少時區";
+"Device number is missing"="缺少設備號";
+"Password is missing"="缺少密碼";
+"Time stamp is missing"="缺少時間戳";
+"Humidity is missing"="缺少濕度";
+"Page is missing"="缺少頁碼";
+"Lack of opening and closing requests"="缺少開關門請求";
+"wrong format"="格式錯誤";
+"Parameter error or missing"="參數錯誤或缺少";
+"User name error or password error"="用戶名錯誤或者密碼錯誤";
+
+
+
+
+
+
+
+//后续添加...
+"The cabinet is open and can not be locked"="櫃子已打開，無法鎖死";
+"Connection network failed"="連接網絡失敗";
+"Please reconnect to the network"="請重新連接網絡";
+"You receive an alert from the SR-Cabinet"="您收到一條防潮櫃的警報，請查看";
+"The third party push service can not register the notification, please start the app later try to register the notification push"="第三方推送服務不能夠註冊通知，請稍後啟動app嘗試註冊通知推送";
+"name"="name";
+"name"="name";
+"name"="name";
+
+
+
+///新增功能1.0(增加切图，九宫格)
+"Save to album"="保存到相冊";
+"Save failed"="保存失敗";
+"Saved successfully"="保存成功";
+"Can not access album"="無法訪問相冊";
+"Please go to the settings to find the app and open the permission to access the photo"="請前往設置找到該app並打開允許訪問照片的權限";
+
+//360 len
+"全景" = "全景";
+"平面" = "平面";
+"全鱼眼" = "全魚眼";
+
+"Origin" = "原圖";
+"Toaster" = "舊時光";
+"Amaro" = "夏至";
+"LordKelvin" = "麥田";
+"Nashville" = "回到過去";
+"Walden" = "泡沫之夏";
+"XproII" = "挪威的森林";
+"Hefe" = "1943";
+"Brannan" = "重返20歲";
+"Sierra" = "思享+";
+"Valencia" = "戀人未滿";
+"Earlybird" = "年輪";
+"1977" = "火烈鳥";
+"Inkwell" = "光與影";
+"Lomofi" = "方糖";
+"Hudson" = "藍莓";
+"Sutro" = "老相機";
+"Rise" = "1989";
+"Beauty" = "美顏";
+"save video success" = "视频保存成功";
+"save video fail" = "视频保存失败";
+
+"connected"="已連接";
+"please connect device first" = "請連接藍牙";
+
+"save origin image?" = "是否保留高清原图?";
+"How to" = "查看原图拼接教程";
+"please view tutorials in the setting" = "请前往设置中查看原图拼接教程";
+
+"正在保存照片" = "正在保存照片";
+"Pano Error" = "全景拍摄失败，请把设备保持水平放置";
+
+"已扫描的设备"="已扫描的设备";
+"正在扫描设备"="正在扫描设备";
+
+"上传失败" = "上传失败";
+"上传成功" = "上传成功";
+"正在上传..." = "正在上传...";
+
+"正常" = "正常";
+"延时摄影" = "延时摄影";
+"慢动作" = "慢动作";
+
+"全景" = "全景";
+"单拍" = "单拍";
+
+"跟踪区域太小" = "跟踪区域太小";
+"跟踪区域太大" = "跟踪区域太大";
+
