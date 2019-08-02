@@ -5553,7 +5553,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 return CGSizeMake(1080, 1920);
             }
         }
-            
             break;
             
         case 2:
