@@ -22,6 +22,8 @@
     self.title = NSLocalizedString(@"电影镜头",comment: "");
     [self.connectBtn setTitle:NSLocalizedString(@"进入拍摄",comment: "") forState:UIControlStateNormal];
     [self.howToBtn setTitle:NSLocalizedString(@"如何使用？",comment: "") forState:UIControlStateNormal];
+    
+    NSLog(@"test commit");
 }
 
 - (IBAction)connectDevice:(id)sender {
