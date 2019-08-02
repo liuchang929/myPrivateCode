@@ -311,6 +311,12 @@
     if (_autoConnectTimes > 4) {
         if (_flashDevicesArray.count > 0) {
             CBPeripheral *per = self.flashDevicesArray[0][0];
+            if ([per.name isEqualToString:self.deviceNameArray[0]]) {
+                self.isXP3 = YES;
+            }
+            else {
+                self.isXP3 = NO;
+            }
             [[JEBluetoothManager shareBLESingleton] connectDeviceWithCBPeripheral:per];
             if (_autoConnectCountdown.isValid) {
                 [self.autoConnectCountdown invalidate];
@@ -651,8 +657,7 @@
 - (void)finishedEventByEnterCameraButton:(EnterCameraButton *)button {
 
     JESmartCameraViewController *vc = [[JESmartCameraViewController alloc] init];
-//    vc.cameraConnectMode = connectNothing;
-    vc.controllerMode = cameraP1;
+    vc.controllerMode = cameraM1;
     [self presentViewController:vc animated:YES completion:nil];
     [self clearPopView];
 }

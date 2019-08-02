@@ -25,7 +25,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;    //状态栏颜色
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;    //状态栏字体颜色
     
     //强制纠正语言
     NSArray *languages = [NSLocale preferredLanguages];

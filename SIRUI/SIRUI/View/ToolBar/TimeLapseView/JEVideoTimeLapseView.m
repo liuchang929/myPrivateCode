@@ -52,6 +52,7 @@
     [noteStr addAttribute:NSForegroundColorAttributeName value:MAIN_TEXT_COLOR range:selfRange];
     [noteStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:selfRange];
     [speedLabel setAttributedText:noteStr];
+    speedLabel.adjustsFontSizeToFitWidth = YES;
     [self addSubview:speedLabel];
     
     self.timeLapsePicker = [[UIPickerView alloc] initWithFrame:CGRectMake(120, 27, self.frame.size.width - 150, 50)];

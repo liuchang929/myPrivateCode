@@ -161,6 +161,9 @@
 #define USER_GET_SaveVersionNewFirmware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionNewFirmware"]
 #define USER_GET_SaveVersionHardware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionHardware"]
 #define USER_GET_SaveVersionBluetooth_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionBluetooth"]
+//电影镜头状态
+#define USER_SET_SaveFilmCameraState_BOOL(bool) [[NSUserDefaults standardUserDefaults] setBool:bool forKey:@"SaveFilmCameraState"]
+#define USER_GET_SaveFilmCameraState_BOOL [[NSUserDefaults standardUserDefaults] boolForKey:@"SaveFilmCameraState"]
 //充电开关机状态
 #define USER_SET_SaveChargingSwitchState_BOOL(bool) [[NSUserDefaults standardUserDefaults] setBool:bool forKey:@"SaveChargingSwitchState"]
 #define USER_GET_SaveChargingSwitchState_BOOL [[NSUserDefaults standardUserDefaults] boolForKey:@"SaveChargingSwitchState"]

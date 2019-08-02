@@ -135,6 +135,21 @@
 }
 
 - (void)switchChanged:(UISwitch *)swi {
+    
+    NSLog(@"swi.tag = %ld", swi.tag);
+    if (swi.tag == 292) {
+        //电影镜头
+        
+        USER_SET_SaveFilmCameraState_BOOL(swi.on);
+    
+        if (self.delegate && [self.delegate respondsToSelector:@selector(filmCameraAction:)]) {
+            [self.delegate filmCameraAction:USER_GET_SaveFilmCameraState_BOOL];
+        }
+        
+        [_tableView reloadData];
+        return;
+    }
+    
     if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
         if (swi.tag == 293) {
             //充电使用设备
@@ -225,6 +240,19 @@
                 }
                     break;
                     
+                case 3: {
+                    //电影镜头
+                    UISwitch *swi = [[UISwitch alloc] initWithFrame:CGRectMake(cell.cellView.frame.size.width - 3*CELL_ICON_HEIGHT, 7.5, CELL_ICON_HEIGHT, CELL_ICON_HEIGHT)];
+                    swi.tag = 292;
+                    [swi setOnTintColor:MAIN_BLUE_COLOR];
+                    [swi setTintColor:[UIColor whiteColor]];
+                    [swi setOn:USER_GET_SaveFilmCameraState_BOOL];
+                    [swi addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+                    
+                    [cell.cellView addSubview:swi];
+                }
+                    break;
+                    
                 default:
                     break;
             }
@@ -234,34 +262,7 @@
         case deviceSetting: {
             //设备设置
             _headLabel.text = NSLocalizedString(@"Device Settings", nil);
-//            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
             switch (indexPath.row) {
-                /*
-                case 0: {
-                    //航向轴推动速度
-                    self.hPushSpeedPicker = [[UIPickerView alloc] init];
-                    [_hPushSpeedPicker setTransform:transform];
-                    _hPushSpeedPicker.frame = CGRectMake(-50, CELL_ICON_TOPLEFT_WIDTH, _backView.frame.size.width/2 + 50, CELL_ICON_HEIGHT);
-                    _hPushSpeedPicker.delegate = self;
-                    _hPushSpeedPicker.dataSource = self;
-                    [cell.cellView addSubview:_hPushSpeedPicker];
-                    [_hPushSpeedPicker selectRow:USER_GET_SaveAxisPushSpeed_Interger inComponent:0 animated:nil];
-                }
-                    break;
-                    
-                case 1: {
-                    //俯仰轴推动速度
-                    self.fPushSpeedPicker = [[UIPickerView alloc] init];
-                    [_fPushSpeedPicker setTransform:transform];
-                    _fPushSpeedPicker.frame = CGRectMake(-50, CELL_ICON_TOPLEFT_WIDTH, _backView.frame.size.width/2 + 50, CELL_ICON_HEIGHT);
-                    _fPushSpeedPicker.delegate = self;
-                    _fPushSpeedPicker.dataSource = self;
-                    [cell.cellView addSubview:_fPushSpeedPicker];
-                    [_fPushSpeedPicker selectRow:USER_GET_SavePitchPushSpeed_Interger inComponent:0 animated:nil];
-                }
-                    break;
-                 */
-                    
                 case 0: {
                     //设备充电状态
                     UISwitch *swi = [[UISwitch alloc] initWithFrame:CGRectMake(cell.cellView.frame.size.width - 3*CELL_ICON_HEIGHT, 7.5, CELL_ICON_HEIGHT, CELL_ICON_HEIGHT)];
@@ -392,6 +393,9 @@
     
     switch (_settingMode) {
         case cameraSetting: {
+            if (indexPath.row == 3) {
+                return;
+            }
             if (!_optionsView) {
                 if (_backView.frame.size.width > _backView.frame.size.height) {
                     //竖屏

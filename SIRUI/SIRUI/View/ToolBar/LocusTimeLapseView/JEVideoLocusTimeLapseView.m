@@ -61,7 +61,7 @@
     speedPickerLabel.textColor = [UIColor whiteColor];
     speedPickerLabel.textAlignment = NSTextAlignmentLeft;
     speedPickerLabel.font = [UIFont systemFontOfSize:14];
-//    speedPickerLabel.adjustsFontSizeToFitWidth = YES;
+    speedPickerLabel.adjustsFontSizeToFitWidth = YES;
     speedPickerLabel.backgroundColor = [UIColor clearColor];
     [self addSubview:speedPickerLabel];
     
@@ -82,7 +82,7 @@
     pickerLabel.textColor = [UIColor whiteColor];
     pickerLabel.textAlignment = NSTextAlignmentLeft;
     pickerLabel.font = [UIFont systemFontOfSize:14];
-//    pickerLabel.adjustsFontSizeToFitWidth = YES;
+    pickerLabel.adjustsFontSizeToFitWidth = YES;
     pickerLabel.backgroundColor = [UIColor clearColor];
     [self addSubview:pickerLabel];
     

@@ -38,6 +38,7 @@
 #import "SliderView.h"
 #import "UIImage+WaterMark.h"
 #import "SRVideoRecordTool.h"
+#import "JEGetDeviceVersion.h"
 
 #import "SRTrackingCore.h"
 #import "FileUtils.h"
@@ -140,6 +141,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, assign) CGFloat                   effectiveScale;         //移动变焦倍数
 @property (nonatomic, assign) CGFloat                   mainFrameWidth;         //屏幕宽
 @property (nonatomic, assign) CGFloat                   mainFrameHeight;        //屏幕高
+@property (nonatomic, assign) CGFloat                   filmFrameWidth;         //电影屏幕宽
+@property (nonatomic, assign) CGFloat                   filmFrameHeight;        //电影屏幕高
+@property (nonatomic, assign) CGFloat                   filmDistortionRatio;    //电影镜头校正录制完成畸变
+@property (nonatomic, assign) CGFloat                   filmRatio;              //展示界面调整
 
 //Data
 //@property (nonatomic, assign) BOOL      isSearchingDevice;      //蓝牙搜索设备中
@@ -151,6 +156,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, assign) BOOL      islensSwitching;        //正在切换镜头
 @property (nonatomic, assign) BOOL      isSubShowing;           //菜单弹出状态
 @property (nonatomic, assign) BOOL      isVideo;                //拍摄模式
+@property (nonatomic, assign) BOOL      isFilm;                 //电影模式
 @property (nonatomic, assign) BOOL      isPanoing;              //全景拍摄状态
 @property (nonatomic, assign) BOOL      isFunctionShowing;      //自定义功能菜单
 @property (nonatomic, assign) BOOL      isClearViewShowing;     //全屏屏蔽按键事件
@@ -987,7 +993,8 @@ typedef void(^getStillImageBlock)(UIImage *image);
     //设置列表数据初始化
     self.cameraSettingArray = @[@{@"name":@"Grid Line",        @"type":@"yes"},
                                 @{@"name":@"Flash",            @"type":@"yes"},
-                                @{@"name":@"Video Resolution", @"type":@"yes"}];
+                                @{@"name":@"Video Resolution", @"type":@"yes"},
+                                @{@"name":@"Film Camera",      @"type":@"no"}];
     
     self.deviceSettingArray = @[
 //                                @{@"name":@"Push speed(pan)",           @"type":@"no"},
@@ -1064,6 +1071,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     USER_SET_SaveVersionHardware_NSString(NULL);
     USER_SET_SaveVersionBluetooth_NSString(NULL);
     
+    //电影镜头
+    USER_SET_SaveFilmCameraState_BOOL(NO);
+    
     //设备充电设置
     USER_SET_SaveChargingSwitchState_BOOL(NO);
     
@@ -1086,12 +1096,13 @@ typedef void(^getStillImageBlock)(UIImage *image);
     }
 }
 
-#pragma mark - StillCamera && VideoCamera
+#pragma mark - StillCamera && VideoCamera && FilmCamera
 - (void)setupStillCamera {
     //预览 View
     self.cameraOutputView = [[GPUImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _cameraOutputView.userInteractionEnabled    = YES;
     _cameraOutputView.fillMode                  = kGPUImageFillModePreserveAspectRatioAndFill;  //保持源图像的纵横比，放大其中心以填充视图
+//    _cameraOutputView.center = self.view.center;
     [self.view addSubview:_cameraOutputView];
     
     //创建滤镜
@@ -1115,8 +1126,29 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [_stillCamera startCameraCapture];
 }
 
+- (void)setupFilmCamera {
+    [_stillCamera stopCameraCapture];
+    
+    self.cameraOutputView.frame = CGRectMake((_mainFrameWidth - _mainFrameWidth/_filmRatio)/2.0, 0, _mainFrameWidth/_filmRatio, _mainFrameHeight);
+    _cameraOutputView.fillMode = kGPUImageFillModeStretch;
+    
+    [_stillCamera startCameraCapture];
+}
+
+- (void)resetStillCamera {
+    
+    [_stillCamera stopCameraCapture];
+    
+    self.cameraOutputView.frame = [UIScreen mainScreen].bounds;
+    _cameraOutputView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
+    
+    [_stillCamera startCameraCapture];
+}
+
 #pragma mark - ToolBar
-//顶部 ToolBar
+/**
+ 顶部 ToolBar
+ */
 - (void)setupTopToolBar {
     self.topToolBar = [[JECameraTopToolBar alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 75) CameraMode:connectXP3];
     
@@ -1125,7 +1157,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [self.view addSubview:_topToolBar];
 }
 
-//中部 Toolbar
+/**
+ 中部 Toolbar
+ */
 - (void)setupMiddleToolBar {
     self.middleToolBar = [[JECameraMiddleToolBar alloc] initWithFrame:CGRectMake(20, 90, WIDTH - 40, 60)];
     
@@ -1136,7 +1170,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [self.view addSubview:_middleToolBar];
 }
 
-//底部 ToolBar
+/**
+ 底部 ToolBar
+ */
 - (void)setupBottomToolBar {
     self.bottomToolBar = [[JECameraBottomToolBar alloc] initWithFrame:CGRectMake(0, HEIGHT - WIDTH * 0.6, WIDTH, WIDTH * 0.6) CameraMode:bConnectXP3];
     
@@ -1146,13 +1182,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
     self.stopTimeLapseButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     [_stopTimeLapseButton setImage:[UIImage imageNamed:@"icon_timeLapse_stop"] forState:UIControlStateNormal];
     [_stopTimeLapseButton setImage:[UIImage imageNamed:@"icon_timeLapse_start"] forState:UIControlStateSelected];
-    /*
-    [_stopTimeLapseButton setTitle:NSLocalizedString(@"stop motion", nil) forState:UIControlStateNormal];
-    [_stopTimeLapseButton setTitle:NSLocalizedString(@"continue motion", nil) forState:UIControlStateSelected];
-    _stopTimeLapseButton.imageEdgeInsets = UIEdgeInsetsMake(-_stopTimeLapseButton.titleLabel.intrinsicContentSize.height, 0, 0, -_stopTimeLapseButton.titleLabel.intrinsicContentSize.width);
-    _stopTimeLapseButton.titleEdgeInsets = UIEdgeInsetsMake(_stopTimeLapseButton.imageView.frame.size.height, -_stopTimeLapseButton.frame.size.width/2, 0, 0);
-    _stopTimeLapseButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-     */
     [_stopTimeLapseButton addTarget:self action:@selector(stopOrStartTimeLapseDevice) forControlEvents:UIControlEventTouchUpInside];
     _stopTimeLapseButton.hidden = YES;
     _stopTimeLapseButton.center = CGPointMake(WIDTH/4*3, _bottomToolBar.toolBar.center.y-10);
@@ -1647,19 +1676,19 @@ typedef void(^getStillImageBlock)(UIImage *image);
             break;
             
         case 1:
-            _auxLineView = [[JEAuxLineView alloc] initWithFrame:self.view.bounds];
+            _auxLineView = [[JEAuxLineView alloc] initWithFrame:_cameraOutputView.bounds];
             _auxLineView.auxLineMode = Square;
             [_cameraOutputView addSubview:_auxLineView];
             break;
             
         case 2:
-            _auxLineView = [[JEAuxLineView alloc] initWithFrame:self.view.bounds];
+            _auxLineView = [[JEAuxLineView alloc] initWithFrame:_cameraOutputView.bounds];
             _auxLineView.auxLineMode = SquareDiagonal;
             [_cameraOutputView addSubview:_auxLineView];
             break;
             
         case 3:
-            _auxLineView = [[JEAuxLineView alloc] initWithFrame:self.view.bounds];
+            _auxLineView = [[JEAuxLineView alloc] initWithFrame:_cameraOutputView.bounds];
             _auxLineView.auxLineMode = CenterPoint;
             [_cameraOutputView addSubview:_auxLineView];
             break;
@@ -1810,17 +1839,36 @@ typedef void(^getStillImageBlock)(UIImage *image);
  */
 - (void)configRatioByNotify {
     if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
-        [self configRatio:2160 height:3840];
+        if (_isFilm) {
+            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
+        }
+        else {
+            [self configRatio:2160 height:3840];
+        }
     }
     else if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset1280x720) {
-        [self configRatio:720 height:1280];
+        if (_isFilm) {
+            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
+        }
+        else {
+            [self configRatio:720 height:1280];
+        }
     }
     else if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset1920x1080) {
-        [self configRatio:1080 height:1920];
+        if (_isFilm) {
+            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
+        }
+        else {
+            [self configRatio:1080 height:1920];
+        }
     }
     else if (_stillCamera.captureSessionPreset == AVCaptureSessionPresetPhoto) {
-        [self configRatio:([UIScreen mainScreen].scale * self.view.frame.size.width) height:([UIScreen mainScreen].scale * self.view.frame.size.height)];
-//        [self configRatio:750 height:1000];
+        if (_isFilm) {
+            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
+        }
+        else {
+            [self configRatio:([UIScreen mainScreen].scale * self.view.frame.size.width) height:([UIScreen mainScreen].scale * self.view.frame.size.height)];
+        }
     }
 }
 
@@ -1857,8 +1905,19 @@ typedef void(^getStillImageBlock)(UIImage *image);
         //创建线程池
         @autoreleasepool {
             [_stillCamera capturePhotoAsPNGProcessedUpToFilter:self.captureFilter withOrientation:self.imageOrientation withCompletionHandler:^(NSData *processedPNG, NSError *error) {
+                //如果开启了电影镜头，就对获取到的照片进行尺寸调整一下
+                
+                UIImage *processedImage;
+                
+                if (_isFilm) {
+                    processedImage = [self resetStillcameraProcessedPNG:processedPNG];
+                }
+                else {
+                    processedImage = [UIImage imageWithData:processedPNG];
+                }
+                
                 NSString *fileName = [JECameraManager shareCAMSingleton].getNowDate;
-                if ([[JECameraManager shareCAMSingleton] saveImage:[UIImage imageWithData:processedPNG] toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName] withOrientation:self.imageOrientation]) {
+                if ([[JECameraManager shareCAMSingleton] saveImage:processedImage toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName] withOrientation:self.imageOrientation]) {
                     self.pictureCapturing = NO;
                 }
                 else {
@@ -2319,117 +2378,36 @@ typedef void(^getStillImageBlock)(UIImage *image);
         
         CGSize captureSize = [self getUserSaveVideoResolution];
         NSLog(@"captureSize = (%f, %f)", captureSize.width, captureSize.height);
-        NSDictionary *settings = @{AVVideoCodecKey:AVVideoCodecH264, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
+        NSDictionary *settings;
         
-        /*
         if (captureSize.width == 2160) {
-            NSLog(@"进入 4k 模式");
-            //初始化
-            [self.stillCamera pauseCameraCapture];
-            [self.stillCamera.captureSession beginConfiguration];
-            [self.stillCamera.captureSession removeOutput:self.stillCamera.videoOutput];
-            [self.stillCamera.captureSession commitConfiguration];
-            
-            self.preLayer.hidden = NO;
-            [self.stillCamera.captureSession stopRunning];
-            CGFloat desiredFPS = 60.0; //帧率
-            AVCaptureDevice *videoDevice = self.stillCamera.inputCamera;
-            AVCaptureDeviceFormat *selectedFormat = nil;
-            int32_t maxWidth = 0;
-            AVFrameRateRange *frameRateRange = nil;
-            for (AVCaptureDeviceFormat *format in [videoDevice formats]) {
-                for (AVFrameRateRange *range in format.videoSupportedFrameRateRanges) {
-                    CMFormatDescriptionRef desc = format.formatDescription;
-                    CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(desc);
-                    int32_t width = dimensions.width;
-                    if (range.minFrameRate <= desiredFPS && desiredFPS <= range.maxFrameRate && width >= maxWidth) {
-                        selectedFormat = format;
-                        frameRateRange = range;
-                        maxWidth = width;
-                    }
-                }
+            //调整编码
+            if (@available(iOS 11.0, *)) {
+                settings = @{AVVideoCodecKey:AVVideoCodecHEVC, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
+            } else {
+                // Fallback on earlier versions
+                SHOW_HUD_DELAY(NSLocalizedString(@"您的手机版本太低，请升级到ios11.0或以上，否则4k录制会丢帧", nil), self.view, 2);
+                settings = @{AVVideoCodecKey:AVVideoCodecH264, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
             }
-            if (selectedFormat) {
-                if ([videoDevice lockForConfiguration:nil]) {
-                    NSLog(@"selected format: %@", selectedFormat);
-                    videoDevice.activeFormat = selectedFormat;
-                    videoDevice.activeVideoMinFrameDuration = CMTimeMake(1, (int32_t)desiredFPS);
-                    videoDevice.activeVideoMaxFrameDuration = CMTimeMake(1, (int32_t)desiredFPS);
-                    [videoDevice unlockForConfiguration];
-                }
-            }
-            [self.stillCamera.captureSession startRunning];
-            
-            [self.stillCamera.captureSession addOutput:self.stillCamera.videoOutput];
-            AVCaptureConnection *videoConnection = nil;
-            for (AVCaptureConnection *connection in [self.stillCamera.videoOutput connections]) {
-                for (AVCaptureInputPort *port in [connection inputPorts]) {
-                    if ( [[port mediaType] isEqual:AVMediaTypeVideo]){
-                        videoConnection = connection;
-                    }
-                }
-            }
-            if ([videoConnection isVideoOrientationSupported]) {
-                [videoConnection setVideoOrientation:(AVCaptureVideoOrientation)[MotionOrientation sharedInstance].deviceOrientation];
-            }
-            if (![self.stillCamera.videoOutput ]) {
-                
-            }
-            
         }
         else {
-         */
-            //初始化
-            self.movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:captureSize fileType:AVFileTypeQuickTimeMovie outputSettings:settings];
-            _movieWriter.encodingLiveVideo = YES;
-            _movieWriter.shouldPassthroughAudio = YES;
-            
-            //设置声道
-            _stillCamera.audioEncodingTarget = _movieWriter;
-            
-            [_captureFilter addTarget:_movieWriter];
-        
-        /*
-        if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
-            if ([_stillCamera.inputCamera respondsToSelector:@selector(setActiveVideoMaxFrameDuration:)] && [_stillCamera.inputCamera respondsToSelector:@selector(setActiveVideoMinFrameDuration:)]) {
-                
-                NSError *error;
-                [_stillCamera.inputCamera lockForConfiguration:&error];
-                if (error == nil) {
-                    [_stillCamera.inputCamera setActiveVideoMinFrameDuration:CMTimeMake(1, 40)];
-                    [_stillCamera.inputCamera setActiveVideoMaxFrameDuration:CMTimeMake(1, 60)];
-                }
-                [_stillCamera.inputCamera unlockForConfiguration];
-            }
-//            NSLog(@"", );
+            settings = @{AVVideoCodecKey:AVVideoCodecH264, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
         }
-         */
         
-            //开始录制
-            [_movieWriter startRecordingInOrientation:CGAffineTransformRotate(CGAffineTransformIdentity, -_mainRotate)];
-            NSLog(@"开始录像");
+        //初始化
+        self.movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:captureSize fileType:AVFileTypeQuickTimeMovie outputSettings:settings];
+        _movieWriter.encodingLiveVideo = YES;
+        _movieWriter.shouldPassthroughAudio = YES;
         
-        /*
-        NSLog(@"inputCamera max(epoch, flags, timescale, value) = (%lld, %u, %d, %lld), min(epoch, flags, timescale, value) = (%lld, %u, %d, %lld)", _stillCamera.inputCamera.activeVideoMaxFrameDuration.epoch, _stillCamera.inputCamera.activeVideoMaxFrameDuration.flags, _stillCamera.inputCamera.activeVideoMaxFrameDuration.timescale, _stillCamera.inputCamera.activeVideoMaxFrameDuration.value, _stillCamera.inputCamera.activeVideoMinFrameDuration.epoch, _stillCamera.inputCamera.activeVideoMinFrameDuration.flags, _stillCamera.inputCamera.activeVideoMinFrameDuration.timescale, _stillCamera.inputCamera.activeVideoMinFrameDuration.value);
+        //设置声道
+        _stillCamera.audioEncodingTarget = _movieWriter;
         
-         */
-        /*
-         1280x720 : 帧率 : 30fps
-         max(epoch, flags, timescale, value) = (0, 1, 30, 1),
-         min(epoch, flags, timescale, value) = (0, 1, 30, 1)
-         
-         1920x1080 : 帧率 : 30fps
-         max(epoch, flags, timescale, value) = (0, 1, 30, 1),
-         min(epoch, flags, timescale, value) = (0, 1, 30, 1)
-         
-         4k : 帧率 : 帧率 : 30fps 平均会丢 6 帧 只有 25 帧左右
-         max(epoch, flags, timescale, value) = (0, 1, 30, 1),
-         min(epoch, flags, timescale, value) = (0, 1, 30, 1)
-         */
+        [_captureFilter addTarget:_movieWriter];
         
-        
-//        }
-        
+        //开始录制
+        [_movieWriter startRecordingInOrientation:CGAffineTransformRotate(CGAffineTransformIdentity, -_mainRotate)];
+        NSLog(@"开始录像");
+    
         self.videoCapturing = YES;
     }
     else {
@@ -4699,6 +4677,14 @@ typedef void(^getStillImageBlock)(UIImage *image);
         case 222: {
             NSLog(@"切换拍摄模式");
             
+            //判断 4k 不支持前置摄像头，4k 时自动切换成后置摄像头
+            if (USER_GET_SaveVideoResolution_Integer == 2) {
+                if ([_stillCamera cameraPosition] == AVCaptureDevicePositionFront) {
+                    self.isFrontCamera = NO;
+                    SHOW_HUD_DELAY(NSLocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
+                }
+            }
+            
             [self changeStillcameraVideoResolution:!_isVideo];  //修改屏幕分辨率
             
             [self setVideoStabilizationMode];   //光学防抖
@@ -4792,7 +4778,13 @@ typedef void(^getStillImageBlock)(UIImage *image);
         case 225: {
             NSLog(@"切换镜头");
             //前后置摄像头切换
+            if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
+                SHOW_HUD_DELAY(NSLocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
+                return;
+            }
+            
             self.isFrontCamera = !_isFrontCamera;
+            
         }
             break;
             
@@ -5237,6 +5229,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [self checkNewVersion];
 }
 
+/**
+ 检查新版本
+ */
 - (void)checkNewVersion {
     //1.确定请求路径
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://47.52.17.78/AppUpdate/SwiftAppUpdate.txt"]];
@@ -5248,6 +5243,20 @@ typedef void(^getStillImageBlock)(UIImage *image);
     NSURLSessionDataTask *dataTask = [_askSession dataTaskWithRequest:request];
     //5.执行任务
     [dataTask resume];
+}
+
+- (void)filmCameraAction:(BOOL)on {
+    self.isFilm = on;
+    [self changeFilmRatio];
+    if (on) {
+        [self setupFilmCamera];
+    }
+    else {
+        [self resetStillCamera];
+    }
+    [self changeStillcameraVideoResolution:_isVideo];
+    [self getUserSaveVideoResolution];
+    [self setupAuxLineView];
 }
 
 #pragma mark - NSURLSessionDataDelegate
@@ -5348,6 +5357,61 @@ typedef void(^getStillImageBlock)(UIImage *image);
     return NO;
 }
 
+- (UIImage *)resetStillcameraProcessedPNG:(NSData *)processedPNG {
+    // 创建一个bitmap的context
+    // 并把它设置成为当前正在使用的context
+    UIImage *image = [UIImage imageWithData:processedPNG];
+    UIGraphicsBeginImageContext(CGSizeMake(_filmFrameWidth, _filmFrameHeight));
+    // 绘制改变大小的图片
+    [image drawInRect:CGRectMake(0, 0, _filmFrameWidth, _filmFrameHeight)];
+    // 从当前context中创建一个改变大小后的图片
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    // 使当前的context出堆栈
+    UIGraphicsEndImageContext();
+    // 返回新的改变大小后的图片
+    NSLog(@"scaledImage = %@", scaledImage);
+    return scaledImage;
+}
+
+- (UIImage *)imageResize:(UIImage*)img andResizeTo:(CGSize)newSize
+{
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    
+    //UIGraphicsBeginImageContext(newSize);
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, scale);
+    [img drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+/**
+ 修改电影镜头适配的 ratio
+ */
+- (void)changeFilmRatio {
+    DeviceType deviceType = [JEGetDeviceVersion deviceVersion];
+    switch (deviceType) {
+        case iPhone_XS_MAX:
+        case iPhone_XR:
+        case iPhone_XS:
+        case iPhone_X:
+        {
+            _filmRatio = 1.03;
+        }
+            break;
+        
+        //iphone8 及以下
+        default:
+        {
+            _filmRatio = 1.29;
+        }
+            break;
+    }
+    
+    NSLog(@"_filmRatio = %f", _filmRatio);
+    
+}
+
 /**
  固件升级触发重发机制
  */
@@ -5426,7 +5490,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     return UIInterfaceOrientationMaskPortrait;
 }
 
-//获取视频分辨率
+/**
+ 获取视频分辨率
+ */
 - (void)getVideoResolution {
     
     self.videoResolutionArray = [[NSMutableArray alloc] init];
@@ -5443,37 +5509,67 @@ typedef void(^getStillImageBlock)(UIImage *image);
         [_videoResolutionArray addObject:@{@"option":@"1920x1080"}];
         _highestResolution = AVCaptureSessionPreset1920x1080;
     }
-//    if (@available(iOS 9.0, *)) {
-//        if ([_stillCamera.captureSession canSetSessionPreset:AVCaptureSessionPreset3840x2160]) {
-//            [_videoResolutionArray addObject:@{@"option":@"3840x2160"}];
-//            _highestResolution = AVCaptureSessionPreset3840x2160;
-//        }
-//    }
+    if (@available(iOS 9.0, *)) {
+        if ([_stillCamera.captureSession canSetSessionPreset:AVCaptureSessionPreset3840x2160]) {
+            [_videoResolutionArray addObject:@{@"option":@"3840x2160"}];
+            _highestResolution = AVCaptureSessionPreset3840x2160;
+        }
+    }
     NSLog(@"当前相机支持的分辨率为 = %@", _videoResolutionArray);
 }
 
-//获取用户当前选择的分辨率尺寸
+/**
+ 获取用户当前选择的分辨率尺寸
+
+ @return 尺寸
+ */
 - (CGSize)getUserSaveVideoResolution {
     NSInteger videoResolutionInteger = USER_GET_SaveVideoResolution_Integer;
     switch (videoResolutionInteger) {
-        /*
         case 0:
-                return CGSizeMake(480, 640);
-            break;
-         */
-         
-        case 0:
+        {
+            if (_isFilm) {
+                _filmFrameWidth = 720 / _filmRatio;
+                _filmFrameHeight = 1280;
+                
+                return CGSizeMake(_filmFrameWidth, _filmFrameHeight);
+            }
+            else {
                 return CGSizeMake(720, 1280);
+            }
+        }
+            
             break;
             
         case 1:
+        {
+            if (_isFilm) {
+                _filmFrameWidth = 1080 / _filmRatio;
+                _filmFrameHeight = 1920;
+                
+                return CGSizeMake(_filmFrameWidth, _filmFrameHeight);
+            }
+            else {
                 return CGSizeMake(1080, 1920);
+            }
+        }
+            
             break;
             
-//        case 2:
-//            return CGSizeMake(2160, 3840);
-//                return CGSizeMake(1080, 1920);      //当前发现录像时丢帧，初步断定是分辨率太高的原因？所以暂时不支持 4k 录制
-//            break;
+        case 2:
+        {
+            if (_isFilm) {
+                _filmFrameWidth = 2160 / _filmRatio;
+                _filmFrameHeight = 3840;
+                
+                return CGSizeMake(_filmFrameWidth, _filmFrameHeight);
+            }
+            else {
+                return CGSizeMake(2160, 3840);
+            }
+        }
+            
+            break;
             
         default:
             return CGSizeMake(0, 0);
@@ -5503,21 +5599,29 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 break;
                 
-//            case 2:
-//                if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset3840x2160) {
-//                    self.stillCamera.captureSessionPreset = AVCaptureSessionPreset3840x2160;
-//                }
-//                break;
+            case 2:
+                if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset3840x2160) {
+                    self.stillCamera.captureSessionPreset = AVCaptureSessionPreset3840x2160;
+                }
+                break;
                 
             default:
                 break;
         }
     }
     else {
-        if (_stillCamera.captureSessionPreset != AVCaptureSessionPresetPhoto) {
-            self.stillCamera.captureSessionPreset = AVCaptureSessionPresetPhoto;
+        if (_isFilm) {
+            if (_stillCamera.captureSessionPreset != _highestResolution) {
+                self.stillCamera.captureSessionPreset = _highestResolution;
+            }
+        }
+        else {
+            if (_stillCamera.captureSessionPreset != AVCaptureSessionPresetPhoto) {
+                self.stillCamera.captureSessionPreset = AVCaptureSessionPresetPhoto;
+            }
         }
     }
+    //修改跟踪的分辨率
     [self configRatioByNotify];
 }
 
@@ -5536,9 +5640,14 @@ typedef void(^getStillImageBlock)(UIImage *image);
     return format_time;
 }
 
-//获取图片第一帧
+/**
+ 获取视频第一帧图片
+
+ @param url 视频地址
+ @param size 视频尺寸
+ @return 视频第一帧图片
+ */
 - (UIImage *)firstFrameWithVideoURL:(NSURL *)url size:(CGSize)size {
-    // 获取视频第一帧
     NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts];
     AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
@@ -5881,7 +5990,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
     return hexData;
 }
 
-//data转字符串
+/**
+ data转字符串
+
+ @param data data类型
+ @return 字符串类型
+ */
 - (NSString *)convertDataToHexStr:(NSData *)data{
     
     if (!data || [data length] == 0) {
@@ -5905,7 +6019,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
     return string;
 }
 
-// 十六进制转换为普通字符串
+/**
+ 十六进制转换为普通字符串
+
+ @param hexString 十六进制
+ @return 十进制字符串
+ */
 - (NSString *)stringFromHexString:(NSString *)hexString {
     char *myBuffer = (char *)malloc((int)[hexString length] / 2 + 1);
     bzero(myBuffer, [hexString length] / 2 + 1);
@@ -5921,7 +6040,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     return unicodeString;
 }
 
-//更新固件升级进度条
+/**
+ 更新固件升级进度条
+ */
 - (void)doSomeWorkWithProgress{
     
     dispatch_async(dispatch_get_main_queue(), ^{

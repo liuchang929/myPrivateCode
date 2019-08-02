@@ -2532,8 +2532,8 @@
 		BAE8DB052244E44F00217B0E /* GetDeviceVersion */ = {
 			isa = PBXGroup;
 			children = (
-				BAE8DB062244E44F00217B0E /* JEGetDeviceVersion.m */,
 				BAE8DB072244E44F00217B0E /* JEGetDeviceVersion.h */,
+				BAE8DB062244E44F00217B0E /* JEGetDeviceVersion.m */,
 			);
 			path = GetDeviceVersion;
 			sourceTree = "<group>";

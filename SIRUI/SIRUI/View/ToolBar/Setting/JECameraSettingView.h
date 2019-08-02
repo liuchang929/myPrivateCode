@@ -26,6 +26,7 @@ typedef enum settingMode {
 - (void)setCameraVideoResMode:(NSInteger)mode;
 - (void)deviceUpdateAction;
 - (void)appUpdateAction;
+- (void)filmCameraAction:(BOOL)on;
 
 @end
 

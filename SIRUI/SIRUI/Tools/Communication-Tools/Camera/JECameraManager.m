@@ -90,6 +90,7 @@ static JECameraManager *jeManager = nil;
     NSLog(@"图片方向 : %ld", (long)imageOrientation);
     
     if (image == nil || fileName == nil) {
+        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         return NO;
     }
     
@@ -205,6 +206,7 @@ static JECameraManager *jeManager = nil;
 - (void)savePointImage:(UIImage *)image toPointNumber:(NSInteger)num withOrientation:(UIImageOrientation)imageOrientation {
     
     if (image == nil) {
+        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         return;
     }
     
@@ -269,10 +271,8 @@ static JECameraManager *jeManager = nil;
         
         //存入目录
         if ([jeManager.lapsePointData writeToFile:jeManager.lapsePointPath atomically:YES]) {
-            NSLog(@"延时关键点保存成功");
         }
         else {
-            NSLog(@"延时关键点保存失败");
         }
     }
 }
