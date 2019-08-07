@@ -39,6 +39,7 @@
 #import "UIImage+WaterMark.h"
 #import "SRVideoRecordTool.h"
 #import "JEGetDeviceVersion.h"
+#import "JEGyroCalibrationViewController.h"
 
 #import "SRTrackingCore.h"
 #import "FileUtils.h"
@@ -125,6 +126,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, strong) SliderView                *zoomSliderView;        //变焦
 @property (nonatomic, strong) UIButton                  *stopTimeLapseButton;   //延时摄影暂停按钮
 @property (nonatomic, strong) SRMotionViewController    *accelerationVC;        //加速度校准 vc
+@property (nonatomic, strong) JEGyroCalibrationViewController *gyroCalibrationVC;   //陀螺仪校准 vc
 
 //Base
 @property (nonatomic, strong) GPUImageCropFilter        *normalFilter;          //基础滤镜
@@ -138,6 +140,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, assign) CGFloat                   mainRatioY;
 @property (nonatomic, assign) CGFloat                   mainRatio;
 @property (nonatomic, assign) CGFloat                   mainPreset;             //屏幕分辨率
+    //电影镜头屏幕和分辨率的比例 X轴和 Y轴
+@property (nonatomic, assign) CGFloat                   filmRatioX;
+@property (nonatomic, assign) CGFloat                   filmRatioY;
+@property (nonatomic, assign) CGFloat                   filmPreset;
 @property (nonatomic, assign) CGFloat                   effectiveScale;         //移动变焦倍数
 @property (nonatomic, assign) CGFloat                   mainFrameWidth;         //屏幕宽
 @property (nonatomic, assign) CGFloat                   mainFrameHeight;        //屏幕高
@@ -171,6 +177,8 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, assign) BOOL      isObjTrackStart;        //对象跟踪开始
 @property (nonatomic, assign) BOOL      isAutoStitchPanoing;    //全景合成中
 @property (nonatomic, assign) BOOL      isFirmwareUpdating;     //固件升级中
+@property (nonatomic, assign) BOOL      isAccelerating;         //加速度校准中
+@property (nonatomic, assign) BOOL      isGyroCalibrating;      //陀螺仪校准中
 @property (nonatomic, assign) BOOL      updateFirmwareBag;      //固件升级包发送次序 0 == first，1 == second
 @property (nonatomic, assign) int       timeLapseProgress;      //时间帧  60帧一秒
 @property (nonatomic, assign) int       blueParameterTimes;     //蓝牙参数发送包数
@@ -213,8 +221,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    NSLog(@"_controllerMode = %d", _controllerMode);
-    
     [self screenRotate:nil];            //屏幕旋转检测
     [self configRatioByNotify];         //屏幕分辨率获取
     [self setVideoStabilizationMode];   //光学防抖
@@ -254,7 +260,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
     _objectTrackingView.layer.borderWidth = 1;
     _objectTrackingView.layer.borderColor = MAIN_TEXT_COLOR.CGColor;
     _objectTrackingView.hidden = YES;
-    [self.view addSubview:_objectTrackingView];
+    [_cameraOutputView addSubview:_objectTrackingView];
     
     //基础滤镜初始化
     self.normalFilter = [[GPUImageCropFilter alloc] init];
@@ -675,6 +681,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if (_isSubShowing == YES) {
         self.isSubShowing = NO;
     }
+    if (_isMotionLapseShowing == YES) {
+        self.isMotionLapseShowing = NO;
+    }
+    if (_isTimeLapseShowing == YES) {
+        self.isTimeLapseShowing = NO;
+    }
     
     self.isClearViewShowing = isFunctionShowing;
     if (isFunctionShowing) {
@@ -965,6 +977,8 @@ typedef void(^getStillImageBlock)(UIImage *image);
         [self bottomToolBarButtonAction:222];   //默认视频模式
         [self.bottomToolBar.bottomMenu.subVideoLocusTimeLapse setTitle:NSLocalizedString(@"Path Shoot", nil) forState:UIControlStateNormal];
         
+        //辅助线隐藏
+        
         //调整 frame
         self.bottomToolBar.subBottomButton.center = CGPointMake((self.bottomToolBar.frame.size.width - 75)/4, self.bottomToolBar.cameraButton.center.y);
         self.bottomToolBar.albumButton.center = CGPointMake(self.bottomToolBar.frame.size.width - (self.bottomToolBar.frame.size.width - 75)/4, self.bottomToolBar.cameraButton.center.y);
@@ -977,6 +991,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
 - (void)loadData {
     _islensSwitching    = NO;
     _isSubShowing       = NO;
+    
+    _isAccelerating     = NO;
+    _isGyroCalibrating  = NO;
     
     self.mainFrameWidth = self.view.frame.size.width;
     self.mainFrameHeight = self.view.frame.size.height;
@@ -996,12 +1013,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
                                 @{@"name":@"Video Resolution", @"type":@"yes"},
                                 @{@"name":@"Film Camera",      @"type":@"no"}];
     
-    self.deviceSettingArray = @[
-//                                @{@"name":@"Push speed(pan)",           @"type":@"no"},
-//                                @{@"name":@"Push speed(tilt)",          @"type":@"no"},
-                                @{@"name":@"Allow the Gimbal to function while charging", @"type":@"no"},
+    self.deviceSettingArray = @[@{@"name":@"Allow the Gimbal to function while charging", @"type":@"no"},
                                 @{@"name":@"Reverse Tilting Motion",    @"type":@"no"},
-                                @{@"name":@"Acceleration Calibration",  @"type":@"yes"},
+                                @{@"name":@"Pan-Tilt Calibration",      @"type":@"yes"},
                                 @{@"name":@"Firmware Version",          @"type":@"no"},
                                 @{@"name":@"Hardware Version",          @"type":@"no"},
                                 @{@"name":@"Bluetooth Version",         @"type":@"no"},
@@ -1131,6 +1145,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
     
     self.cameraOutputView.frame = CGRectMake((_mainFrameWidth - _mainFrameWidth/_filmRatio)/2.0, 0, _mainFrameWidth/_filmRatio, _mainFrameHeight);
     _cameraOutputView.fillMode = kGPUImageFillModeStretch;
+    
+    _filmRatioX = _filmFrameWidth/(self.view.frame.size.width/_filmRatio);
+    _filmRatioY = _filmFrameHeight/(self.view.frame.size.height);
+    _filmPreset = (self.view.frame.size.width/_filmRatio);
     
     [_stillCamera startCameraCapture];
 }
@@ -1668,6 +1686,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if (_auxLineView) {
         [_auxLineView removeFromSuperview];
     }
+    if (_controllerMode == cameraP1) {
+        return;
+    }
     switch (USER_GET_SaveAuxLines_Integer) {
         case 0:
             if (_auxLineView) {
@@ -1839,41 +1860,20 @@ typedef void(^getStillImageBlock)(UIImage *image);
  */
 - (void)configRatioByNotify {
     if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
-        if (_isFilm) {
-            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
-        }
-        else {
-            [self configRatio:2160 height:3840];
-        }
+        [self configRatio:2160 height:3840];
     }
     else if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset1280x720) {
-        if (_isFilm) {
-            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
-        }
-        else {
-            [self configRatio:720 height:1280];
-        }
+        [self configRatio:720 height:1280];
     }
     else if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset1920x1080) {
-        if (_isFilm) {
-            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
-        }
-        else {
-            [self configRatio:1080 height:1920];
-        }
+        [self configRatio:1080 height:1920];
     }
     else if (_stillCamera.captureSessionPreset == AVCaptureSessionPresetPhoto) {
-        if (_isFilm) {
-            [self configRatio:_filmFrameWidth height:_filmFrameHeight];
-        }
-        else {
-            [self configRatio:([UIScreen mainScreen].scale * self.view.frame.size.width) height:([UIScreen mainScreen].scale * self.view.frame.size.height)];
-        }
+        [self configRatio:([UIScreen mainScreen].scale * self.view.frame.size.width) height:([UIScreen mainScreen].scale * self.view.frame.size.height)];
     }
 }
 
 - (void)configRatio:(CGFloat)width height:(CGFloat)height {
-    NSLog(@"width = %f, height = %f", width, height);
     _cropImageWidth = width;
     _cropImageHeight = height;
     
@@ -2264,88 +2264,59 @@ typedef void(^getStillImageBlock)(UIImage *image);
 //全景拍摄中
 - (void)getStillImageWithBlock:(getStillImageBlock)block animate:(BOOL)animate {
     NSLog(@"全景拍摄中...");
-//    if(self.normalFilter.outputFrameSize.width != 0){
-//        CGFloat cropWidth =  _cropImageWidth/self.normalFilter.sizeOfFBO.width;
-//        if(cropWidth > 1.0)
-//            cropWidth = 1.0;
-//
-//        CGFloat cropHeigh =  _cropImageHeight/self.normalFilter.sizeOfFBO.height;
-//        if(cropHeigh > 1.0)
-//            cropHeigh = 1.0;
-//
-//        self.normalFilter.cropRegion = CGRectMake(0, 0, cropWidth, cropHeigh);
-//    }else{
-//        self.normalFilter.cropRegion = CGRectMake(0, 0, 1, 1);
-//    }
     
-//    NSLog(@"_flashMode = %d", _flashMode);
-//    if (_flashMode == flashModeOff) {
-//        dispatch_async([GPUImageContext sharedContextQueue], ^{
-//            [_normalFilter useNextFrameForImageCapture];
-//        });
-//
-//        UIImage *img = [self.normalFilter imageFromCurrentFramebufferWithOrientation:_imageOrientation];
-//
-//        block(img);
-//    }
-//    else {
-//        dispatch_async([GPUImageContext sharedContextQueue], ^{
-//            [_normalFilter useNextFrameForImageCapture];
-//        });
-    
-        [self.stillCamera capturePhotoAsImageProcessedUpToFilter:self.normalFilter withOrientation:_imageOrientation withCompletionHandler:^(UIImage *processedImage, NSError *error) {
-            //处理图片 压缩
+    [self.stillCamera capturePhotoAsImageProcessedUpToFilter:self.normalFilter withOrientation:_imageOrientation withCompletionHandler:^(UIImage *processedImage, NSError *error) {
+        //处理图片 压缩
 
-            NSInteger maxLength = 250 * 1024;
-            CGFloat compression = 1.0;
-            NSData *compressData = UIImageJPEGRepresentation(processedImage, compression);
-            UIImage *finalImage;
+        NSInteger maxLength = 250 * 1024;
+        CGFloat compression = 1.0;
+        NSData *compressData = UIImageJPEGRepresentation(processedImage, compression);
+        UIImage *finalImage;
+        if (compressData.length < maxLength) {
+            finalImage = [UIImage imageWithData:compressData];
+        }
+        else {
+            CGFloat max = 1.0;
+            CGFloat min = 0.0;
+            for (int index = 0; index < 6; ++index) {
+                compression = (max + min)/2;
+                compressData = UIImageJPEGRepresentation(processedImage, compression);
+                if (compressData.length < maxLength * 0.9) {
+                    min = compression;
+                }
+                else if (compressData.length > maxLength) {
+                    max = compression;
+                }
+                else {
+                    break;
+                }
+            }
+            //第一次对图片尺寸压缩后判断是否符合标准 (对图片尺寸压缩因为不会影响图片质量，所以会压缩到一定程度后无法再压缩)
             if (compressData.length < maxLength) {
                 finalImage = [UIImage imageWithData:compressData];
             }
             else {
-                CGFloat max = 1.0;
-                CGFloat min = 0.0;
-                for (int index = 0; index < 6; ++index) {
-                    compression = (max + min)/2;
-                    compressData = UIImageJPEGRepresentation(processedImage, compression);
-                    if (compressData.length < maxLength * 0.9) {
-                        min = compression;
-                    }
-                    else if (compressData.length > maxLength) {
-                        max = compression;
-                    }
-                    else {
-                        break;
-                    }
+                //不符合标准进一步对图片质量进行压缩，一直压缩到符合要求为止
+                UIImage *compressImage = [UIImage imageWithData:compressData];
+                NSUInteger lastDataLength = 0;
+                while (compressData.length > maxLength && compressData.length != lastDataLength) {
+                    lastDataLength = compressData.length;
+                    CGFloat ratio = (CGFloat)maxLength / compressData.length;
+                    CGSize size = CGSizeMake((NSUInteger)(compressImage.size.width * sqrtf(ratio)), (NSUInteger)(compressImage.size.height * sqrtf(ratio)));
+                    UIGraphicsBeginImageContext(size);
+                    [compressImage drawInRect:CGRectMake(0, 0, size.width, size.height)];   //重新画尺寸
+                    compressImage = UIGraphicsGetImageFromCurrentImageContext();
+                    UIGraphicsEndImageContext();
+                    compressData = UIImageJPEGRepresentation(compressImage, compression);
                 }
-                //第一次对图片尺寸压缩后判断是否符合标准 (对图片尺寸压缩因为不会影响图片质量，所以会压缩到一定程度后无法再压缩)
-                if (compressData.length < maxLength) {
-                    finalImage = [UIImage imageWithData:compressData];
-                }
-                else {
-                    //不符合标准进一步对图片质量进行压缩，一直压缩到符合要求为止
-                    UIImage *compressImage = [UIImage imageWithData:compressData];
-                    NSUInteger lastDataLength = 0;
-                    while (compressData.length > maxLength && compressData.length != lastDataLength) {
-                        lastDataLength = compressData.length;
-                        CGFloat ratio = (CGFloat)maxLength / compressData.length;
-                        CGSize size = CGSizeMake((NSUInteger)(compressImage.size.width * sqrtf(ratio)), (NSUInteger)(compressImage.size.height * sqrtf(ratio)));
-                        UIGraphicsBeginImageContext(size);
-                        [compressImage drawInRect:CGRectMake(0, 0, size.width, size.height)];   //重新画尺寸
-                        compressImage = UIGraphicsGetImageFromCurrentImageContext();
-                        UIGraphicsEndImageContext();
-                        compressData = UIImageJPEGRepresentation(compressImage, compression);
-                    }
-                    finalImage = [UIImage imageWithData:compressData];
-                }
+                finalImage = [UIImage imageWithData:compressData];
             }
-            NSData *finalData = UIImageJPEGRepresentation(finalImage, 1.0);
-            NSLog(@"单张全景照片大小 = %lu k", finalData.length/1024);
-            
-            block(finalImage);
-        }];
-//    }
+        }
+        NSData *finalData = UIImageJPEGRepresentation(finalImage, 1.0);
+        NSLog(@"单张全景照片大小 = %lu k", finalData.length/1024);
+        
+        block(finalImage);
+    }];
 }
 
 /**
@@ -2872,6 +2843,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         }
         if (_isCameraSetting == YES) {
             self.isCameraSetting = NO;
+            [_cameraSettingView cleanCameraSettingOption];
         }
         if (_isDeviceSetting == YES) {
             self.isDeviceSetting = NO;
@@ -2943,6 +2915,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         }
         if (_isCameraSetting == YES) {
             self.isCameraSetting = NO;
+            [_cameraSettingView cleanCameraSettingOption];
         }
         if (_isDeviceSetting == YES) {
             self.isDeviceSetting = NO;
@@ -3331,7 +3304,16 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if ([[msg substringWithRange:NSMakeRange(2, 2)] isEqualToString:@"17"]) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
         
-        [_accelerationVC accelerationSuccess];
+        if (_isAccelerating) {
+            [_accelerationVC accelerationSuccess];
+            self.isAccelerating = NO;
+        }
+        
+        if (_isGyroCalibrating) {
+            [_gyroCalibrationVC accelerationSuccess];
+            self.isGyroCalibrating = NO;
+        }
+        
         return;
     }
     
@@ -3810,7 +3792,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subPicPano90d];
-                    [self camStillAction];
+//                    [self camStillAction];
                 });
             }
                 break;
@@ -3823,7 +3805,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subPicPano180d];
-                    [self camStillAction];
+//                    [self camStillAction];
                 });
                 
             }
@@ -3837,7 +3819,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subPicPano360d];
-                    [self camStillAction];
+//                    [self camStillAction];
                 });
                 
             }
@@ -3851,7 +3833,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subPicNLSquare];
-                    [self camStillAction];
+//                    [self camStillAction];
                 });
                 
             }
@@ -3865,7 +3847,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subPicNLRectangle];
-                    [self camStillAction];
+//                    [self camStillAction];
                 });
                 
             }
@@ -3910,7 +3892,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     self.timeLapseProgress = (int)USER_GET_SaveTimelapseProportion_Interger * 15 * 2;
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subVideoTimeLapse];
-                    [self camStillAction];
+//                    [self camStillAction];
                 });
             }
                 break;
@@ -3936,7 +3918,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subPicPano3x3];
-                    [self camStillAction];
+//                    [self camStillAction];
                 });
             }
                 break;
@@ -4124,6 +4106,8 @@ typedef void(^getStillImageBlock)(UIImage *image);
     CGFloat maxX = fmax(_trackViewLTPoint.x, _trackViewRDPoint.x);
     CGFloat maxY = fmax(_trackViewLTPoint.y, _trackViewRDPoint.y);
     
+    
+    
     CGPoint lp;
     CGPoint rp;
     
@@ -4141,12 +4125,14 @@ typedef void(^getStillImageBlock)(UIImage *image);
         BOOL vfix = NO;
         CGFloat tRatio = _mainRatio;
         
+        CGFloat fillfix;
+        
         if ((width/height) > (_mainFrameWidth/_mainFrameHeight)) {
             vfix = YES;
         }
         
-        CGFloat fillfix = (width * (_mainFrameWidth / height)) / _mainFrameHeight;
-        
+        fillfix = (width * (_mainFrameWidth / height)) / _mainFrameHeight;
+    
         CGFloat fixFillMode = lp.x * tRatio;
         
         if(vfix){
@@ -4189,7 +4175,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 //            @weakify(self)
 //            dispatch_async(dispatch_get_main_queue(), ^{
 //                @strongify(self)
-                
+    
 //                self->trackingFrame.isLost = YES;
 //            });
         }else{
@@ -4198,6 +4184,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 //                @strongify(self)
 //                self->trackingFrame.isLost = NO;
 //            });
+            
             [self drawCVRect:sampleBuffer rect:ocRect ratio:SRObjTracker.compressRatio size:CGSizeMake(width, height)];
         }
     }else{
@@ -4238,15 +4225,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
         if(vfix){
             CGFloat ty = ox/(_mainRatioY*tRatio);
             CGFloat fillfix = (captureSzie.width*(_mainFrameWidth/captureSzie.height))/_mainFrameHeight;
-            CGFloat fixFillMode = _mainFrameHeight/2.0 + (ty - _mainFrameHeight/2.0)*fillfix;
+            CGFloat fixFillMode = _mainFrameHeight/2.0 + (ty - _mainFrameHeight/2.0)*fillfix;;
             
             res = CGRectMake(_mainFrameWidth-oy/(_mainRatioX*tRatio), fixFillMode, rect.size.height/(_mainRatioX*tRatio), rect.size.width/(_mainRatioY*tRatio));
-            
         }else{
             res = CGRectMake(_mainFrameWidth-oy/(_mainRatioX*tRatio), ox/(_mainRatioY*tRatio), rect.size.height/(_mainRatioX*tRatio), rect.size.width/(_mainRatioY*tRatio));
-            
         }
-        
     }
     
 //    @weakify(self)
@@ -4265,22 +4249,22 @@ typedef void(^getStillImageBlock)(UIImage *image);
              */
             AVCaptureDevicePosition position = [_stillCamera cameraPosition];
             if (position == AVCaptureDevicePositionFront){
-//                curr = Mid- int(trackingFrame.center.y*Mid/self.view.height);
-//                currX = Mid- int(trackingFrame.center.x*Mid/self.view.width);
                 curr = Mid - (_objectTrackingView.center.y * Mid / self.view.frame.size.height);
                 currX = Mid - (_objectTrackingView.center.x * Mid / self.view.frame.size.width);
             }
             if (position == AVCaptureDevicePositionBack) {
-//                curr = int(trackingFrame.center.y*Mid/self.view.height);
-//                currX = int(trackingFrame.center.x*Mid/self.view.width);
-                curr = (_objectTrackingView.center.y * Mid / self.view.frame.size.height);
-                currX = (_objectTrackingView.center.x * Mid / self.view.frame.size.width);
+                if (_isFilm) {
+                    curr = (_objectTrackingView.center.y * Mid / self.view.frame.size.height);
+                    currX = (_objectTrackingView.center.x * Mid / self.view.frame.size.width) + _mainFrameWidth/_filmRatio;
+                }
+                else {
+                    curr = (_objectTrackingView.center.y * Mid / self.view.frame.size.height);
+                    currX = (_objectTrackingView.center.x * Mid / self.view.frame.size.width);
+                }
             }
         
         [[JEBluetoothManager shareBLESingleton] BPFaceMsgX:currX Y:curr];
-        
-//        }
-        
+
     });
     
 }
@@ -5050,6 +5034,17 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [self takePhotoWithMotionLapse];
 }
 
+//删除延时关键点
+- (void)deletePointPicWithMotionLapse:(NSInteger)row {
+    NSLog(@"第%ld个", row);
+    [[JEBluetoothManager shareBLESingleton] BPDeleteMotionLapsePosition:row+1];
+    [self.motionLapsePointArray removeObjectAtIndex:row];
+    _motionLapsePopView.pointPicArray = _motionLapsePointArray;
+    [_motionLapsePopView.getPointTableView reloadData];
+    [_motionLapsePopView.getPointTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_motionLapsePointArray.count inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+
 #pragma mark - JECameraSettingDelegate
 - (void)tableViewPushVC:(UIViewController *)pushVC {
     [self presentViewController:pushVC animated:YES completion:^{
@@ -5123,13 +5118,40 @@ typedef void(^getStillImageBlock)(UIImage *image);
 - (void)deviceSettingMode:(NSInteger)mode {
     switch (mode) {
         case 2: {
+            //云台校准
+            if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Pan-Tilt Calibration", nil) message:NSLocalizedString(@"Cradle head calibration is about to be carried out.", nil) preferredStyle:UIAlertControllerStyleAlert];
+                
+                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    //确定进入陀螺仪校准
+                    self.gyroCalibrationVC = [[JEGyroCalibrationViewController alloc] init];
+                    self.isGyroCalibrating = YES;
+                    [[JEBluetoothManager shareBLESingleton] BPEnterCalibrationMode];    //关电机
+                    [self presentViewController:_gyroCalibrationVC animated:YES completion:^{
+                        
+                    }];
+                }]];
+                
+                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    //取消
+                }]];
+                
+                [self presentViewController:alertC animated:YES completion:nil];
+            }
+            else {
+                SHOW_HUD_DELAY(NSLocalizedString(@"Please connect the device", nil), self.view, 1.5);
+            }
+        }
+            break;
+            
+        case 4: {
             //加速度校准
             if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
                 UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Acceleration Calibration", nil) message:NSLocalizedString(@"The consequences might be quite serious if acceleration calibration failed. Are you sure to continue to calibrate?", nil) preferredStyle:UIAlertControllerStyleAlert];
                 
                 [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    
                     self.accelerationVC = [[SRMotionViewController alloc] init];
+                    self.isAccelerating = YES;
                     [self presentViewController:_accelerationVC animated:YES completion:nil];
                 }]];
                 
@@ -5245,8 +5267,16 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [dataTask resume];
 }
 
+/**
+ 电影镜头开关事件
+
+ @param on 功能开关
+ */
 - (void)filmCameraAction:(BOOL)on {
     self.isFilm = on;
+    
+    [self cleanTrackState]; //清除跟踪状态
+    
     [self changeFilmRatio];
     if (on) {
         [self setupFilmCamera];

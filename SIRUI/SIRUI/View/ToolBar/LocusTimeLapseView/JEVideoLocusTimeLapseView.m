@@ -187,19 +187,21 @@
     
     if (!cell) {
         cell = [[JEVideoLapseTableViewCell alloc] initWithFrame:CGRectMake(0, 0, 275, 100)];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     //只有最后一行有点击事件
     if (indexPath.row == _pointPicArray.count) {
-//        [cell.pointImage addTarget:self action:@selector(takePointPic) forControlEvents:UIControlEventTouchUpInside];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(takePointPic)];
         tap.numberOfTapsRequired = 1;
         [cell.pointImage addGestureRecognizer:tap];
     }
     else {
         //将默认的图片换为拍摄的关键点照片，照片从缓存的地址去取
-//        [cell.pointImage setImage:_pointPicArray[indexPath.row] forState:UIControlStateNormal];
         cell.pointImage.image = _pointPicArray[indexPath.row];
+        cell.pointDeleteBtn.hidden = NO;
+        cell.pointDeleteBtn.tag = 456+indexPath.row;
+        [cell.pointDeleteBtn addTarget:self action:@selector(deletePointPic:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return cell;
@@ -217,6 +219,15 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(takePointPicWithMotionLapse)]) {
         [self.delegate takePointPicWithMotionLapse];
     }
+}
+
+- (void)deletePointPic:(UIButton *)button {
+    NSLog(@"tag = %ld", button.tag);
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(deletePointPicWithMotionLapse:)]) {
+        [self.delegate deletePointPicWithMotionLapse:(button.tag - 456)];
+    }
+    
 }
 
 @end

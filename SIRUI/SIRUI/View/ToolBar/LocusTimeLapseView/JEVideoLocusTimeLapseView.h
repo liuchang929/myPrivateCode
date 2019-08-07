@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol JEVideoLocusTimeLapseViewDelegate <NSObject>
 
 - (void)takePointPicWithMotionLapse;
+- (void)deletePointPicWithMotionLapse:(NSInteger)row;
 
 @end
 

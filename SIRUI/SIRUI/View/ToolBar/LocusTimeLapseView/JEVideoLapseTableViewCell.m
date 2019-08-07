@@ -31,6 +31,13 @@
         self.pointImage.backgroundColor = [UIColor clearColor];
         
         [self addSubview:self.pointImage];
+    
+        self.pointDeleteBtn = [[UIButton alloc] initWithFrame:CGRectMake(275 - 50, 25, 50, 50)];
+        [_pointDeleteBtn setImage:[UIImage imageNamed:@"icon_album_delect"] forState:UIControlStateNormal];
+        _pointDeleteBtn.backgroundColor = [UIColor clearColor];
+        _pointDeleteBtn.hidden = YES;
+        [self addSubview:self.pointDeleteBtn];
+        
     }
     return self;
 }

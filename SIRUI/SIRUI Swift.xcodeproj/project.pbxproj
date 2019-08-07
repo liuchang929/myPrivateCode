@@ -329,6 +329,11 @@
 		BAE8DCC422487A7E00217B0E /* SR360CamFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE8DBDE22487A7E00217B0E /* SR360CamFilterView.m */; };
 		BAE8DCCB22487A7E00217B0E /* OneAxiFilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE8DBE922487A7E00217B0E /* OneAxiFilterCell.m */; };
 		BAE8DCD522487A7E00217B0E /* OneAxiFilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BAE8DBFC22487A7E00217B0E /* OneAxiFilterCell.xib */; };
+		BAE97C9722F92F7E00A60B47 /* JEGyroCalibrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE97C9622F92F7E00A60B47 /* JEGyroCalibrationViewController.m */; };
+		BAE97C9C22F964C400A60B47 /* XFStepView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE97C9B22F964C400A60B47 /* XFStepView.m */; };
+		BAE97CA022F9740000A60B47 /* SDRotationLoopProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE97C9E22F9740000A60B47 /* SDRotationLoopProgressView.m */; };
+		BAE97CA322F9743200A60B47 /* SDBaseProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE97CA222F9743200A60B47 /* SDBaseProgressView.m */; };
+		BAE97CA522F99FC000A60B47 /* image_gyro_step2.png in Resources */ = {isa = PBXBuildFile; fileRef = BAE97CA422F99FC000A60B47 /* image_gyro_step2.png */; };
 		BAEAF0482251C67B00410EED /* JESmartCameraViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BAEAF0472251C67B00410EED /* JESmartCameraViewController.mm */; };
 		BAEAF04B22520F2400410EED /* JESmartCameraModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEAF04A22520F2400410EED /* JESmartCameraModel.m */; };
 		BAEAF04E22533AE100410EED /* SRGradientbackground.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE8DBE322487A7E00217B0E /* SRGradientbackground.m */; };
@@ -1101,6 +1106,15 @@
 		BAE8DBE922487A7E00217B0E /* OneAxiFilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneAxiFilterCell.m; sourceTree = "<group>"; };
 		BAE8DBF722487A7E00217B0E /* DotGPUImageBeautyFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DotGPUImageBeautyFilter.h; sourceTree = "<group>"; };
 		BAE8DBFC22487A7E00217B0E /* OneAxiFilterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OneAxiFilterCell.xib; sourceTree = "<group>"; };
+		BAE97C9522F92F7E00A60B47 /* JEGyroCalibrationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEGyroCalibrationViewController.h; sourceTree = "<group>"; };
+		BAE97C9622F92F7E00A60B47 /* JEGyroCalibrationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JEGyroCalibrationViewController.m; sourceTree = "<group>"; };
+		BAE97C9A22F964C400A60B47 /* XFStepView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFStepView.h; sourceTree = "<group>"; };
+		BAE97C9B22F964C400A60B47 /* XFStepView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFStepView.m; sourceTree = "<group>"; };
+		BAE97C9E22F9740000A60B47 /* SDRotationLoopProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDRotationLoopProgressView.m; sourceTree = "<group>"; };
+		BAE97C9F22F9740000A60B47 /* SDRotationLoopProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDRotationLoopProgressView.h; sourceTree = "<group>"; };
+		BAE97CA122F9743200A60B47 /* SDBaseProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseProgressView.h; sourceTree = "<group>"; };
+		BAE97CA222F9743200A60B47 /* SDBaseProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBaseProgressView.m; sourceTree = "<group>"; };
+		BAE97CA422F99FC000A60B47 /* image_gyro_step2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image_gyro_step2.png; sourceTree = "<group>"; };
 		BAEAF0462251C67B00410EED /* JESmartCameraViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JESmartCameraViewController.h; sourceTree = "<group>"; };
 		BAEAF0472251C67B00410EED /* JESmartCameraViewController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = JESmartCameraViewController.mm; sourceTree = "<group>"; };
 		BAEAF04922520F2400410EED /* JESmartCameraModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JESmartCameraModel.h; sourceTree = "<group>"; };
@@ -1267,6 +1281,7 @@
 		BA0937F32230F5B8007AFEA9 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				BAE97CA422F99FC000A60B47 /* image_gyro_step2.png */,
 				BACBC4A5225C4B3800380A7B /* image_filter_cover.jpg */,
 				BAEEB3EA2266D57300466295 /* filterimage16.jpg */,
 				BAEEB3EB2266D57300466295 /* filterimage17.jpg */,
@@ -1609,6 +1624,8 @@
 				BA7073562232110A00940489 /* Shimmering */,
 				BAC3A7AF223A5D3D0004084D /* EnterCameraButton */,
 				BAD30D852282D0C700E0DE35 /* Auxiliary line */,
+				BAE97C9922F964C400A60B47 /* XFStepView */,
+				BAE97C9D22F973F000A60B47 /* SDProgressView */,
 			);
 			path = "UI-Component";
 			sourceTree = "<group>";
@@ -1722,8 +1739,7 @@
 				BAEAF0472251C67B00410EED /* JESmartCameraViewController.mm */,
 				BA1A220A228022AA004B5C12 /* Album */,
 				BA26CE0F22ADF2AB00D2231F /* News */,
-				BA26CF1C22B23F1600D2231F /* SRMotionViewController.h */,
-				BA26CF1B22B23F1600D2231F /* SRMotionViewController.m */,
+				BAE97C9822F92F8E00A60B47 /* Calibration */,
 				BA66BDD4226EEC6B008AD5A8 /* JEPickerController.h */,
 				BA66BDD5226EEC6B008AD5A8 /* JEPickerController.m */,
 			);
@@ -2538,6 +2554,37 @@
 			path = GetDeviceVersion;
 			sourceTree = "<group>";
 		};
+		BAE97C9822F92F8E00A60B47 /* Calibration */ = {
+			isa = PBXGroup;
+			children = (
+				BA26CF1C22B23F1600D2231F /* SRMotionViewController.h */,
+				BA26CF1B22B23F1600D2231F /* SRMotionViewController.m */,
+				BAE97C9522F92F7E00A60B47 /* JEGyroCalibrationViewController.h */,
+				BAE97C9622F92F7E00A60B47 /* JEGyroCalibrationViewController.m */,
+			);
+			path = Calibration;
+			sourceTree = "<group>";
+		};
+		BAE97C9922F964C400A60B47 /* XFStepView */ = {
+			isa = PBXGroup;
+			children = (
+				BAE97C9A22F964C400A60B47 /* XFStepView.h */,
+				BAE97C9B22F964C400A60B47 /* XFStepView.m */,
+			);
+			path = XFStepView;
+			sourceTree = "<group>";
+		};
+		BAE97C9D22F973F000A60B47 /* SDProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				BAE97CA122F9743200A60B47 /* SDBaseProgressView.h */,
+				BAE97CA222F9743200A60B47 /* SDBaseProgressView.m */,
+				BAE97C9F22F9740000A60B47 /* SDRotationLoopProgressView.h */,
+				BAE97C9E22F9740000A60B47 /* SDRotationLoopProgressView.m */,
+			);
+			path = SDProgressView;
+			sourceTree = "<group>";
+		};
 		BAEAF04C22520F3300410EED /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -2828,6 +2875,7 @@
 				BACD623022CF25CB00C3EEB0 /* lookup_LOMO.png in Resources */,
 				BACD622922CF25CB00C3EEB0 /* lookup-Effect-1.png in Resources */,
 				BAEEB40E2266D57300466295 /* filterimage7.jpg in Resources */,
+				BAE97CA522F99FC000A60B47 /* image_gyro_step2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3023,6 +3071,7 @@
 				BAFD3BB8228680F900BB0DE1 /* JEAlbumCollectionViewHeader.m in Sources */,
 				BAC3AA3E22438A580004084D /* GPUImageRGBFilter.m in Sources */,
 				BA26CDF222A0C5F400D2231F /* BLEProgressView.m in Sources */,
+				BAE97CA022F9740000A60B47 /* SDRotationLoopProgressView.m in Sources */,
 				BAEEB3DA2266D4AF00466295 /* IFBrannanFilter.m in Sources */,
 				BAC3AA7C22438A580004084D /* GPUImageNobleCornerDetectionFilter.m in Sources */,
 				BA26CF2522B25A5600D2231F /* ZHPSlider.m in Sources */,
@@ -3039,6 +3088,7 @@
 				BAC3AA3D22438A580004084D /* GPUImageSourceOverBlendFilter.m in Sources */,
 				BA26CE2422ADF3A500D2231F /* AXWebViewControllerActivitySafari.m in Sources */,
 				BAC3AA7922438A580004084D /* GPUImageNormalBlendFilter.m in Sources */,
+				BAE97C9722F92F7E00A60B47 /* JEGyroCalibrationViewController.m in Sources */,
 				BAC3AA5822438A580004084D /* GPUImageRawDataOutput.m in Sources */,
 				BA1A222422816918004B5C12 /* TOActivityCroppedImageProvider.m in Sources */,
 				BAEAF0482251C67B00410EED /* JESmartCameraViewController.mm in Sources */,
@@ -3066,6 +3116,7 @@
 				BAC3AA7E22438A580004084D /* GPUImageHighlightShadowFilter.m in Sources */,
 				BAC3A9F822438A580004084D /* GPUImageColorPackingFilter.m in Sources */,
 				BAC3AA4322438A580004084D /* GPUImagePicture.m in Sources */,
+				BAE97C9C22F964C400A60B47 /* XFStepView.m in Sources */,
 				BAC3AA1622438A580004084D /* GPUImageSolidColorGenerator.m in Sources */,
 				BA26CF2222B2599800D2231F /* SRFocusingView.m in Sources */,
 				BAC3A9ED22438A580004084D /* GPUImageUnsharpMaskFilter.m in Sources */,
@@ -3143,6 +3194,7 @@
 				BA1A224722817076004B5C12 /* FBPictureViewController.m in Sources */,
 				BA1A222822816918004B5C12 /* TOCropViewController.m in Sources */,
 				BAC3AA2822438A580004084D /* GPUImage3x3TextureSamplingFilter.m in Sources */,
+				BAE97CA322F9743200A60B47 /* SDBaseProgressView.m in Sources */,
 				BAC3A9F022438A580004084D /* GPUImageLuminanceThresholdFilter.m in Sources */,
 				BAC3A9F222438A580004084D /* GPUImageParallelCoordinateLineTransformFilter.m in Sources */,
 				BAC3AA3822438A580004084D /* GPUImageXYDerivativeFilter.m in Sources */,

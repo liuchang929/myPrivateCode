@@ -67,6 +67,8 @@
 "Please connect the device" = "请先连接设备";
 "Setting Saved" = "参数保存成功";
 "Acceleration Calibration" = "加速度校准";
+"Pan-Tilt Calibration" = "云台校准";
+"Cradle head calibration is about to be carried out." = "即将进行云台校准。";
 "The consequences might be quite serious if acceleration calibration failed. Are you sure to continue to calibrate?" = "加速度校准失败可能会导致很严重的后果，是否确认继续校准";
 "Delete Photo" = "删除照片";
 "Delete Video" = "删除视频";
@@ -188,3 +190,19 @@
 
 //新增
 "The front-facing camera does not support 4k resolution" = "前置摄像头不支持 4k 分辨率";
+"Step 1" = "第一步";
+"Step 2" = "第二步";
+"Step 3" = "第三步";
+"Step 4" = "第四步";
+"Start calibration" = "开始校准";
+"Complete calibration" = "完成校准";
+"Do not move the device during calibration" = "校准中，请勿移动设备";
+"In calibration..." = "校准中...";
+
+
+"The cradle head motor has been turned off. Please remove the mobile phone \nand click \"Next\" to start calibration" = "已关闭云台电机，请将手机取下，\n点击\"下一步\"开始校准";
+
+"Place the cradle head as shown in the picture, \nand click \"Start calibration\"." = "如图所示放置云台，点击\"开始校准\"";
+"Attention: the cradle head calibration needs to be placed on an absolutely stable plane. \nIt is recommended to place it on the ground for calibration" = "注意：云台校准需要放置在绝对稳定的平面上，\n建议放置在地面上进行校准";
+
+"The calibration is successful. Please put the phone back on the cradle head and click \"Complete calibration\"." = "校准成功，请将手机放置回云台上再点击\"完成校准\"";

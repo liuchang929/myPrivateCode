@@ -135,8 +135,6 @@
 }
 
 - (void)switchChanged:(UISwitch *)swi {
-    
-    NSLog(@"swi.tag = %ld", swi.tag);
     if (swi.tag == 292) {
         //电影镜头
         
@@ -185,9 +183,24 @@
         [self.delegate appUpdateAction];
     }
 }
+
+- (void)cellLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        //加速度校准
+        if (self.delegate && [self.delegate respondsToSelector:@selector(deviceSettingMode:)]) {
+            [self.delegate deviceSettingMode:4];
+        }
+    }
+}
 #pragma mark - UITableViewDelegate&&UITableViewDataSource
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return CELL_HEIGHT;
+    if (_settingMode == cameraSetting) {
+        if (indexPath.row == 3) {
+            return CELL_HEIGHT * 2;
+        }
+        else return CELL_HEIGHT;
+    }
+    else return CELL_HEIGHT;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -250,6 +263,12 @@
                     [swi addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
                     
                     [cell.cellView addSubview:swi];
+                    
+                    UILabel *psLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, CELL_HEIGHT, cell.frame.size.width, CELL_HEIGHT)];
+                    psLabel.text = NSLocalizedString(@"(Use with the SiRui 33mm film lens.)", nil);
+                    psLabel.textColor = [UIColor whiteColor];
+                    psLabel.font = [UIFont systemFontOfSize:14];
+                    [cell addSubview:psLabel];
                 }
                     break;
                     
@@ -290,7 +309,7 @@
                     break;
                     
                 case 2: {
-                    //加速度校准
+                    //改成云台校准
                 }
                     break;
                     
@@ -334,6 +353,10 @@
                     label.textAlignment = NSTextAlignmentRight;
                     label.textColor = [UIColor whiteColor];
                     [cell.cellView addSubview:label];
+                    //添加 cell 长按事件，跳转加速度校准
+                    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(cellLongPress:)];
+                    longPress.minimumPressDuration = 5;
+                    [cell addGestureRecognizer:longPress];
                 }
                     break;
                     
@@ -419,7 +442,6 @@
                         break;
                         
                     case 2: {
-                        NSLog(@"_videoResolutionArray1 = %@", _videoResolutionArray);
                         _optionsView.cellArray = self.videoResolutionArray;
                         _optionsView.cameraSettingMode = resolution;
                     }
@@ -479,7 +501,7 @@
             switch (indexPath.row) {
                     
                 case 2: {
-                    //加速度校准
+                    //云台校准
                     if (self.delegate && [self.delegate respondsToSelector:@selector(deviceSettingMode:)]) {
                         [self.delegate deviceSettingMode:2];
                     }
@@ -579,18 +601,6 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     NSLog(@"pickerView选中的行数 = %ld", (long)row);
-    /*
-    if (pickerView == _hPushSpeedPicker) {
-        USER_SET_SaveAxisPushSpeed_Interger(row);
-    }
-    else {
-        USER_SET_SavePitchPushSpeed_Interger(row);
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(deviceSettingMode:)]) {
-        [self.delegate deviceSettingMode:0];
-    }
-    NSLog(@"选中：%ld；%ld", USER_GET_SaveAxisPushSpeed_Interger, USER_GET_SavePitchPushSpeed_Interger);
-     */
 }
 
 #pragma mark - Tools

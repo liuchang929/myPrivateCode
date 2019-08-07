@@ -35,7 +35,6 @@
 
 @property (nonatomic, assign) BOOL      isEnterSelecting;     //是否进入选择
 
-
 @end
 
 @implementation JEAlbumViewController
