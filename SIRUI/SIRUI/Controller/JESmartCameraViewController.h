@@ -56,10 +56,6 @@ typedef enum shootingMode {
 
 @property (nonatomic, strong) NSArray   *peripheralName;      //蓝牙扫描设备名
 
-/**
- 智能退出拍摄模式
- */
-- (void)smartQuitCamera;
 
 @end
 

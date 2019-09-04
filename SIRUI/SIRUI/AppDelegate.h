@@ -12,11 +12,5 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-/*
- 0723更新
- -  如果视频保存失败，在相册中预览图为黑，无法正常删除       ✅已修复
- -  延时摄影时双击快门键app闪退                         
- */
-
 @end
 

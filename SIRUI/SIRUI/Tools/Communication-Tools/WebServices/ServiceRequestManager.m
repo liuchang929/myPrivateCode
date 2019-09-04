@@ -36,14 +36,17 @@
     
     if (self.connection) {
         [self.connection cancel];
-        [self.connection release],self.connection=nil;
+        [_connection release];
+        self.connection=nil;
     }
     if (responseData_) {
-         [responseData_ release],responseData_=nil;
+        [responseData_ release];
+        responseData_=nil;
     }
    
     if (error_) {
-        [error_ release],error_=nil;
+        [error_ release];
+        error_=nil;
     }
 	[super dealloc];
 }
@@ -143,7 +146,7 @@
             if (statusCode_!=200) {
                 [responseData_ release],responseData_=nil;
                 
-                NSString* statusError  = [NSString stringWithFormat:NSLocalizedString(@"HTTP Error: %ld", nil), statusCode_];
+                NSString* statusError  = [NSString stringWithFormat:JELocalizedString(@"HTTP Error: %ld", nil), statusCode_];
                 NSDictionary* userInfo = [NSDictionary dictionaryWithObject:statusError forKey:NSLocalizedDescriptionKey];
                 error_ = [[NSError alloc] initWithDomain:@"ServiceRequestManager"
                                                     code:statusCode_
@@ -174,7 +177,7 @@
         if (statusCode_!=200) {
             [responseData_ release],responseData_=nil;
             
-            NSString* statusError  = [NSString stringWithFormat:NSLocalizedString(@"HTTP Error: %ld", nil), statusCode_];
+            NSString* statusError  = [NSString stringWithFormat:JELocalizedString(@"HTTP Error: %ld", nil), statusCode_];
             NSDictionary* userInfo = [NSDictionary dictionaryWithObject:statusError forKey:NSLocalizedDescriptionKey];
             error_ = [[NSError alloc] initWithDomain:@"ServiceRequestManager"
                                                 code:statusCode_
@@ -184,7 +187,9 @@
         }
         [self hideNetworkActivityIndicator];
     }
-    *err=error_;
+    if (*err != NULL) {
+        *err = error_;
+    }
     return [self responseString];
 }
 - (void)success:(SRMFinishBlock)aCompletionBlock failure:(SRMFailedBlock)aFailedBlock{
@@ -210,7 +215,7 @@
         //取得文件大小
         self.totalFileSize=[response expectedContentLength];
     } else {
-        NSString* statusError  = [NSString stringWithFormat:NSLocalizedString(@"HTTP Error: %ld", nil), statusCode_];
+        NSString* statusError  = [NSString stringWithFormat:JELocalizedString(@"HTTP Error: %ld", nil), statusCode_];
         NSDictionary* userInfo = [NSDictionary dictionaryWithObject:statusError forKey:NSLocalizedDescriptionKey];
         error_ = [[NSError alloc] initWithDomain:@"ServiceRequestManager"
                                             code:statusCode_

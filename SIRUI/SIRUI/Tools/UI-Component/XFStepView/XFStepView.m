@@ -25,7 +25,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame Titles:(nonnull NSArray *)titles
 {
-    if ([super initWithFrame:frame])
+    self = [super initWithFrame:frame];
+    if (self)
     {
         _stepIndex = 0;
         

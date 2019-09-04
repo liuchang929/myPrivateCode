@@ -25,6 +25,7 @@ typedef enum settingMode {
 - (void)setCameraAuxLineMode:(NSInteger)mode;
 - (void)setCameraVideoResMode:(NSInteger)mode;
 - (void)deviceUpdateAction;
+- (void)bluetoothUpdateAction;
 - (void)appUpdateAction;
 - (void)filmCameraAction:(BOOL)on;
 
@@ -42,6 +43,7 @@ typedef enum settingMode {
 @property (nonatomic, strong) UIPickerView              *fPushSpeedPicker;  //俯仰轴
 @property (nonatomic, strong) NSArray *videoResolutionArray;    //视频分辨率
 @property (nonatomic, strong) UIButton *updateVersionButton;    //更新版本按钮
+@property (nonatomic, strong) UIButton *updateBLEVersionButton; //蓝牙更新版本按钮
 @property (nonatomic, strong) UIButton *appVersionButton;       //app 版本按钮
 
 - (void)resetUISize:(CGSize)size;

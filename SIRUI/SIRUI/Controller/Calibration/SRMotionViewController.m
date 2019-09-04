@@ -71,7 +71,7 @@ static int flag = 0;
     if (!_backBtn) {
          _backBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
         [_backBtn addTarget:self action:@selector(backBtnClick) forControlEvents:(UIControlEventTouchUpInside)];
-        [_backBtn setTitle:NSLocalizedString(@"Back",nil) forState:(UIControlStateNormal)];
+        [_backBtn setTitle:JELocalizedString(@"Back",nil) forState:(UIControlStateNormal)];
         [_backBtn setTitleColor:[UIColor colorWithRed:0.322 green:0.322 blue:0.322 alpha:1.00] forState:0];
         _backBtn.titleLabel.font = [UIFont systemFontOfSize:20];
     }
@@ -98,7 +98,7 @@ static int flag = 0;
     if (!_showInfoLabel) {
         
         _showInfoLabel = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth-150, kScreenHeight-180, 150, 150)];
-        _showInfoLabel.text = NSLocalizedString(@"Please adjust the angle to overlap the two grid lines",nil);
+        _showInfoLabel.text = JELocalizedString(@"Please adjust the angle to overlap the two grid lines",nil);
         _showInfoLabel.numberOfLines = 0;
         [_showInfoLabel sizeToFit];
         _showInfoLabel.textColor = [UIColor redColor];
@@ -164,9 +164,9 @@ static int flag = 0;
 - (void)accelerationSuccess {
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Information",nil) message:NSLocalizedString(@"Calibrated", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Information",nil) message:JELocalizedString(@"Calibrated", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
         [self dismissViewControllerAnimated:YES completion:nil];
         
@@ -191,9 +191,9 @@ static int flag = 0;
         
         [MBProgressHUD hideHUDForView:self.view animated:YES];
             
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Information",nil) message:NSLocalizedString(@"Calibrated", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Information",nil) message:JELocalizedString(@"Calibrated", nil) preferredStyle:UIAlertControllerStyleAlert];
             
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
                 [self dismissViewControllerAnimated:YES completion:nil];
                 
@@ -266,7 +266,7 @@ static int flag = 0;
         double rotation =  atan2(motion.gravity.x, motion.gravity.y) - M_PI;
         double rotation1 =  atan2(motion.gravity.x, motion.gravity.z);
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.textLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Tilting:%.0f°\n Rolling:%.0f°",nil),zTheta,xyTheta];
+            self.textLabel.text = [NSString stringWithFormat:JELocalizedString(@"Tilting:%.0f°\n Rolling:%.0f°",nil),zTheta,xyTheta];
             double x1 = motion.gravity.x;
             double y1 = motion.gravity.y;
             if (fabs(y1) >= fabs(x1))

@@ -101,10 +101,12 @@
         cell = [[JECameraSettingTableViewCell alloc] initWithFrame:CGRectMake(0, 0, _tableView.frame.size.width, CELL_HEIGHT)];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    cell.cellName.text = NSLocalizedString([_cellArray[indexPath.row] valueForKey:@"option"], nil);
-    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(cell.cellView.frame.size.width - CELL_ICON_HEIGHT - CELL_ICON_RIGHT_WIDTH, CELL_ICON_TOPLEFT_WIDTH, CELL_ICON_HEIGHT, CELL_ICON_HEIGHT)];
-    [icon setImage:[UIImage imageNamed:[_cellArray[indexPath.row] valueForKey:@"image"]]];
-    [cell.cellView addSubview:icon];
+    cell.cellName.text = JELocalizedString([_cellArray[indexPath.row] valueForKey:@"option"], nil);
+    if ([_cellArray[indexPath.row] valueForKey:@"image"] != nil) {
+        UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(cell.cellView.frame.size.width - CELL_ICON_HEIGHT - CELL_ICON_RIGHT_WIDTH, CELL_ICON_TOPLEFT_WIDTH, CELL_ICON_HEIGHT, CELL_ICON_HEIGHT)];
+        [icon setImage:[UIImage imageNamed:[_cellArray[indexPath.row] valueForKey:@"image"]]];
+        [cell.cellView addSubview:icon];
+    }
     
     switch (_cameraSettingMode) {
         case auxiliaryLine: {

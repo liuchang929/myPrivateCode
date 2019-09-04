@@ -44,16 +44,22 @@ typedef enum : NSInteger {
 @interface JEBluetoothManager : NSObject
 
 @property (nonatomic, weak)             id<JEBluetoothManagerDelegate> delegate;
+@property (nonatomic, strong)           CBService           *service;                       //当前服务
+@property (nonatomic, strong)           CBService           *normalService;                 //普通服务
+@property (nonatomic, strong)           CBService           *otaService;                    //ota服务
 @property (nonatomic, strong, nullable) CBPeripheral        *peripheral;                    //连接的外设信息
 @property (nonatomic, assign)           bluetoothDeviceName bleDeviceName;                  //支持的蓝牙设备名
 @property (nonatomic, strong, nullable) NSMutableArray      *srPeripherals;                 //外设名数组
 @property (nonatomic, strong, nullable) NSMutableArray      *srMacPeripherals;              //外设mac地址数组
 @property (nonatomic, strong)           NSString            *serviceUUIDString;             //外设服务的UUID Default = FFF0
+@property (nonatomic, strong)           NSString            *otaUUIDString;                 //ota服务的UUID Default = 00010203-0405-0607-0809-0A0B0C0D1911
 @property (nonatomic, strong)           NSArray             *peripheralName;                //蓝牙扫描筛选设备名 Default = RPXMXP
 @property (nonatomic, assign)           NSNumber            *scanRange;                     //蓝牙扫描范围 Default = -60
 @property (nonatomic, assign)           float               scanMaxTime;                    //蓝牙扫描自动连接最长等待时间 Default = 10.0f
 @property (nonatomic, strong)           NSString            *deviceBroadcastingNameKeyword; //设备名广播关键词 Default = kCBAdvDataLocalName
 @property (nonatomic, strong)           NSString            *deviceBroadcastionDataKeyword; //设备数据广播关键词 Default = kCBAdvDataManufacturerData
+
+//@property (nonatomic, strong)           CBCharacteristic    *characteristic;
 
 //单例
 + (instancetype)shareBLESingleton;
@@ -84,6 +90,9 @@ typedef enum : NSInteger {
 
 //控制发送频率的消息
 - (void)sendRestrictiveMsg:(NSData *)msg;
+
+//发送 OTA 消息
+- (void)sendOTAMsg:(NSData *)msg;
 
 /*
  *  蓝牙协议指令
@@ -146,6 +155,19 @@ typedef enum : NSInteger {
 - (void)BPCheckPitchOrientationOpposite;
 //切换俯仰控制方向
 - (void)BPSendPitchOrientationOpposite;
+/*
+ OTA蓝牙固件
+ */
+//开始蓝牙升级
+- (void)BPOtaSendUpdateStart;
+- (void)BPOtasendUpdateEnd;
+
+//暂存
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(nullable NSError *)error;
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(nullable NSError *)error;
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error;
 
 @end
 

@@ -107,7 +107,7 @@ typedef enum : NSUInteger {
 //                        }];
 //                    }
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        SHOW_HUD_DELAY(NSLocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                        SHOW_HUD_DELAY(JELocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                     });
                     return;
                 }else{

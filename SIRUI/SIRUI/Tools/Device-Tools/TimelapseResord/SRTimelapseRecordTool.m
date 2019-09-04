@@ -277,18 +277,18 @@
     if ([movieData writeToFile:filePath atomically:YES]) {
         if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:path size:[self getUserSaveVideoResolution]] toSandboxWithFileName:filePreviewName]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                SHOW_HUD_DELAY(NSLocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                SHOW_HUD_DELAY(JELocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
             });
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
             });
         }
     }
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+            SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         });
     }
 }

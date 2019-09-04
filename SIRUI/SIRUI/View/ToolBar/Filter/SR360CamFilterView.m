@@ -52,7 +52,6 @@
         
         _filters = [NSMutableArray arrayWithArray:@[
                                                     [GPUImageFilter       new],
-//                                                    [IFToasterFilter new],
                                                     [NSNull      null],
                                                     [NSNull      null],
                                                     [NSNull      null],
@@ -69,8 +68,7 @@
                                                     [NSNull      null],
                                                     [NSNull      null],
                                                     [NSNull      null],
-                                                    [NSNull      null],
-                                                    [GPUImageExposureFilter new]
+                                                    [NSNull      null]
                                                     ]];
         
         _filterToolName = @[@"GPUImageFilter",
@@ -90,40 +88,31 @@
                             @"IFLomofiFilter",
                             @"IFHudsonFilter",
                             @"IFSutroFilter",
-                            @"IFRiseFilter",
-                            @"GPUImageExposureFilter"
+                            @"IFRiseFilter"
                             ];
         
         _filtersName = @[
-                         NSLocalizedString(@"Origin",comment: ""),
-                         NSLocalizedString(@"Toaster",comment: ""),
-                         NSLocalizedString(@"Amaro",comment: ""),
-                         NSLocalizedString(@"LordKelvin",comment: ""),
-                         NSLocalizedString(@"Nashville",comment: ""),
-                         NSLocalizedString(@"Walden",comment: ""),
-                         NSLocalizedString(@"XproII",comment: ""),
-                         NSLocalizedString(@"Hefe",comment: ""),
-                         NSLocalizedString(@"Brannan",comment: ""),
-                         NSLocalizedString(@"Sierra",comment: ""),
-                         NSLocalizedString(@"Valencia",comment: ""),
-                         NSLocalizedString(@"Earlybird",comment: ""),
-                         NSLocalizedString(@"1977",comment: ""),
-                         NSLocalizedString(@"Inkwell",comment: ""),
-                         NSLocalizedString(@"Lomofi",comment: ""),
-                         NSLocalizedString(@"Hudson",comment: ""),
-                         NSLocalizedString(@"Sutro",comment: ""),
-                         NSLocalizedString(@"Rise",comment: ""),
-//                         NSLocalizedString(@"Beauty",comment: ""),
-                         NSLocalizedString(@"Exposure",comment: ""),
+                         JELocalizedString(@"Origin",comment: ""),
+                         JELocalizedString(@"Toaster",comment: ""),
+                         JELocalizedString(@"Amaro",comment: ""),
+                         JELocalizedString(@"LordKelvin",comment: ""),
+                         JELocalizedString(@"Nashville",comment: ""),
+                         JELocalizedString(@"Walden",comment: ""),
+                         JELocalizedString(@"XproII",comment: ""),
+                         JELocalizedString(@"Hefe",comment: ""),
+                         JELocalizedString(@"Brannan",comment: ""),
+                         JELocalizedString(@"Sierra",comment: ""),
+                         JELocalizedString(@"Valencia",comment: ""),
+                         JELocalizedString(@"Earlybird",comment: ""),
+                         JELocalizedString(@"1977",comment: ""),
+                         JELocalizedString(@"Inkwell",comment: ""),
+                         JELocalizedString(@"Lomofi",comment: ""),
+                         JELocalizedString(@"Hudson",comment: ""),
+                         JELocalizedString(@"Sutro",comment: ""),
+                         JELocalizedString(@"Rise",comment: "")
                          ];
         
-    //filters = instagramFilters;
         self.currentFilter = _filters[0];
-        
-        
-
-//        UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-//        self.effect = effect;
         
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
         layout.itemSize = CGSizeMake(frame.size.height*0.9, frame.size.height*0.9);

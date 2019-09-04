@@ -60,7 +60,7 @@
     
     [super viewDidLoad];
     
-    [self addNavViewTitle:NSLocalizedString(@"Video Clip",nil)];
+    [self addNavViewTitle:JELocalizedString(@"Video Clip",nil)];
     
     self.view.backgroundColor = [UIColor blackColor];
     
@@ -70,7 +70,7 @@
     
     [self.backBtn addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.nextBtn setTitle:NSLocalizedString(@"Next",nil) forState:UIControlStateNormal];
+    [self.nextBtn setTitle:JELocalizedString(@"Next",nil) forState:UIControlStateNormal];
     
     [self.nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
@@ -199,7 +199,7 @@
 - (void)saveVideo{
     
     if (self.stopTime <= 0 || self.startTime <= 0) {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Video is too short for editing", nil), self.view, 1.5);
+        SHOW_HUD_DELAY(JELocalizedString(@"Video is too short for editing", nil), self.view, 1.5);
         return ;
     }
 
@@ -288,7 +288,7 @@
 - (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didChangeLeftPosition:(CGFloat)startTime rightPosition:(CGFloat)endTime {
     
     if (startTime <= 0 || endTime <= 0) {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Video is too short for editing", nil), self.view, 0.5);
+        SHOW_HUD_DELAY(JELocalizedString(@"Video is too short for editing", nil), self.view, 0.5);
         [self.trimmerView removeFromSuperview];
         self.trimmerView = nil;
         return;

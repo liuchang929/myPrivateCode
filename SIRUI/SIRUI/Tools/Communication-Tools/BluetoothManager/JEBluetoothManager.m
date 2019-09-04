@@ -13,10 +13,10 @@
 
 @interface JEBluetoothManager()<CBCentralManagerDelegate, CBPeripheralDelegate>
 
-@property (nonatomic, strong)           CBService           *service;                       //当前服务
 @property (nonatomic, strong)           CBCentralManager    *centralManager;                //蓝牙管理对象
 @property (nonatomic, strong)           CBCharacteristic    *inputCharacteristic;           //连接的设备特征（通道）输入
 @property (nonatomic, strong)           CBCharacteristic    *outPutcharacteristic;          //连接的设备特征（通道）输出
+@property (nonatomic, strong)           CBCharacteristic    *otaCharacteristic;             //ota的设备特征（通道）输入 && 输出
 
 //@property (nonatomic, strong)           NSTimer             *scanStopTimer;                 //扫描自动连接限制计时器
 @property (nonatomic, strong)           NSTimer             *updateTimer;                   //更新设备计时器
@@ -46,7 +46,8 @@ static JEBluetoothManager *jeManager = nil;
         jeManager.scanRange                     = [NSNumber numberWithInt:-60];         //初始化蓝牙扫描范围
         jeManager.deviceBroadcastingNameKeyword = @"kCBAdvDataLocalName";               //初始化蓝牙设备名关键字
         jeManager.deviceBroadcastionDataKeyword = @"kCBAdvDataManufacturerData";        //初始化蓝牙设备信息关键字
-        jeManager.serviceUUIDString             = @"FFF0";                              //初始化服务的 UUID
+        jeManager.serviceUUIDString             = kServiceUUID;                         //初始化服务的 UUID
+        jeManager.otaUUIDString                 = kOTAService;                             //初始化ota服务的 UUID
 //        jeManager.peripheralName                = @[@"RPXMXP"];                         //初始化蓝牙扫描设备名
         jeManager.canSendMsg                    = YES;                                  //初始化发送消息权限
         
@@ -277,7 +278,7 @@ static JEBluetoothManager *jeManager = nil;
     
     NSLog(@"连接上了名称为%@的外设",peripheral.name);
     
-    [MBProgressHUD showTipMessageInWindow:[NSString stringWithFormat:NSLocalizedString(@"Connect device %@",nil),peripheral.name]];
+    [MBProgressHUD showTipMessageInWindow:[NSString stringWithFormat:JELocalizedString(@"Connect device %@",nil),peripheral.name]];
     
     jeManager.peripheral.delegate = jeManager;
     
@@ -325,10 +326,17 @@ static JEBluetoothManager *jeManager = nil;
         NSLog(@"外设服务: %@", service);
         //判断外设服务中的 UUID 是不是我所需的 UUID，如果是，则搜索特征
         if ([service.UUID.UUIDString isEqual:jeManager.serviceUUIDString]) {
-            jeManager.service = service;
+            jeManager.normalService = service;
+//            jeManager.service = jeManager.normalService;    //默认为普通服务
             //每个服务又包含一个或多个特征,搜索服务的特征    此处可放入异步主队列
             dispatch_async(dispatch_get_main_queue(), ^{
-                [peripheral discoverCharacteristics:nil forService:jeManager.service];
+                [peripheral discoverCharacteristics:nil forService:jeManager.normalService];
+            });
+        }
+        if ([service.UUID.UUIDString isEqual:jeManager.otaUUIDString]) {
+            jeManager.otaService = service;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [peripheral discoverCharacteristics:nil forService:jeManager.otaService];
             });
         }
     }
@@ -343,8 +351,10 @@ static JEBluetoothManager *jeManager = nil;
 
     //获取Characteristic的值
     for (CBCharacteristic *characteristic in service.characteristics) {
-        NSLog(@"服务server:%@ 的特征:%@, 读写属性:%lu", service.UUID.UUIDString, characteristic, (unsigned long)characteristic.properties);
-        
+        NSLog(@"服务server:%@ 的特征:%@, 读写属性:%lu, 特征值:%@", service.UUID.UUIDString, characteristic, (unsigned long)characteristic.properties, characteristic.descriptors);
+
+        [peripheral discoverDescriptorsForCharacteristic:characteristic];
+    
         /*
          
          服务server:FFF0 的特征:<CBCharacteristic: 0x283e5c420, UUID = FFF1, properties = 0xC, value = <00000000 00000000 00000000 00000000 00000000>, notifying = NO>, 读写属性:12
@@ -357,9 +367,6 @@ static JEBluetoothManager *jeManager = nil;
          *  订阅特征，如果 UUID数据固定，一般使用 readValueForCharacteristic ，如果 UUID 数据频繁更换，一般使用 setNotifyValue:forCharacteristic:
          */
         [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-        
-        [peripheral readValueForCharacteristic:characteristic];
-        
         //获取数据后，进入代理方法- peripheral: didUpdateValueForCharacteristic: error:
         
         //写
@@ -370,7 +377,29 @@ static JEBluetoothManager *jeManager = nil;
         if ([characteristic.UUID.UUIDString isEqual:kReadUUID1]||[characteristic.UUID.UUIDString isEqual:kReadUUID2]){
             _inputCharacteristic = characteristic;
         }
+        //OTA 服务
+        if ([characteristic.UUID.UUIDString isEqual:kOTAUUID]) {
+            _otaCharacteristic = characteristic;
+        }
     }
+}
+
+//搜索到Characteristic的Descriptors
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
+    if (error) {
+        NSLog(@"扫描特征出错:%@", [error localizedDescription]);
+        return;
+    }
+    
+    //获取Characteristic的值
+    for (CBDescriptor *d in characteristic.descriptors) {
+        NSLog(@"characteristic = %@, descriptors = %@", characteristic.UUID.UUIDString, d.value);
+    }
+}
+
+//暂存
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(nullable NSError *)error {
+    NSLog(@"descriptor = %@", descriptor);
 }
 
 //接受数据
@@ -385,11 +414,12 @@ static JEBluetoothManager *jeManager = nil;
      });
     }
      */
-
     if (jeManager.delegate && [jeManager.delegate respondsToSelector:@selector(commandDidRecieved:)]) {
     
         dispatch_async(dispatch_get_main_queue(), ^{
             @autoreleasepool {
+                NSLog(@"%@信道 --------------------> %@", characteristic.UUID.UUIDString, characteristic.value);
+                
                 [jeManager.delegate commandDidRecieved:[self convertDataToHexStr:characteristic.value]];
             }
         });
@@ -399,7 +429,7 @@ static JEBluetoothManager *jeManager = nil;
 //设置通知后调用，监控蓝牙传回来的实时数据
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
     if (error) {
-        NSLog(@"错误");
+        NSLog(@"获取蓝牙实时数据错误");
         return;
     }
     
@@ -1518,15 +1548,38 @@ static JEBluetoothManager *jeManager = nil;
     
 }
 
+#pragma mark - OTAProtocol
+/**
+ 告知蓝牙开始 OTA 升级
+ */
+- (void)BPOtaSendUpdateStart {
+    Byte byte[2];
+    byte[0] = 0x01;
+    byte[1] = 0xff;
+    NSData *msg = [NSData dataWithBytes:byte length:2];
+    
+    [self sendOTAMsg:msg];
+}
+
+/**
+ 告知蓝牙结束 OTA 升级
+ */
+- (void)BPOtasendUpdateEnd {
+    Byte byte[2];
+    byte[0] = 0x02;
+    byte[1] = 0xff;
+    NSData *msg = [NSData dataWithBytes:byte length:2];
+    
+    [self sendOTAMsg:msg];
+}
+
 #pragma mark - SendMessage
 //发送消息总方法
 - (void)sendMsg:(NSData *)msg {
     if (msg) {
         if (jeManager.bluetoothState == Connect && _outPutcharacteristic != nil){
-            NSString *dataMsg = [[self convertDataToHexStr:msg] substringWithRange:NSMakeRange(2, 2)];
-            NSLog(@"发送的关键命令 : %@", dataMsg);
             [jeManager.peripheral writeValue:msg forCharacteristic:_outPutcharacteristic type:CBCharacteristicWriteWithoutResponse];
-            NSLog(@"发送消息 : %@", msg);
+            NSLog(@"发送消息 ======> %@", msg);
         }
     }
 }
@@ -1538,8 +1591,22 @@ static JEBluetoothManager *jeManager = nil;
             if (_canSendMsg) {
                 [self sendMsg:msg];
                 jeManager.canSendMsg = NO;
-                NSLog(@"发送限制频率消息 : %@", msg);
+                NSLog(@"发送限制频率消息 ======> %@", msg);
             }
+        }
+    }
+}
+
+/**
+ 发送 OTA 服务消息
+
+ @param msg OTA消息
+ */
+- (void)sendOTAMsg:(NSData *)msg {
+    if (msg) {
+        if (jeManager.bluetoothState == Connect && _otaCharacteristic != nil) {
+            [jeManager.peripheral writeValue:msg forCharacteristic:_otaCharacteristic type:CBCharacteristicWriteWithoutResponse];
+            NSLog(@"发送消息 : %@", msg);
         }
     }
 }

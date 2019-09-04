@@ -25,7 +25,7 @@
         self.lostLB = [[UILabel alloc] initWithFrame:CGRectOffset(frame, 0, 0)];
             _lostLB.clipsToBounds = NO;
             _lostLB.textColor = [UIColor redColor];
-            _lostLB.text = NSLocalizedString(@"Track loss", nil);
+            _lostLB.text = JELocalizedString(@"Track loss", nil);
             _lostLB.hidden = YES;
             _lostLB.font = [UIFont systemFontOfSize:12];
             _lostLB.textAlignment = NSTextAlignmentCenter;

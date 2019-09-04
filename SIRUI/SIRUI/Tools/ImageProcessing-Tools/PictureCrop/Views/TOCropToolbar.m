@@ -63,14 +63,14 @@
     
     _doneTextButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _doneTextButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [_doneTextButton setTitle:NSLocalizedString(@"Next",nil)forState:UIControlStateNormal];
+    [_doneTextButton setTitle:JELocalizedString(@"Next",nil)forState:UIControlStateNormal];
     [_doneTextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_doneTextButton.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];
     [_doneTextButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_doneTextButton];
     
     _doneIconButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_doneIconButton setTitle:NSLocalizedString(@"Next",nil)forState:UIControlStateNormal];
+    [_doneIconButton setTitle:JELocalizedString(@"Next",nil)forState:UIControlStateNormal];
     [_doneIconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_doneIconButton.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];
     [_doneIconButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -78,7 +78,7 @@
     
     _cancelTextButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _cancelTextButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    [_cancelTextButton setTitle:NSLocalizedString(@"Cancel",nil)
+    [_cancelTextButton setTitle:JELocalizedString(@"Cancel",nil)
                        forState:UIControlStateNormal];
     [_cancelTextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_cancelTextButton.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];
@@ -86,7 +86,7 @@
     [self addSubview:_cancelTextButton];
     
     _cancelIconButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_cancelIconButton setTitle:NSLocalizedString(@"Cancel",nil)
+    [_cancelIconButton setTitle:JELocalizedString(@"Cancel",nil)
                        forState:UIControlStateNormal];
     [_cancelIconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_cancelIconButton.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];

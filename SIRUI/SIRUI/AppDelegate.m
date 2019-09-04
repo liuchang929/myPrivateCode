@@ -27,17 +27,9 @@
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;    //状态栏字体颜色
     
-    //强制纠正语言
-    NSArray *languages = [NSLocale preferredLanguages];
-    
-    NSString *language = [languages objectAtIndex:0];
-    
-    if ([language hasPrefix:@"zh"]) {//检测开头匹配，是否为中文
-        [[NSUserDefaults standardUserDefaults] setObject:@"zh-Hans" forKey:@"appLanguage"];//App语言设置为中文
-    }
-    else{//其他语言
-        [[NSUserDefaults standardUserDefaults] setObject:@"en" forKey:@"appLanguage"];//App语言设置为英文
-    }
+    //初始化应用语言
+    [JEChangeLanguage initUserLanguage];
+    [JEChangeLanguage setUserLanguage:[JEChangeLanguage userLanguage]];
     
     [self initControllers]; //初始化控制器
     
@@ -50,7 +42,7 @@
 - (void)initControllers {
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
-    NSArray *vcTitles = @[NSLocalizedString(@"Devices", nil), NSLocalizedString(@"Media Library", nil), NSLocalizedString(@"News", nil)];
+    NSArray *vcTitles = @[JELocalizedString(@"Devices", nil), JELocalizedString(@"Media Library", nil), JELocalizedString(@"News", nil)];
     
     NSArray *controllersNames = @[@"JEMainViewController", @"JEAlbumViewController", @"YYBuyViewController"];
     

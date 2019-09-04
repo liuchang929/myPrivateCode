@@ -53,9 +53,9 @@
 #endif
       
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"发现新版本",nil) message:updateMsg preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:JELocalizedString(@"发现新版本",nil) message:updateMsg preferredStyle:UIAlertControllerStyleAlert];
         
-        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"更新",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alert addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"更新",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 
             [self openInAppStoreForAppURL:self.appInfo.trackViewUrl];
             

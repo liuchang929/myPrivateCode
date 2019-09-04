@@ -49,7 +49,7 @@
     
     //顶部视图
     _headLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, HEAD_HEIGHT)];
-    _headLabel.text = NSLocalizedString(@"Path lapse settings", nil);
+    _headLabel.text = JELocalizedString(@"Path lapse settings", nil);
     _headLabel.textColor = [UIColor whiteColor];
     _headLabel.textAlignment = NSTextAlignmentCenter;
     _headLabel.backgroundColor = [UIColor clearColor];
@@ -57,7 +57,7 @@
     
     //云台速度 label
     UILabel *speedPickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.frame.size.height - 100, 80, 50)];
-    speedPickerLabel.text = NSLocalizedString(@"Gimbal Speed :", nil);
+    speedPickerLabel.text = JELocalizedString(@"Gimbal Speed :", nil);
     speedPickerLabel.textColor = [UIColor whiteColor];
     speedPickerLabel.textAlignment = NSTextAlignmentLeft;
     speedPickerLabel.font = [UIFont systemFontOfSize:14];
@@ -78,7 +78,7 @@
     
     //时间比例 label
     UILabel *pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.frame.size.height - 50, 100, 50)];
-    pickerLabel.text = NSLocalizedString(@"Time scale: 1s = ", nil);
+    pickerLabel.text = JELocalizedString(@"Time scale: 1s = ", nil);
     pickerLabel.textColor = [UIColor whiteColor];
     pickerLabel.textAlignment = NSTextAlignmentLeft;
     pickerLabel.font = [UIFont systemFontOfSize:14];
@@ -212,7 +212,7 @@
     NSLog(@"拍摄关键点");
     if (_pointPicArray.count > 9) {
         
-        SHOW_HUD_DELAY(NSLocalizedString(@"Ten Key Shooting Points Maximum", nil), [UIApplication sharedApplication].keyWindow, 2);
+        SHOW_HUD_DELAY(JELocalizedString(@"Ten Key Shooting Points Maximum", nil), [UIApplication sharedApplication].keyWindow, 2);
         
         return;
     }

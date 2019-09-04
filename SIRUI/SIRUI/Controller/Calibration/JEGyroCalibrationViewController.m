@@ -54,7 +54,7 @@
     [self.titleView addSubview:self.backBtn];
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
-    _titleLabel.text = NSLocalizedString(@"Pan-Tilt Calibration", nil);
+    _titleLabel.text = JELocalizedString(@"Pan-Tilt Calibration", nil);
     _titleLabel.textColor = MAIN_TEXT_COLOR;
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.center = CGPointMake(self.titleView.center.x, self.backBtn.center.y);
@@ -65,7 +65,7 @@
     self.contentView.backgroundColor = MAIN_BACKGROUND_COLOR;
     [self.view addSubview:self.contentView];
     
-    self.stepView = [[XFStepView alloc] initWithFrame:CGRectMake(0, 50, self.view.frame.size.width, 60) Titles:[NSArray arrayWithObjects:NSLocalizedString(@"Step 1", nil), NSLocalizedString(@"Step 2", nil), NSLocalizedString(@"Step 3", nil), NSLocalizedString(@"Step 4", nil), nil]];
+    self.stepView = [[XFStepView alloc] initWithFrame:CGRectMake(0, 50, self.view.frame.size.width, 60) Titles:[NSArray arrayWithObjects:JELocalizedString(@"Step 1", nil), JELocalizedString(@"Step 2", nil), JELocalizedString(@"Step 3", nil), JELocalizedString(@"Step 4", nil), nil]];
     [self.contentView addSubview:self.stepView];
     
     self.hintView = [[UIView alloc] initWithFrame:CGRectMake(0, 110, self.view.frame.size.width, self.view.frame.size.width)];
@@ -73,7 +73,7 @@
     
     self.nextBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
     _nextBtn.center = CGPointMake(self.view.center.x, _hintView.frame.origin.y + self.view.frame.size.width + 50);
-    [_nextBtn setTitle:NSLocalizedString(@"Next", nil) forState:UIControlStateNormal];
+    [_nextBtn setTitle:JELocalizedString(@"Next", nil) forState:UIControlStateNormal];
     [_nextBtn setTitleColor:MAIN_TEXT_COLOR forState:UIControlStateNormal];
     [_nextBtn setBackgroundColor:MAIN_BLUE_COLOR];
     _nextBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -91,7 +91,7 @@
     _step1Label.center = CGPointMake(_hintView.frame.size.width/2, _hintView.frame.size.width/2);
     _step1Label.textAlignment = NSTextAlignmentCenter;
     _step1Label.numberOfLines = 2;
-    _step1Label.text = NSLocalizedString(@"The cradle head motor has been turned off. Please remove the mobile phone \nand click \"Next\" to start calibration", nil);
+    _step1Label.text = JELocalizedString(@"The cradle head motor has been turned off. Please remove the mobile phone \nand click \"Next\" to start calibration", nil);
     _step1Label.textColor = MAIN_TEXT_COLOR;
     [self.hintView addSubview:self.step1Label];
 }
@@ -112,7 +112,7 @@
     _step2Label.center = CGPointMake(_hintView.frame.size.width/2, _hintView.frame.size.height - 100);
     _step2Label.textAlignment = NSTextAlignmentCenter;
     _step2Label.numberOfLines = 2;
-    _step2Label.text = NSLocalizedString(@"Place the cradle head as shown in the picture, \nand click \"Start calibration\".", nil);
+    _step2Label.text = JELocalizedString(@"Place the cradle head as shown in the picture, \nand click \"Start calibration\".", nil);
     _step2Label.textColor = MAIN_TEXT_COLOR;
     [self.hintView addSubview:_step2Label];
     
@@ -121,7 +121,7 @@
     _step2Label2.center = CGPointMake(_hintView.frame.size.width/2, _hintView.frame.size.height - 50);
     _step2Label2.textAlignment = NSTextAlignmentCenter;
     _step2Label2.numberOfLines = 2;
-    _step2Label2.text = NSLocalizedString(@"Attention: the cradle head calibration needs to be placed on an absolutely stable plane. \nIt is recommended to place it on the ground for calibration", nil);
+    _step2Label2.text = JELocalizedString(@"Attention: the cradle head calibration needs to be placed on an absolutely stable plane. \nIt is recommended to place it on the ground for calibration", nil);
     _step2Label2.textColor = [UIColor redColor];
     [self.hintView addSubview:_step2Label2];
 }
@@ -137,8 +137,8 @@
         [self.step2Label2 removeFromSuperview];
     }
     
-    self.progressView = [[SDRotationLoopProgressView alloc] initWithFrame:CGRectMake((_hintView.frame.size.width-200)/2, (_hintView.frame.size.height-200)/2, 200, 200)];
-    _progressView.backgroundColor = [UIColor lightGrayColor];
+    self.progressView = [[SDRotationLoopProgressView alloc] initWithFrame:CGRectMake((_hintView.frame.size.width-100)/2, (_hintView.frame.size.height-100)/2, 100, 100)];
+    _progressView.backgroundColor = [UIColor blackColor];
     [self.hintView addSubview:self.progressView];
     
     self.step3Label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _hintView.frame.size.width, 100)];
@@ -146,7 +146,7 @@
     _step3Label.center = CGPointMake(_hintView.frame.size.width/2, _hintView.frame.size.height - 50);
     _step3Label.textAlignment = NSTextAlignmentCenter;
     _step3Label.numberOfLines = 1;
-    _step3Label.text = NSLocalizedString(@"Do not move the device during calibration", nil);
+    _step3Label.text = JELocalizedString(@"Do not move the device during calibration", nil);
     _step3Label.textColor = MAIN_TEXT_COLOR;
     [self.hintView addSubview:self.step3Label];
 }
@@ -171,7 +171,7 @@
     _step4Label.textAlignment = NSTextAlignmentCenter;
     _step4Label.numberOfLines = 2;
     _step4Label.adjustsFontSizeToFitWidth = YES;
-    _step4Label.text = NSLocalizedString(@"The calibration is successful. Please put the phone back on the cradle head and click \"Complete calibration\".", nil);
+    _step4Label.text = JELocalizedString(@"The calibration is successful. Please put the phone back on the cradle head and click \"Complete calibration\".", nil);
     _step4Label.textColor = MAIN_TEXT_COLOR;
     [self.hintView addSubview:_step4Label];
     
@@ -192,7 +192,7 @@
             {
                 //准备校准
                 [self setupStep2];
-                [_nextBtn setTitle:NSLocalizedString(@"Start calibration", nil) forState:UIControlStateNormal];
+                [_nextBtn setTitle:JELocalizedString(@"Start calibration", nil) forState:UIControlStateNormal];
             }
                 break;
                 
@@ -210,7 +210,7 @@
                 //校准中
                 [self setupStep4];
                 _nextBtn.hidden = NO;
-                [_nextBtn setTitle:NSLocalizedString(@"Complete calibration", nil) forState:UIControlStateNormal];
+                [_nextBtn setTitle:JELocalizedString(@"Complete calibration", nil) forState:UIControlStateNormal];
             }
                 break;
                 

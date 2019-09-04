@@ -21,6 +21,8 @@
 "Cancel" = "取消";
 "Firmware Update" = "固件升级";
 "Firmware Updated" = "固件升级完成";
+"Bluetooth Update" = "蓝牙升级";
+"Bluetooth Updated" = "蓝牙升级完成";
 "The current firmware upgrade package is empty. Please retrieve server data again." = "当前固件升级包数据为空，请重新获取服务器数据。";
 "Failed to request information from server" = "向服务器请求信息失败";
 
@@ -116,7 +118,6 @@
 "Hudson" = "Hudson";
 "Sutro" = "Sutro";
 "Rise" = "Rise";
-"Exposure" = "Exposure";
 "Janpanese&Korean" = "日韩";
 "Modern" = "现代";
 "Funk" = "放克";
@@ -150,6 +151,7 @@
 "Camera Settings" = "相机设置";
 "Device Settings" = "设备设置";
 "Path lapse settings" = "轨迹延时设置";
+"Hitchcock Settings" = "移动变焦设置";
 "Gimbal Speed :" = "云台速度 :";
 "Time scale :" = "时间比例 :";
 "Time scale: 1s = " = "时间比例: 1s = ";
@@ -198,6 +200,7 @@
 "Complete calibration" = "完成校准";
 "Do not move the device during calibration" = "校准中，请勿移动设备";
 "In calibration..." = "校准中...";
+"(Use with the SiRui 33mm film lens.)" = "(需搭配SiRui 33mm电影镜头使用。)";
 
 
 "The cradle head motor has been turned off. Please remove the mobile phone \nand click \"Next\" to start calibration" = "已关闭云台电机，请将手机取下，\n点击\"下一步\"开始校准";
@@ -206,3 +209,15 @@
 "Attention: the cradle head calibration needs to be placed on an absolutely stable plane. \nIt is recommended to place it on the ground for calibration" = "注意：云台校准需要放置在绝对稳定的平面上，\n建议放置在地面上进行校准";
 
 "The calibration is successful. Please put the phone back on the cradle head and click \"Complete calibration\"." = "校准成功，请将手机放置回云台上再点击\"完成校准\"";
+
+"Face tracking in 3840x2160 is temporarily not supported" = "暂时不支持 3840x2160 的人脸跟踪";
+
+"The front camera doesn't support focusing" = "前置摄像头不支持对焦";
+
+"Shoot length(s)" = "拍摄时长(s)";
+"Zoom direction" = "变焦方向";
+
+"Please set shooting parameters" = "请设置拍摄参数";
+
+"Zoom up" = "放大";
+"Zoom down" = "缩小";

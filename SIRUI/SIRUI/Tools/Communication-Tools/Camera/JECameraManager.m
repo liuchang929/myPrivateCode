@@ -90,7 +90,7 @@ static JECameraManager *jeManager = nil;
     NSLog(@"图片方向 : %ld", (long)imageOrientation);
     
     if (image == nil || fileName == nil) {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+        SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         return NO;
     }
     
@@ -176,26 +176,27 @@ static JECameraManager *jeManager = nil;
         CGRect rect = CGRectMake(offsetX, offsetY, width, width);
         CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);
         UIImage *cropImage = [UIImage imageWithCGImage:newImageRef];
+        CGImageRelease(newImageRef);
         jeManager.thumbnailData = UIImageJPEGRepresentation(cropImage, 1.0);
         
         //将原图和缩略图都存入目录
         if ([jeManager.originalData writeToFile:jeManager.originalPath atomically:YES]) {
             if ([jeManager.thumbnailData writeToFile:jeManager.thumbnailPath atomically:YES]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                 });
                 return YES;
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                 });
                 return NO;
             }
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
             });
             return NO;
         }
@@ -206,7 +207,7 @@ static JECameraManager *jeManager = nil;
 - (void)savePointImage:(UIImage *)image toPointNumber:(NSInteger)num withOrientation:(UIImageOrientation)imageOrientation {
     
     if (image == nil) {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+        SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         return;
     }
     
@@ -321,7 +322,6 @@ static JECameraManager *jeManager = nil;
         
         //图片路径
         jeManager.videoPreviewPath = [jeManager.videoPreviewDirPath stringByAppendingPathComponent:fileName];
-        NSLog(@"缩略图的路径 = %@", _videoPreviewPath);
         
         //处理照片
         //1.先压缩
@@ -478,9 +478,7 @@ static JECameraManager *jeManager = nil;
         case Original:
         {
             imagePath = [jeManager.originalDirPath stringByAppendingPathComponent:imageName];
-            
-            NSLog(@"得到的路径 = %@", imagePath);
-            
+    
             jeManager.getImage = [UIImage imageWithContentsOfFile:imagePath];
         }
             break;
@@ -496,9 +494,7 @@ static JECameraManager *jeManager = nil;
         case VideoThumbnail:
         {
             imagePath = [jeManager.videoPreviewDirPath stringByAppendingPathComponent:imageName];
-            
-            NSLog(@"视频缩略图的路径 = %@", imagePath);
-            
+        
             jeManager.getImage = [UIImage imageWithContentsOfFile:imagePath];
         }
             break;
@@ -506,8 +502,6 @@ static JECameraManager *jeManager = nil;
         case LapsePoint:
         {
             imagePath = [jeManager.lapsePointDirPath stringByAppendingPathComponent:imageName];
-            
-            NSLog(@"得到的路径 = %@", imagePath);
             
             jeManager.getImage = [UIImage imageWithContentsOfFile:imagePath];
         }
@@ -539,7 +533,6 @@ static JECameraManager *jeManager = nil;
             jeManager.videoPath = [jeManager.videoDirPath stringByAppendingPathComponent:videoName];
         }
     }
-    NSLog(@"当前视频路径 = %@", jeManager.videoPath);
     return jeManager.videoPath;
 }
 
@@ -589,11 +582,8 @@ static JECameraManager *jeManager = nil;
 - (BOOL)deleteVideoWithName:(NSString *)videoName {
     NSString *videoOriPath = [jeManager.videoDirPath stringByAppendingPathComponent:videoName];     //原视频路径
     NSString *videoPrePath = [jeManager.videoPreviewDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [videoName substringWithRange:NSMakeRange(0, 13)]]];      //缩略图路径
-    NSLog(@"videoOriPath = %@, videoPrePath = %@", videoOriPath, videoPrePath);
     BOOL videoIsOriExisted = [jeManager.fileManager fileExistsAtPath:videoOriPath];
     BOOL videoIsPreExisted = [jeManager.fileManager fileExistsAtPath:videoPrePath];
-    
-    NSLog(@"videoIsOriExisted = %d, videoIsPreExisted = %d", videoIsOriExisted, videoIsPreExisted);
     
     if (videoIsOriExisted || videoIsPreExisted) {
         [jeManager.fileManager removeItemAtPath:videoOriPath error:nil];

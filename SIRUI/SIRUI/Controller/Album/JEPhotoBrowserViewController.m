@@ -67,10 +67,6 @@
     
     [_photoBrowserScrollView setContentOffset:CGPointMake(_indexPath.row * _photoBrowserScrollView.frame.size.width, 0)];
     
-    //标题栏
-    NSMutableString *muString = [NSMutableString stringWithFormat:@"%@  %ld/%lu", [_photoBrowserDic objectForKey:@"Date"], _indexPath.row + 1, (unsigned long)[[_photoBrowserDic objectForKey:@"Array"] count]];
-    _titleLabel.text = muString;
-    
     for (int index = 0; index < [[_photoBrowserDic objectForKey:@"Array"] count]; index++) {
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(index * _photoBrowserScrollView.frame.size.width, 0, _photoBrowserScrollView.frame.size.width, _photoBrowserScrollView.frame.size.height)];
@@ -105,6 +101,10 @@
     
         [self.photoBrowserScrollView addSubview:imageView];
     }
+    
+    //标题栏
+    NSMutableString *muString = [NSMutableString stringWithFormat:@"%@  %ld/%lu", [_photoBrowserDic objectForKey:@"Date"], _indexPath.row + 1, (unsigned long)[[_photoBrowserDic objectForKey:@"Array"] count]];
+    _titleLabel.text = muString;
     
     //返回键
     [_backButton addTarget:self action:@selector(backButtonAction) forControlEvents:UIControlEventTouchUpInside];
@@ -141,7 +141,6 @@
     
     if (_browerMode == pictureBrowser) {
         TOCropViewController *cropVC = [[TOCropViewController alloc] initWithImage:[[JECameraManager shareCAMSingleton] getImage:[_photoBrowserDic objectForKey:@"Array"][currentPage] fromAlbumSandboxMode:Original]];
-//        cropVC.delegate = self;
         [self presentViewController:cropVC animated:YES completion:nil];
     }
     else {
@@ -160,43 +159,105 @@
 
 //删除按钮
 - (void)delectButtonAction {
-    
     if (_browerMode == pictureBrowser) {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete Photo", nil) message:NSLocalizedString(@"Confirm to delete the selected photos?", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Delete Photo", nil) message:JELocalizedString(@"Confirm to delete the selected photos?", nil) preferredStyle:UIAlertControllerStyleAlert];
         
         //取消
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         }]];
         
         //确认
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             //同时删除原图和缩略图中的图片
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             CGFloat pageWidth = _photoBrowserScrollView.frame.size.width;
             int currentPage = floor((_photoBrowserScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
             
             BOOL delectIsSuccess = [[JECameraManager shareCAMSingleton] deleteImageWithName:[_photoBrowserDic objectForKey:@"Array"][currentPage]];
             
             if (delectIsSuccess) {
-                SHOW_HUD_DELAY(NSLocalizedString(@"Deleted", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                [[_photoBrowserDic objectForKey:@"Array"] removeObjectAtIndex:currentPage];
+                
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                SHOW_HUD_DELAY(JELocalizedString(@"Deleted", comment: ""), self.view, HUD_SHOW_DELAY_TIME);
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    
+                    for (UIView *subView in _photoBrowserScrollView.subviews) {
+                        [subView removeFromSuperview];
+                    }
+                    
+                    //重置数据源
+                    _photoBrowserScrollView.contentSize = CGSizeMake([[_photoBrowserDic objectForKey:@"Array"] count] * _photoBrowserScrollView.frame.size.width, 0);
+                    for (int index = 0; index < [[_photoBrowserDic objectForKey:@"Array"] count]; index++) {
+                        
+                        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(index * _photoBrowserScrollView.frame.size.width, 0, _photoBrowserScrollView.frame.size.width, _photoBrowserScrollView.frame.size.height)];
+                        
+                        if (_browerMode == pictureBrowser) {
+                            imageView.image = [[JECameraManager shareCAMSingleton] getImage:[_photoBrowserDic objectForKey:@"Array"][index] fromAlbumSandboxMode:Original];
+                            imageView.contentMode = UIViewContentModeScaleAspectFit;
+                            imageView.userInteractionEnabled = YES;
+                            
+                            //单击手势
+                            UITapGestureRecognizer *imageViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+                            [imageViewSingleTap setNumberOfTapsRequired:1];
+                            [imageView addGestureRecognizer:imageViewSingleTap];
+                        }
+                        else {
+                            NSMutableString *str = [NSMutableString stringWithString:[_photoBrowserDic objectForKey:@"Array"][index]];
+                            [str replaceCharactersInRange:NSMakeRange(14, 3) withString:@"png"];
+                            imageView.image = [[JECameraManager shareCAMSingleton] getVideoPreviewWithName:str];
+                            
+                            imageView.contentMode = UIViewContentModeScaleAspectFit;
+                            imageView.userInteractionEnabled = YES;
+                            
+                            //播放按钮
+                            UIButton *videoPlayBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+                            videoPlayBtn.center = CGPointMake(imageView.frame.size.width/2, imageView.center.y);
+                            [videoPlayBtn setImage:[UIImage imageNamed:@"icon_brower_videoPlay"] forState:UIControlStateNormal];
+                            [videoPlayBtn addTarget:self action:@selector(videoPlayAction) forControlEvents:UIControlEventTouchUpInside];
+                            [imageView addSubview:videoPlayBtn];
+                            NSLog(@"%@", videoPlayBtn);
+                            
+                        }
+                        
+                        [self.photoBrowserScrollView addSubview:imageView];
+                        
+                    }
+                    
+                    NSMutableString *muString;
+                    
+                    [_photoBrowserScrollView setContentOffset:CGPointMake((currentPage - 1) * _photoBrowserScrollView.frame.size.width, 0)];
+                    if ([[_photoBrowserDic objectForKey:@"Array"] count] != currentPage) {
+                        [_photoBrowserScrollView setContentOffset:CGPointMake(currentPage * _photoBrowserScrollView.frame.size.width, 0)];
+                        muString = [NSMutableString stringWithFormat:@"%@  %d/%lu", [_photoBrowserDic objectForKey:@"Date"], (currentPage + 1), (unsigned long)[[_photoBrowserDic objectForKey:@"Array"] count]];
+                    }
+                    else {
+                        muString = [NSMutableString stringWithFormat:@"%@  %d/%lu", [_photoBrowserDic objectForKey:@"Date"], currentPage, (unsigned long)[[_photoBrowserDic objectForKey:@"Array"] count]];
+                    }
+                
+                    _titleLabel.text = muString;
+                });
             }
             else {
-                SHOW_HUD_DELAY(NSLocalizedString(@"Deleting Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                SHOW_HUD_DELAY(JELocalizedString(@"Deleting Failed", comment: ""), self.view, HUD_SHOW_DELAY_TIME);
             }
             
-            [self dismissViewControllerAnimated:YES completion:nil];
         }]];
         
         [self presentViewController:alertC animated:YES completion:nil];
     }
     else {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete Video", nil) message:NSLocalizedString(@"Confirm to delete the selected videos?", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Delete Video", nil) message:JELocalizedString(@"Confirm to delete the selected videos?", nil) preferredStyle:UIAlertControllerStyleAlert];
         
         //取消
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         }]];
         
         //确认
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             //同时删除原图和缩略图中的图片
             CGFloat pageWidth = _photoBrowserScrollView.frame.size.width;
             int currentPage = floor((_photoBrowserScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
@@ -204,13 +265,66 @@
             BOOL delectIsSuccess = [[JECameraManager shareCAMSingleton] deleteVideoWithName:[_photoBrowserDic objectForKey:@"Array"][currentPage]];
             
             if (delectIsSuccess) {
-                SHOW_HUD_DELAY(NSLocalizedString(@"Deleted", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                [[_photoBrowserDic objectForKey:@"Array"] removeObjectAtIndex:currentPage];
+                
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                SHOW_HUD_DELAY(JELocalizedString(@"Deleted", comment: ""), self.view, HUD_SHOW_DELAY_TIME);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    
+                    for (UIView *subView in _photoBrowserScrollView.subviews) {
+                        [subView removeFromSuperview];
+                    }
+                    
+                    //重置数据源
+                    _photoBrowserScrollView.contentSize = CGSizeMake([[_photoBrowserDic objectForKey:@"Array"] count] * _photoBrowserScrollView.frame.size.width, 0);
+                    for (int index = 0; index < [[_photoBrowserDic objectForKey:@"Array"] count]; index++) {
+                        
+                        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(index * _photoBrowserScrollView.frame.size.width, 0, _photoBrowserScrollView.frame.size.width, _photoBrowserScrollView.frame.size.height)];
+                        
+                        if (_browerMode == pictureBrowser) {
+                            imageView.image = [[JECameraManager shareCAMSingleton] getImage:[_photoBrowserDic objectForKey:@"Array"][index] fromAlbumSandboxMode:Original];
+                            imageView.contentMode = UIViewContentModeScaleAspectFit;
+                            imageView.userInteractionEnabled = YES;
+                            
+                            //单击手势
+                            UITapGestureRecognizer *imageViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+                            [imageViewSingleTap setNumberOfTapsRequired:1];
+                            [imageView addGestureRecognizer:imageViewSingleTap];
+                        }
+                        else {
+                            NSMutableString *str = [NSMutableString stringWithString:[_photoBrowserDic objectForKey:@"Array"][index]];
+                            [str replaceCharactersInRange:NSMakeRange(14, 3) withString:@"png"];
+                            imageView.image = [[JECameraManager shareCAMSingleton] getVideoPreviewWithName:str];
+                            
+                            imageView.contentMode = UIViewContentModeScaleAspectFit;
+                            imageView.userInteractionEnabled = YES;
+                            
+                            //播放按钮
+                            UIButton *videoPlayBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+                            videoPlayBtn.center = CGPointMake(imageView.frame.size.width/2, imageView.center.y);
+                            [videoPlayBtn setImage:[UIImage imageNamed:@"icon_brower_videoPlay"] forState:UIControlStateNormal];
+                            [videoPlayBtn addTarget:self action:@selector(videoPlayAction) forControlEvents:UIControlEventTouchUpInside];
+                            [imageView addSubview:videoPlayBtn];
+                            NSLog(@"%@", videoPlayBtn);
+                            
+                        }
+                        
+                        [self.photoBrowserScrollView addSubview:imageView];
+                        [_photoBrowserScrollView setContentOffset:CGPointMake((currentPage - 1) * _photoBrowserScrollView.frame.size.width, 0)];
+                    }
+                    
+                    [_photoBrowserScrollView setContentOffset:CGPointMake(currentPage * _photoBrowserScrollView.frame.size.width, 0) animated:YES];
+                    NSMutableString *muString = [NSMutableString stringWithFormat:@"%@  %d/%lu", [_photoBrowserDic objectForKey:@"Date"], (currentPage + 1), (unsigned long)[[_photoBrowserDic objectForKey:@"Array"] count]];
+                    _titleLabel.text = muString;
+                });
             }
             else {
-                SHOW_HUD_DELAY(NSLocalizedString(@"Deleting Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                SHOW_HUD_DELAY(JELocalizedString(@"Deleting Failed", comment: ""), self.view, HUD_SHOW_DELAY_TIME);
             }
             
-            [self dismissViewControllerAnimated:YES completion:nil];
+            //刷新当前页面，跳到下一张
+//            [self resetScrollView];
+            
         }]];
         
         [self presentViewController:alertC animated:YES completion:nil];
@@ -220,15 +334,15 @@
 //下载按钮
 - (void)downloadButtonAction {
     if (_browerMode == pictureBrowser) {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Save Photo", nil) message:NSLocalizedString(@"Confirm to save the current photo?", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Save Photo", nil) message:JELocalizedString(@"Confirm to save the current photo?", nil) preferredStyle:UIAlertControllerStyleAlert];
         
         //取消
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"取消");
         }]];
         
         //确认
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"确认");
             
             CGFloat pageWidth = _photoBrowserScrollView.frame.size.width;
@@ -249,12 +363,12 @@
                                 NSLog(@"imageAsset = %@", imageAsset);
                                 if (imageAsset) {
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        SHOW_HUD_DELAY(NSLocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                        SHOW_HUD_DELAY(JELocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                     });
                                 }
                             } failure:^(NSError *error) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    SHOW_HUD_DELAY(NSLocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                    SHOW_HUD_DELAY(JELocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                 });
                             }];
                         }
@@ -266,15 +380,15 @@
         [self presentViewController:alertC animated:YES completion:nil];
     }
     else {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Save Video", nil) message:NSLocalizedString(@"Confirm to save the current video?", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Save Video", nil) message:JELocalizedString(@"Confirm to save the current video?", nil) preferredStyle:UIAlertControllerStyleAlert];
         
         //取消
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"取消");
         }]];
         
         //确认
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"确认");
             
             CGFloat pageWidth = _photoBrowserScrollView.frame.size.width;
@@ -291,12 +405,12 @@
                                 [[PHPhotoLibrary sharedPhotoLibrary] saveVideoWithUrl:videoURL ToAlbum:kVideoAlbumName completion:^(NSURL *videoUrl) {
                                     if (videoUrl) {
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            SHOW_HUD_DELAY(NSLocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                            SHOW_HUD_DELAY(JELocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                         });
                                     }
                                 } failure:^(NSError *error) {
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                        SHOW_HUD_DELAY(JELocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                     });
                                 }];
                             }
@@ -305,7 +419,7 @@
                 } @catch (NSException *exception) {
                     NSLog(@"catch");
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        SHOW_HUD_DELAY(NSLocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                        SHOW_HUD_DELAY(JELocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                     });
                 } @finally {
                 
@@ -388,6 +502,10 @@
     int currentPage = floor((_photoBrowserScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     UIImageView *imageView = scrollView.subviews[currentPage];
     return imageView;
+}
+
+- (void)resetScrollViewWithNewOffset:(NSInteger)offset {
+    [_photoBrowserScrollView setContentOffset:CGPointMake(offset * _photoBrowserScrollView.frame.size.width, 0) animated:YES];
 }
 
 #pragma mark - UIScrollViewDelegate

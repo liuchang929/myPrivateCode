@@ -22,7 +22,7 @@
         _lb = [[UILabel alloc]initWithFrame:CGRectOffset(frame, 0, 0)];
         _lb.clipsToBounds = NO;
         _lb.textColor = [UIColor redColor];
-        _lb.text = NSLocalizedString(@"Track loss", nil);
+        _lb.text = JELocalizedString(@"Track loss", nil);
         _lb.hidden = YES;
         _lb.font = [UIFont systemFontOfSize:12];
         _lb.textAlignment = NSTextAlignmentCenter;

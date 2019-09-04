@@ -51,7 +51,7 @@
     
     //view标题
     self.updateTitle = [[UILabel alloc] init];
-    self.updateTitle.text = NSLocalizedString(@"Firmware Update", nil);
+    self.updateTitle.text = JELocalizedString(@"Firmware Update", nil);
     self.updateTitle.font = [UIFont systemFontOfSize:18];
     self.updateTitle.textAlignment = NSTextAlignmentCenter;
     [self.updateTitle setTextColor:[UIColor whiteColor]];
@@ -63,7 +63,7 @@
     
     //更新确认键
     self.updateConfirmBtn = [[UIButton alloc] init];
-    [self.updateConfirmBtn setTitle:NSLocalizedString(@"Update", nil) forState:UIControlStateNormal];
+    [self.updateConfirmBtn setTitle:JELocalizedString(@"Update", nil) forState:UIControlStateNormal];
     [self.updateConfirmBtn setTitleColor:kTitleColor forState:UIControlStateNormal];
     self.updateConfirmBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     self.updateConfirmBtn.layer.borderWidth = 1;
@@ -81,7 +81,7 @@
     
     //更新取消键
     self.updateCancelBtn = [[UIButton alloc] init];
-    [self.updateCancelBtn setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
+    [self.updateCancelBtn setTitle:JELocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
     [self.updateCancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     self.updateCancelBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     self.updateCancelBtn.layer.borderWidth = 1;

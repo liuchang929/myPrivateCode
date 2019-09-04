@@ -326,10 +326,10 @@ typedef enum : NSInteger {
     BOOL verticalCropBox = self.cropView.cropBoxAspectRatioIsPortrait;
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
-    cancelButtonTitle:NSLocalizedStringFromTableInBundle(NSLocalizedString(@"Cancel", nil),@"TOCropViewControllerLocalizable",[NSBundle bundleForClass:[self class]],nil)
+    cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
     destructiveButtonTitle:nil
-    otherButtonTitles:NSLocalizedStringFromTableInBundle(NSLocalizedString(@"Original", nil),@"TOCropViewControllerLocalizable",[NSBundle bundleForClass:[self class]],nil),
-                      NSLocalizedStringFromTableInBundle(NSLocalizedString(@"Square", nil),@"TOCropViewControllerLocalizable",[NSBundle bundleForClass:[self class]],nil),
+    otherButtonTitles:NSLocalizedString(@"Original", nil),
+                      NSLocalizedString(@"Square", nil),
                       verticalCropBox ? @"2:3" : @"3:2",
                       verticalCropBox ? @"3:4" : @"4:3",
                       verticalCropBox ? @"9:16" : @"16:9",nil];

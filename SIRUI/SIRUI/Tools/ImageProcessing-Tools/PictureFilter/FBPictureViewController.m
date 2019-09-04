@@ -83,7 +83,7 @@
     
     if (!_nextBtn) {
         _nextBtn = [[UIButton alloc] initWithFrame:CGRectMake((SCREEN_WIDTH - 60), 0, 50, 50)];
-        [_nextBtn setTitle:NSLocalizedString(@"Next",nil) forState:(UIControlStateNormal)];
+        [_nextBtn setTitle:JELocalizedString(@"Next",nil) forState:(UIControlStateNormal)];
         [_nextBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
         _nextBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     }
@@ -97,7 +97,7 @@
         _backBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
         [_backBtn setImage:[UIImage imageNamed:@"icon_back"] forState:(UIControlStateNormal)];
         [_backBtn addTarget:self action:@selector(backBtnClick) forControlEvents:(UIControlEventTouchUpInside)];
-        [_backBtn setTitle:NSLocalizedString(@"Back",nil) forState:(UIControlStateNormal)];
+        [_backBtn setTitle:JELocalizedString(@"Back",nil) forState:(UIControlStateNormal)];
          _backBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     }
     return _backBtn;
@@ -116,7 +116,7 @@
     if (!_doneBtn) {
         
         _doneBtn = [[UIButton alloc] initWithFrame:CGRectMake((SCREEN_WIDTH - 60), 0, 50, 50)];
-        [_doneBtn setTitle:NSLocalizedString(@"Save",nil) forState:(UIControlStateNormal)];
+        [_doneBtn setTitle:JELocalizedString(@"Save",nil) forState:(UIControlStateNormal)];
         [_doneBtn setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
         _doneBtn.titleLabel.font = [UIFont systemFontOfSize:17];
     }

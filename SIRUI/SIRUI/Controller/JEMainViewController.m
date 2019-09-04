@@ -49,12 +49,15 @@
 @property (nonatomic, strong) NSURLSession          *askSession;                //网络升级请求
 @property (nonatomic, assign) int                   autoConnectTimes;           //倒计时次数
 @property (nonatomic, assign) BOOL                  isXP3;                      //连接的设备是不是 XP3
+@property (nonatomic, assign) BOOL                  isBecome;                   //系统彻底开启
 
 @end
 
 @implementation JEMainViewController
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     [JEBluetoothManager shareBLESingleton].delegate = self;    //蓝牙代理
     [JEBluetoothManager shareBLESingleton].peripheralName = DEVICE_NAME_ARRAY;
     [[JEBluetoothManager shareBLESingleton] getBLEState];
@@ -100,7 +103,7 @@
         [self.contentView addSubview:shimmeringView2];
         
         UILabel *tintLabel         = [[UILabel alloc] initWithFrame:shimmeringView2.bounds];
-        tintLabel.text             = NSLocalizedString(@"Please close to the device", nil);
+        tintLabel.text             = JELocalizedString(@"Please close to the device", nil);
         tintLabel.font             = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:20.0];
         tintLabel.textColor        = MAIN_BLUE_COLOR;
         tintLabel.textAlignment    = NSTextAlignmentCenter;
@@ -144,7 +147,7 @@
             _enterCameraBtn.animationColor     = MAIN_BLUE_COLOR;
         
             _enterCameraBtn.animationWidth     = 250;
-            _enterCameraBtn.text               = NSLocalizedString(@"Click to activate the camera app", nil);
+            _enterCameraBtn.text               = JELocalizedString(@"Click to activate the camera app", nil);
     
         [self.windowView addSubview:self.enterCameraBtn];
         [self.enterCameraBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -155,12 +158,21 @@
         }];
     }
 
+    self.isBecome = NO;
+    
+    //智能退出和返回的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResign) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecome) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;    //状态栏颜色
     
     [self clearPopView];
+    
+    self.isBecome = NO;
     
     [[JEBluetoothManager shareBLESingleton] stopScanDevice];
 }
@@ -368,9 +380,9 @@
         USER_SET_SaveVersionAPP_NSString(app_Version);
         
         if ([serverVersion compare:app_Version] == NSOrderedDescending) {
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Version update", nil) message:NSLocalizedString(@"There is a new version update.", nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Version update", nil) message:JELocalizedString(@"There is a new version update.", nil) preferredStyle:UIAlertControllerStyleAlert];
             
-            [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
                 NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
                 NSString *bundleId = infoDict[@"CFBundleIdentifier"];
@@ -402,7 +414,7 @@
             
             if ([serverVersionUpdate isEqualToString:@"F"]) {
                 //非强制升级，增加取消键
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     //取消更新
                     [[JEBluetoothManager shareBLESingleton] initCentralManager];
                 }]];
@@ -471,6 +483,8 @@
 //    dispatch_async(dispatch_get_main_queue(), ^{
     
     NSLog(@"devicesArray = %@, macArray = %@", devicesArray, macArray);
+    
+    self.isBecome = YES;
     
     [self.flashDevicesArray         removeAllObjects];
     [self.flashDevicesTitleArray    removeAllObjects];
@@ -630,11 +644,11 @@
 //提示当前手机蓝牙的状态
 - (void)hintBLEStatus:(bluetoothToolsState)bleStatus {
     if (bleStatus == PoweredOff) {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Bluetooth Required", nil)
-                                                                        message:NSLocalizedString(@"Please turn on the mobile Bluetooth", nil)
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Bluetooth Required", nil)
+                                                                        message:JELocalizedString(@"Please turn on the mobile Bluetooth", nil)
                                                                  preferredStyle:UIAlertControllerStyleAlert];
         
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil)
                                                    style:UIAlertActionStyleCancel
                                                  handler:^(UIAlertAction * _Nonnull action) {
                                                  }]];
@@ -773,6 +787,25 @@
 }
 
 #pragma mark - Tools
+//当获取到系统智能退出信号
+- (void)applicationWillResign {
+    if (_isBecome) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;    //状态栏颜色
+        
+        [self clearPopView];
+        
+        [[JEBluetoothManager shareBLESingleton] stopScanDevice];
+    }
+}
+
+//当获取到系统从后台返回的信号
+- (void)applicationDidBecome {
+    if (_isBecome) {
+        NSLog(@"mainDidBecome");
+        [[JEBluetoothManager shareBLESingleton] initCentralManager];
+    }
+}
+
 //data转字符串
 - (NSString *)convertDataToHexStr:(NSData *)data{
     

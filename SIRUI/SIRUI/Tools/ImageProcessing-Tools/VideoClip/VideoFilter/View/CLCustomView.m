@@ -38,14 +38,14 @@
        
         self.backButton = [[CLButton alloc]initWithFrame:CGRectMake(0, heightSpace, 50, 50)];
         _backButton.chooseType = BackGoOutButton;
-        [_backButton setTitle:NSLocalizedString(@"Back",nil) forState:0];
+        [_backButton setTitle:JELocalizedString(@"Back",nil) forState:0];
         [_backButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
         [_backButton addTarget:self action:@selector(clickedButtonType:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_backButton];
         
         self.nextButton = [[CLButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH - 60), heightSpace, 50, 50)];
         _nextButton.chooseType = NextGoInButton;
-        [_nextButton setTitle:NSLocalizedString(@"Next",nil) forState:UIControlStateNormal];
+        [_nextButton setTitle:JELocalizedString(@"Next",nil) forState:UIControlStateNormal];
         [_nextButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
         [_nextButton addTarget:self action:@selector(clickedButtonType:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_nextButton];
@@ -53,7 +53,7 @@
         self.filterButton = [[CLButton alloc]initWithFrame:CGRectMake(50, heightSpace, (SCREEN_WIDTH - 100), 50)];
         self.filterButton.chooseType = FilterShowButton;
         self.filterButton.center = CGPointMake(self.center.x, 52.5/2 + 10);
-        [self.filterButton setTitle:NSLocalizedString(@"Video filters",nil) forState:0];
+        [self.filterButton setTitle:JELocalizedString(@"Video filters",nil) forState:0];
         [self.filterButton.titleLabel setFont:[UIFont systemFontOfSize:17]];
         [_filterButton addTarget:self action:@selector(clickedButtonType:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_filterButton];

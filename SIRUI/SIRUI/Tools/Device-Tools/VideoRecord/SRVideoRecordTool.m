@@ -202,12 +202,12 @@
     
     if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:movieURL size:_videoResolution] toSandboxWithFileName:_videoName]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            SHOW_HUD_DELAY(NSLocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+            SHOW_HUD_DELAY(JELocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         });
     }
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            SHOW_HUD_DELAY(NSLocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+            SHOW_HUD_DELAY(JELocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         });
     }
     /*
@@ -278,18 +278,18 @@
             if ([newMovieData writeToFile:videoPath atomically:YES]) {
                 if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:newMovieURL size:_videoResolution] toSandboxWithFileName:videoPreviewString]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        SHOW_HUD_DELAY(NSLocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                        SHOW_HUD_DELAY(JELocalizedString(@"Saved", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                     });
                 }
                 else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                        SHOW_HUD_DELAY(JELocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                     });
                 }
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Failed", nil), [UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                 });
             }
         }

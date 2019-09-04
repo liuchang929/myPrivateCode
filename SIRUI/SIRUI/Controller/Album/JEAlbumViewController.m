@@ -40,6 +40,7 @@
 @implementation JEAlbumViewController
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     if (_segmentControl.selectedSegmentIndex == 0) {
         self.albumPhotoArray = [[JECameraManager shareCAMSingleton] getAlbumArray:Photo];
@@ -48,6 +49,7 @@
         self.albumPhotoArray = [[JECameraManager shareCAMSingleton] getAlbumArray:Video];
         self.albumVideoPreArray = [[JECameraManager shareCAMSingleton] getAlbumArray:VideoPre];
     }
+    [_btnSelectedStateArray removeAllObjects];
     for (int index = 0; index < _albumPhotoArray.count; index ++) {
         [_btnSelectedStateArray addObject:@"0"];
     }
@@ -76,7 +78,7 @@
     
     //标题 label
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SAFE_AREA_TOP_HEIGHT - 50, self.view.frame.size.width, 50)];
-    titleLabel.text = NSLocalizedString(@"Media Library", nil);
+    titleLabel.text = JELocalizedString(@"Media Library", nil);
     titleLabel.textColor = MAIN_TEXT_COLOR;
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.topView addSubview:titleLabel];
@@ -112,7 +114,7 @@
     //选择视图
     self.segmentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
     _segmentView.backgroundColor = MAIN_BACKGROUND_COLOR;
-    NSArray *segmentArray = @[NSLocalizedString(@"Photos", nil), NSLocalizedString(@"Videos", nil)];
+    NSArray *segmentArray = @[JELocalizedString(@"Photos", nil), JELocalizedString(@"Videos", nil)];
     self.segmentControl = [[UISegmentedControl alloc] initWithItems:segmentArray];
     _segmentControl.frame = CGRectMake(0, 0, self.view.frame.size.width/3, 30);
     _segmentControl.center = _segmentView.center;
@@ -124,8 +126,8 @@
     
     //编辑按钮
     self.editButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, 0, 60, 40)];
-        [_editButton setTitle:NSLocalizedString(@"Select", nil) forState:UIControlStateNormal];
-        [_editButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateSelected];
+        [_editButton setTitle:JELocalizedString(@"Select", nil) forState:UIControlStateNormal];
+        [_editButton setTitle:JELocalizedString(@"Cancel", nil) forState:UIControlStateSelected];
         [_editButton addTarget:self action:@selector(editBtnAction:) forControlEvents:UIControlEventTouchUpInside];
         [_editButton setTitleColor:MAIN_BLUE_COLOR forState:UIControlStateNormal];
         _editButton.backgroundColor = [UIColor clearColor];
@@ -174,6 +176,11 @@
     
     [_selectedArray removeAllObjects];
     
+    [_btnSelectedStateArray removeAllObjects];
+    for (int index = 0; index < _albumPhotoArray.count; index ++) {
+        [_btnSelectedStateArray addObject:@"0"];
+    }
+    
     [_collectionView reloadData];
 }
 
@@ -182,15 +189,15 @@
     UIAlertController *alertC;
     
     if (_segmentControl.selectedSegmentIndex == 0) {
-        alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"Confirm to delete all the selected photos?", nil) preferredStyle:UIAlertControllerStyleAlert];
+        alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Information", nil) message:JELocalizedString(@"Confirm to delete all the selected photos?", nil) preferredStyle:UIAlertControllerStyleAlert];
         
         
     }
     else if (_segmentControl.selectedSegmentIndex == 1) {
-        alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"Confirm to delete all the selected videos?", nil) preferredStyle:UIAlertControllerStyleAlert];
+        alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Information", nil) message:JELocalizedString(@"Confirm to delete all the selected videos?", nil) preferredStyle:UIAlertControllerStyleAlert];
     }
     
-    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSArray *flashArray = [self sortSelectedArray];
         
         if (_segmentControl.selectedSegmentIndex == 0) {
@@ -200,10 +207,10 @@
                 
                 if ([[JECameraManager shareCAMSingleton] deleteImageWithName:imageName]) {
                     //删除成功
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Deleted", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Deleted", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                 }
                 else {
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Deleting Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Deleting Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                 }
             }
             self.albumPhotoArray = [[JECameraManager shareCAMSingleton] getAlbumArray:Photo];
@@ -215,10 +222,10 @@
                 
                 if ([[JECameraManager shareCAMSingleton] deleteVideoWithName:videoName]) {
                     //删除成功
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Deleted", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Deleted", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                 }
                 else {
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Deleting Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Deleting Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                 }
             }
             self.albumPhotoArray = [[JECameraManager shareCAMSingleton] getAlbumArray:Video];
@@ -228,7 +235,7 @@
         [self editBtnAction:_editButton];
     }]];
     
-    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }]];
     
@@ -380,8 +387,8 @@
             header.selectedBtn.hidden = NO;
         }
         header.selectedBtn.tag = 345+indexPath.section;
-        [header.selectedBtn setTitle:NSLocalizedString(@"Select", nil) forState:UIControlStateNormal];
-        [header.selectedBtn setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateSelected];
+        [header.selectedBtn setTitle:JELocalizedString(@"Select", nil) forState:UIControlStateNormal];
+        [header.selectedBtn setTitle:JELocalizedString(@"Cancel", nil) forState:UIControlStateSelected];
         header.selectedBtn.selected = [_btnSelectedStateArray[indexPath.section] integerValue];
     }
     else {
@@ -390,7 +397,6 @@
         }
     }
     
-    NSLog(@"selectedBtn[%ld] = %d", 345+indexPath.section, header.selectedBtn.isSelected);
     header.headerLabel.text = [_albumPhotoArray[indexPath.section] objectForKey:@"Date"];
     
     return header;
@@ -401,6 +407,12 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if ([[_albumPhotoArray[section] objectForKey:@"Array"] count] == 0) {
+        _editButton.hidden = YES;
+    }
+    else {
+        _editButton.hidden = NO;
+    }
     return [[_albumPhotoArray[section] objectForKey:@"Array"] count];
 }
 
@@ -521,9 +533,7 @@
      1.循环 selected，遍历每一个元素
      2.循环 flash，遍历比较每一个元素，大于比较元素时，将元素插入在其前面，如果 flash 为空则直接放入
      */
-    
-    NSLog(@"排序前 : %@", _selectedArray);
-    
+
     NSMutableArray *flashArray = [[NSMutableArray alloc] init];
     
     for (int index = 0; index < _selectedArray.count; index ++) {
@@ -532,28 +542,29 @@
         }
         else {
             for (int index2 = 0; index2 < flashArray.count; index2++) {
-                if ([[flashArray[index2] objectForKey:@"Section"] compare:[_selectedArray[index] objectForKey:@"Section"]] == NSOrderedSame) {
+                if ([[flashArray[index2] objectForKey:@"Section"]integerValue] == [[_selectedArray[index] objectForKey:@"Section"]integerValue]) {
                     //section相同，比较 row
-                    if ([[flashArray[index2] objectForKey:@"Row"] compare:[_selectedArray[index] objectForKey:@"Row"]] == NSOrderedAscending) {
+                    if ([[flashArray[index2] objectForKey:@"Row"]integerValue] < [[_selectedArray[index] objectForKey:@"Row"]integerValue]) {
                         [flashArray insertObject:_selectedArray[index] atIndex:index2];
+                        break;
+                    }else if ((index2 + 1) == flashArray.count){
+                        [flashArray addObject:_selectedArray[index]];
                         break;
                     }
                 }
-                else if ([[flashArray[index2] objectForKey:@"Section"] compare:[_selectedArray[index] objectForKey:@"Section"]] == NSOrderedAscending) {
+                else if ([[flashArray[index2] objectForKey:@"Section"]integerValue] < [[_selectedArray[index] objectForKey:@"Section"]integerValue]) {
                     //section
                     [flashArray insertObject:_selectedArray[index] atIndex:index2];
                     break;
                 }
-                else if ((index2 - 1) == flashArray.count) {
+                else if ((index2 + 1) == flashArray.count) {
                     [flashArray addObject:_selectedArray[index]];
                     break;
                 }
             }
         }
     }
-    
-    NSLog(@"排序后 : %@", flashArray);
-    
+
     return flashArray;
 }
 

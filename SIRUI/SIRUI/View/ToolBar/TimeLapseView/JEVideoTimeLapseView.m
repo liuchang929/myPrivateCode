@@ -44,7 +44,7 @@
     [self addSubview:_backView];
     
     UILabel *speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 40, 110, 25)];
-    NSMutableAttributedString *noteStr = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Time scale: 1s = ", nil)];
+    NSMutableAttributedString *noteStr = [[NSMutableAttributedString alloc] initWithString:JELocalizedString(@"Time scale: 1s = ", nil)];
     NSRange selfRange = NSMakeRange(5, 5);
     speedLabel.textColor = [UIColor whiteColor];
     speedLabel.alpha  = 0.7;

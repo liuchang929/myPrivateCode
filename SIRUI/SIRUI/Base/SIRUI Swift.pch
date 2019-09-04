@@ -23,6 +23,7 @@
 #import "MotionOrientation.h"
 #import "JEBluetoothManager.h"
 #import "JECameraManager.h"
+#import "JEChangeLanguage.h"
 #import "POP.h"
 #endif
 
@@ -92,7 +93,7 @@
 /*
  *  APP信息
  */
-#define APP_VERSION @"1.0.2 (beta)"
+#define APP_VERSION @"1.0.3 (beta)"
 
 /*
  *  设备信息
@@ -102,15 +103,15 @@
 #define DEVICE_PHONE_NAME_ARRAY     @[@"SiRui Swift M1"]                        //手机版
 #define DEVICE_CAMERA_NAME_ARRAY    @[@"SiRui Swift P1"]                        //微单版
 #define DEVICE_GIF_ARRAY            @[@"gif_device_xp3", @"gif_device_camera"]  //设备 gif 列表
-#define M1_DEVICE                   NSLocalizedString(@"SIRUI Swift M1 3 Axis Stabilizer", nil)
-#define P1_DEVICE                   NSLocalizedString(@"SIRUI Swift P1 3 Axis Stabilizer", nil)
+#define M1_DEVICE                   JELocalizedString(@"SIRUI Swift M1 3 Axis Stabilizer", nil)
+#define P1_DEVICE                   JELocalizedString(@"SIRUI Swift P1 3 Axis Stabilizer", nil)
 
 /*
  *  自定义相册名称 系统 && 沙盒
  */
-#define kImageAlbumName  NSLocalizedString(@"SIRUI Image",nil)
-#define kVideoAlbumName  NSLocalizedString(@"SIRUI Video",nil)
-#define kDVideoAlbumName NSLocalizedString(@"SIRUI DelayVideo",nil)
+#define kImageAlbumName  JELocalizedString(@"SIRUI Image",nil)
+#define kVideoAlbumName  JELocalizedString(@"SIRUI Video",nil)
+#define kDVideoAlbumName JELocalizedString(@"SIRUI DelayVideo",nil)
 
 #define sOriginalPhotoSandbox   @"OriginalPhoto"
 #define sThumbnailPhotoSandbox  @"ThumbnailPhoto"
@@ -128,11 +129,19 @@
 #define MAIN_TABBAR_COLOR       [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1]
 
 /*
+ *  语言包转换自定义宏
+ */
+#define JELocalizedString(key, comment) NSLocalizedStringFromTableInBundle(key, @"Localizable", [JEChangeLanguage bundle], comment)
+
+/*
  *  本地保存相关
  */
 //上一次连接过的设备
 #define USER_SET_SaveLastDevice_String(UUID) [[NSUserDefaults standardUserDefaults] setObject:UUID forKey:@"SaveLastDevice"]
 #define USER_GET_SaveLastDevice_String [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveLastDevice"]
+//上一次使用的拍摄模式
+#define USER_SET_SaveLastCameraMode_BOOL(isVideo) [[NSUserDefaults standardUserDefaults] setBool:isVideo forKey:@"SaveLastCameraMode"]
+#define USER_GET_SaveLastCameraMode_BOOL [[NSUserDefaults standardUserDefaults] boolForKey:@"SaveLastCameraMode"]
 //辅助线
 #define USER_SET_SaveAuxLines_Integer(num) [[NSUserDefaults standardUserDefaults] setInteger:num forKey:@"SaveAuxLines"]
 #define USER_GET_SaveAuxLines_Integer [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveAuxLines"]
@@ -148,19 +157,27 @@
 //延时 时间比例 设置 —— 用于自定义功能快速启动
 #define USER_SET_SaveTimelapseProportion_Integer(num) [[NSUserDefaults standardUserDefaults] setInteger:num forKey:@"SaveTimelapseProportion"]
 #define USER_GET_SaveTimelapseProportion_Interger [[NSUserDefaults standardUserDefaults] integerForKey:@"SaveTimelapseProportion"]
-//APP新版本信息和现版本信息、、固件版本信息、服务器固件新版本信息、硬件固件版本信息和蓝牙固件版本信息
+//APP现版本信息
 #define USER_SET_SaveVersionAPP_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionAPP"]
-#define USER_SET_SaveVersionNewAPP_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionNewAPP"]
-#define USER_SET_SaveVersionFirmware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionFirmware"]
-#define USER_SET_SaveVersionNewFirmware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionNewFirmware"]
-#define USER_SET_SaveVersionHardware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionHardware"]
-#define USER_SET_SaveVersionBluetooth_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionBluetooth"]
 #define USER_GET_SaveVersionAPP_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionAPP"]
+//app 新版本信息
+#define USER_SET_SaveVersionNewAPP_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionNewAPP"]
 #define USER_GET_SaveVersionNewAPP_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionNewAPP"]
+//固件版本信息
+#define USER_SET_SaveVersionFirmware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionFirmware"]
 #define USER_GET_SaveVersionFirmware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionFirmware"]
+//固件新版本信息
+#define USER_SET_SaveVersionNewFirmware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionNewFirmware"]
 #define USER_GET_SaveVersionNewFirmware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionNewFirmware"]
+//硬件固件版本信息
+#define USER_SET_SaveVersionHardware_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionHardware"]
 #define USER_GET_SaveVersionHardware_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionHardware"]
+//蓝牙固件版本信息
+#define USER_SET_SaveVersionBluetooth_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionBluetooth"]
 #define USER_GET_SaveVersionBluetooth_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionBluetooth"]
+//蓝牙新固件版本信息
+#define USER_SET_SaveVersionNewBluetooth_NSString(version) [[NSUserDefaults standardUserDefaults] setObject:version forKey:@"SaveVersionNewBluetooth"]
+#define USER_GET_SaveVersionNewBluetooth_NSString [[NSUserDefaults standardUserDefaults] objectForKey:@"SaveVersionNewBluetooth"]
 //电影镜头状态
 #define USER_SET_SaveFilmCameraState_BOOL(bool) [[NSUserDefaults standardUserDefaults] setBool:bool forKey:@"SaveFilmCameraState"]
 #define USER_GET_SaveFilmCameraState_BOOL [[NSUserDefaults standardUserDefaults] boolForKey:@"SaveFilmCameraState"]
@@ -207,11 +224,13 @@
 #define FilterImageHight 58.0f // 滤镜图片高度
 #define THREE_AXI_VIDEO_RESOLUTION @"THREE_AXI_VIDEO_RESOLUTION"
 #define CUSTOM_BTN_MODE @"SETTING_CUSTOM_BTN_MODE"
-#define PANO_PROGRESS @"PANO_PROGRESS"
-#define kServiceUUID     @"FFF0" //设备服务的UUID
-#define kWriteUUID       @"FFF1" //写数据
-#define kReadUUID1       @"FFF2" //读数据
-#define kReadUUID2       @"FFF3" //读数据
+#define PANO_PROGRESS   @"PANO_PROGRESS"
+#define kServiceUUID    @"FFF0" //设备服务的UUID
+#define kOTAService     @"00010203-0405-0607-0809-0A0B0C0D1911" //设备服务的 UUID
+#define kWriteUUID      @"FFF1" //写数据
+#define kReadUUID1      @"FFF2" //读数据
+#define kReadUUID2      @"FFF3" //读数据
+#define kOTAUUID        @"00010203-0405-0607-0809-0A0B0C0D2B12" //ota 特征通道
 #define kScreenWidth  [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 #define kScreenBounds [UIScreen mainScreen].bounds

@@ -163,7 +163,7 @@
         [_tableView reloadData];
     }
     else {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Please connect the device", nil), [UIApplication sharedApplication].keyWindow, 1.5);
+        SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), [UIApplication sharedApplication].keyWindow, 1.5);
     }
 }
 
@@ -175,6 +175,12 @@
 - (void)updateVerAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(deviceUpdateAction)]) {
         [self.delegate deviceUpdateAction];
+    }
+}
+
+- (void)updateBLEVerAction {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bluetoothUpdateAction)]) {
+        [self.delegate bluetoothUpdateAction];
     }
 }
 
@@ -214,7 +220,8 @@
     }
     
     //左侧的文字
-    cell.cellName.text = NSLocalizedString([_settingArray[indexPath.row] valueForKey:@"name"], nil);
+    cell.cellName.text = JELocalizedString([_settingArray[indexPath.row] valueForKey:@"name"], nil);
+    cell.cellName.adjustsFontSizeToFitWidth = YES;
     
     //右侧的小箭头
     if ([[_settingArray[indexPath.row] valueForKey:@"type"] isEqualToString:@"yes"]) {
@@ -226,7 +233,7 @@
     switch (_settingMode) {
         case cameraSetting: {
             //相机设置
-            _headLabel.text = NSLocalizedString(@"Camera Settings", nil);
+            _headLabel.text = JELocalizedString(@"Camera Settings", nil);
             
             switch (indexPath.row) {
                 case 0: {
@@ -245,7 +252,7 @@
                     
                 case 2: {
                     //视频分辨率
-                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH, CELL_ICON_HEIGHT)];
+                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(cell.cellView.frame.size.width - _backView.frame.size.width/3*2 - CELL_ICON_RIGHT_WIDTH, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/3*2, CELL_ICON_HEIGHT)];
                     label.text = [_videoResolutionArray[USER_GET_SaveVideoResolution_Integer] valueForKey:@"option"];
                     label.textAlignment = NSTextAlignmentRight;
                     label.textColor = [UIColor whiteColor];
@@ -265,7 +272,7 @@
                     [cell.cellView addSubview:swi];
                     
                     UILabel *psLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, CELL_HEIGHT, cell.frame.size.width, CELL_HEIGHT)];
-                    psLabel.text = NSLocalizedString(@"(Use with the SiRui 33mm film lens.)", nil);
+                    psLabel.text = JELocalizedString(@"(Use with the SiRui 33mm film lens.)", nil);
                     psLabel.textColor = [UIColor whiteColor];
                     psLabel.font = [UIFont systemFontOfSize:14];
                     [cell addSubview:psLabel];
@@ -280,7 +287,7 @@
          
         case deviceSetting: {
             //设备设置
-            _headLabel.text = NSLocalizedString(@"Device Settings", nil);
+            _headLabel.text = JELocalizedString(@"Device Settings", nil);
             switch (indexPath.row) {
                 case 0: {
                     //设备充电状态
@@ -315,8 +322,8 @@
                     
                 case 3: {
                     //当前固件版本
-                    self.updateVersionButton = [[UIButton alloc] initWithFrame:CGRectMake(0, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH * 3, CELL_ICON_HEIGHT)];
-                    [_updateVersionButton setTitle:NSLocalizedString(@"Firmware Update", nil) forState:UIControlStateNormal];
+                    self.updateVersionButton = [[UIButton alloc] initWithFrame:CGRectMake(-_backView.frame.size.width/3 + CELL_ICON_HEIGHT + 20, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH * 3, CELL_ICON_HEIGHT)];
+                    [_updateVersionButton setTitle:JELocalizedString(@"Firmware Update", nil) forState:UIControlStateNormal];
                     [_updateVersionButton setTitleColor:MAIN_BLUE_COLOR forState:UIControlStateNormal];
                     _updateVersionButton.layer.borderWidth = 1;
                     _updateVersionButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -362,6 +369,29 @@
                     
                 case 5: {
                     //蓝牙固件版本
+                    self.updateBLEVersionButton = [[UIButton alloc] initWithFrame:CGRectMake(-_backView.frame.size.width/3 + CELL_ICON_HEIGHT + 20, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH * 3, CELL_ICON_HEIGHT)];
+                    [_updateBLEVersionButton setTitle:JELocalizedString(@"Bluetooth Update", nil) forState:UIControlStateNormal];
+                    [_updateBLEVersionButton setTitleColor:MAIN_BLUE_COLOR forState:UIControlStateNormal];
+                    _updateBLEVersionButton.layer.borderWidth = 1;
+                    _updateBLEVersionButton.layer.borderColor = [UIColor whiteColor].CGColor;
+                    [_updateBLEVersionButton.layer setMasksToBounds:YES];
+                    [_updateBLEVersionButton.layer setCornerRadius:10];
+                    _updateBLEVersionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+                    [_updateBLEVersionButton addTarget:self action:@selector(updateBLEVerAction) forControlEvents:UIControlEventTouchUpInside];
+                    [cell.cellView addSubview:_updateBLEVersionButton];
+                    
+                    if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
+                        if (USER_GET_SaveVersionBluetooth_NSString == NULL || ([USER_GET_SaveVersionNewBluetooth_NSString compare:USER_GET_SaveVersionBluetooth_NSString] == NSOrderedDescending)) {
+                            self.updateBLEVersionButton.hidden = NO;
+                        }
+                        else {
+                            self.updateBLEVersionButton.hidden = YES;
+                        }
+                    }
+                    else {
+                        self.updateBLEVersionButton.hidden = YES;
+                    }
+                    
                     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH, CELL_ICON_HEIGHT)];
                     label.text = USER_GET_SaveVersionBluetooth_NSString;
                     label.textAlignment = NSTextAlignmentRight;
@@ -372,8 +402,8 @@
                     
                 case 6: {
                     //当前 app 版本
-                    self.appVersionButton = [[UIButton alloc] initWithFrame:CGRectMake(-20, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH * 3, CELL_ICON_HEIGHT)];
-                    [_appVersionButton setTitle:NSLocalizedString(@"Version update", nil) forState:UIControlStateNormal];
+                    self.appVersionButton = [[UIButton alloc] initWithFrame:CGRectMake(-_backView.frame.size.width/3 + CELL_ICON_HEIGHT + 20, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH * 3, CELL_ICON_HEIGHT)];
+                    [_appVersionButton setTitle:JELocalizedString(@"Version update", nil) forState:UIControlStateNormal];
                     [_appVersionButton setTitleColor:MAIN_BLUE_COLOR forState:UIControlStateNormal];
                     _appVersionButton.layer.borderWidth = 1;
                     _appVersionButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -390,7 +420,7 @@
                         self.appVersionButton.hidden = YES;
                     }
                     
-                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/2 - CELL_ICON_RIGHT_WIDTH, CELL_ICON_HEIGHT)];
+                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(cell.cellView.frame.size.width - _backView.frame.size.width/3*2 - CELL_ICON_RIGHT_WIDTH, CELL_ICON_TOPLEFT_WIDTH/2, _backView.frame.size.width/3*2, CELL_ICON_HEIGHT)];
                     label.text = APP_VERSION;
                     label.textAlignment = NSTextAlignmentRight;
                     label.textColor = [UIColor whiteColor];
@@ -427,7 +457,7 @@
                 else {
                     self.optionsView = [[JECameraSettingOptionsView alloc] initWithFrame:CGRectMake(0, - _backView.frame.size.height, _backView.frame.size.width, _backView.frame.size.height)];
                 }
-                _optionsView.headLabel.text = NSLocalizedString([_settingArray[indexPath.row] valueForKey:@"name"], nil);
+                _optionsView.headLabel.text = JELocalizedString([_settingArray[indexPath.row] valueForKey:@"name"], nil);
                 switch (indexPath.row) {
                     case 0: {
                         _optionsView.cellArray = self.auxiliaryLinesArray;
@@ -462,7 +492,7 @@
                     _optionsView.frame = CGRectMake(0, - _backView.frame.size.height, _backView.frame.size.width, _backView.frame.size.height);
                 }
                 [_optionsView resetUISize:CGSizeMake(_backView.frame.size.width, _backView.frame.size.height)];
-                _optionsView.headLabel.text = NSLocalizedString([_settingArray[indexPath.row] valueForKey:@"name"], nil);
+                _optionsView.headLabel.text = JELocalizedString([_settingArray[indexPath.row] valueForKey:@"name"], nil);
                 switch (indexPath.row) {
                     case 0: {
                         _optionsView.cellArray = self.auxiliaryLinesArray;

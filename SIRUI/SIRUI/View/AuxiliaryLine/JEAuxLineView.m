@@ -60,6 +60,7 @@
     CGContextSetLineCap(ctx, kCGLineCapButt);   //无端点
     CGContextAddPath(ctx, path);
     CGContextStrokePath(ctx);
+    CGPathRelease(path);
 }
 
 - (void)linesH2:(CGRect)rect {
@@ -73,6 +74,7 @@
     CGContextSetLineCap(ctx, kCGLineCapButt);   //无端点
     CGContextAddPath(ctx, path);
     CGContextStrokePath(ctx);
+    CGPathRelease(path);
 }
 
 - (void)linesS1:(CGRect)rect {
@@ -86,6 +88,7 @@
     CGContextSetLineCap(ctx, kCGLineCapButt);   //无端点
     CGContextAddPath(ctx, path);
     CGContextStrokePath(ctx);
+    CGPathRelease(path);
 }
 
 - (void)linesS2:(CGRect)rect {
@@ -99,6 +102,7 @@
     CGContextSetLineCap(ctx, kCGLineCapButt);   //无端点
     CGContextAddPath(ctx, path);
     CGContextStrokePath(ctx);
+    CGPathRelease(path);
 }
 
 - (void)linesT1:(CGRect)rect {
@@ -112,6 +116,7 @@
     CGContextSetLineCap(ctx, kCGLineCapButt);
     CGContextAddPath(ctx, path);
     CGContextStrokePath(ctx);
+    CGPathRelease(path);
 }
 
 - (void)linesT2:(CGRect)rect {
@@ -125,6 +130,7 @@
     CGContextSetLineCap(ctx, kCGLineCapButt);
     CGContextAddPath(ctx, path);
     CGContextStrokePath(ctx);
+    CGPathRelease(path);
 }
 
 - (void)roundR1:(CGRect)rect {

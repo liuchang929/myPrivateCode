@@ -187,7 +187,7 @@
         NSUInteger contentSize = [httpResponse expectedContentLength] > 0 ? [httpResponse expectedContentLength] : 0;
         data_ = [[NSMutableData alloc] initWithCapacity:contentSize];
     } else {
-        NSString* statusError  = [NSString stringWithFormat:NSLocalizedString(@"HTTP Error: %ld", nil), statusCode];
+        NSString* statusError  = [NSString stringWithFormat:JELocalizedString(@"HTTP Error: %ld", nil), statusCode];
         NSDictionary* userInfo = [NSDictionary dictionaryWithObject:statusError forKey:NSLocalizedDescriptionKey];
         error_ = [[NSError alloc] initWithDomain:@"ServiceOperation"
                                             code:statusCode

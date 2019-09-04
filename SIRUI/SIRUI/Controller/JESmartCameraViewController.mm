@@ -40,6 +40,8 @@
 #import "SRVideoRecordTool.h"
 #import "JEGetDeviceVersion.h"
 #import "JEGyroCalibrationViewController.h"
+#import "JEPanoWorkingView.h"
+#import "JEHitchcockSettingView.h"
 
 #import "SRTrackingCore.h"
 #import "FileUtils.h"
@@ -112,6 +114,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, strong) JECameraSettingView       *cameraSettingView;     //相机设置菜单
 @property (nonatomic, strong) UIView                    *clearBackView;         //透明 view，用作屏蔽事件
 @property (nonatomic, strong) JECustomFunctionView      *customFunctionView;    //自定义功能菜单
+@property (nonatomic, strong) JEHitchcockSettingView    *hitchcockPopView;      //移动变焦
 @property (nonatomic, strong) JEVideoLocusTimeLapseView *motionLapsePopView;    //轨迹延时
 @property (nonatomic, strong) JEVideoTimeLapseView      *timeLapsePopView;      //普通延时
 @property (nonatomic, strong) UILabel                   *videoTimeLB;           //录制时间 Label
@@ -127,6 +130,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, strong) UIButton                  *stopTimeLapseButton;   //延时摄影暂停按钮
 @property (nonatomic, strong) SRMotionViewController    *accelerationVC;        //加速度校准 vc
 @property (nonatomic, strong) JEGyroCalibrationViewController *gyroCalibrationVC;   //陀螺仪校准 vc
+@property (nonatomic, strong) JEPanoWorkingView         *panoWorkingView;       //全景加载
 
 //Base
 @property (nonatomic, strong) GPUImageCropFilter        *normalFilter;          //基础滤镜
@@ -166,6 +170,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, assign) BOOL      isPanoing;              //全景拍摄状态
 @property (nonatomic, assign) BOOL      isFunctionShowing;      //自定义功能菜单
 @property (nonatomic, assign) BOOL      isClearViewShowing;     //全屏屏蔽按键事件
+@property (nonatomic, assign) BOOL      isMovingZoomShowing;    //移动变焦菜单
 @property (nonatomic, assign) BOOL      isMotionLapseShowing;   //移动延时菜单
 @property (nonatomic, assign) BOOL      isTimeLapseShowing;     //普通延时菜单
 @property (nonatomic, assign) BOOL      videoCapturing;         //视频采集中
@@ -177,12 +182,14 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, assign) BOOL      isObjTrackStart;        //对象跟踪开始
 @property (nonatomic, assign) BOOL      isAutoStitchPanoing;    //全景合成中
 @property (nonatomic, assign) BOOL      isFirmwareUpdating;     //固件升级中
+@property (nonatomic, assign) BOOL      isBLEUpdating;          //蓝牙升级中
 @property (nonatomic, assign) BOOL      isAccelerating;         //加速度校准中
 @property (nonatomic, assign) BOOL      isGyroCalibrating;      //陀螺仪校准中
 @property (nonatomic, assign) BOOL      updateFirmwareBag;      //固件升级包发送次序 0 == first，1 == second
 @property (nonatomic, assign) int       timeLapseProgress;      //时间帧  60帧一秒
 @property (nonatomic, assign) int       blueParameterTimes;     //蓝牙参数发送包数
 @property (nonatomic, assign) int       updateFirmwareTimeCount;    //固件升级蓝牙获取不到回执计数
+@property (nonatomic, assign) int       otaDataIndex;           //蓝牙升级数据包序号
 @property (nonatomic, strong) NSMutableArray    *bluetoothDeviceArray;      //蓝牙设备列表
 @property (nonatomic, strong) NSArray           *cameraSettingArray;        //相机设置数据
 @property (nonatomic, strong) NSArray           *deviceSettingArray;        //设备设置数据
@@ -200,13 +207,17 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @property (nonatomic, strong) NSMutableArray    *panoImagesArray;           //全景照片数组
 @property (nonatomic, strong) NSMutableString   *updateFirmwareDataString;  //固件升级数据
 @property (nonatomic, assign) NSInteger         updateFirmwareDataLength;   //固件升级数据长度
+@property (nonatomic, strong) NSMutableString   *updateBLEDataString;       //蓝牙升级数据
+@property (nonatomic, assign) NSInteger         updateBLEDataLength;        //蓝牙升级数据长度
 @property (nonatomic, strong) NSString          *blueParameter1;            //蓝牙参数数据字符串第一段
 @property (nonatomic, strong) NSString          *blueParameter2;            //蓝牙参数数据字符串第二段
 @property (nonatomic, strong) NSString          *blueParameterString;       //蓝牙参数数据字符串完整版
 @property (nonatomic, strong) NSMutableArray    *motionLapsePointArray;     //移动延时关键点照片数据数组
 @property (nonatomic, strong) NSArray           *customFunctionArray;       //自定义功能数组
 @property (nonatomic, strong) NSString          *deviceNewVersion;          //从服务器获取的新固件版本
+@property (nonatomic, strong) NSString          *bleNewVersion;             //从服务器获取的新蓝牙版本
 @property (nonatomic, strong) NSString          *deviceUpdateString;        //服务器更新的内容
+@property (nonatomic, strong) NSString          *bleUpdateString;           //蓝牙更新的内容
 @property (nonatomic, strong) NSURLSession      *askSession;                //网络升级请求
 @property (nonatomic, strong) NSTimer           *updateFirmwareTimer;       //固件升级回执计时器
 
@@ -215,11 +226,16 @@ typedef void(^getStillImageBlock)(UIImage *image);
 @implementation JESmartCameraViewController
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [JEBluetoothManager shareBLESingleton].delegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    if (USER_GET_SaveLastCameraMode_BOOL != _isVideo) {
+        [self bottomToolBarButtonAction:222];
+    }
     
     [self screenRotate:nil];            //屏幕旋转检测
     [self configRatioByNotify];         //屏幕分辨率获取
@@ -272,42 +288,79 @@ typedef void(^getStillImageBlock)(UIImage *image);
         //发送速度太快，蓝牙无法及时回复消息，需要限制发送频率
         //获取固件版本信息
         [[JEBluetoothManager shareBLESingleton] BPGetDeviceVersion];
-        NSMutableArray *params = [NSMutableArray array];
-        
+        NSMutableArray *deviceParams = [NSMutableArray array];
+        NSMutableArray *bleParams = [NSMutableArray array];
+
+        /*
+         ProdID = 1  P1固件
+         ProdID = 2  M1固件
+         ProdID = 7  M1蓝牙
+         ProdID = 8  P1蓝牙
+         */
+
         if (_controllerMode == cameraM1) {
-            [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"2", @"ProdID", nil]];
+            [deviceParams addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"2", @"ProdID", nil]];
+            [bleParams addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"5", @"ProdID", nil]];
         }
         else if (_controllerMode == cameraP1) {
-            [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"1", @"ProdID", nil]];
+            [deviceParams addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"1", @"ProdID", nil]];
+            [bleParams addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"8", @"ProdID", nil]];
         }
-        
+
         //从服务器获取版本信息
-        [JEWebManager loadDataCenter:params methodName:@"SR_GetLastFirmwareInfo" result:^(NSDictionary *resultDic, NSString *error) {
+        [JEWebManager loadDataCenter:deviceParams methodName:@"SR_GetLastFirmwareInfo" result:^(NSDictionary *resultDic, NSString *error) {
             if (error) {
-                
-                SHOW_HUD_DELAY(NSLocalizedString(@"Network Error", nil), self.view, 1);
-                
+
+                SHOW_HUD_DELAY(JELocalizedString(@"Network Error", nil), self.view, 1);
+
                 return;
             }
-            
+
             //强制纠正语言
             NSArray *languages = [NSLocale preferredLanguages];
-            
+
             NSString *language = [languages objectAtIndex:0];
-            
+
             NSLog(@"system language = %@", language);
-            
+
             if ([language hasPrefix:@"zh"]) {//检测开头匹配，是否为中文，再决定固件升级内容语言
                 self.deviceUpdateString = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"InfoCN"][@"__text"];
             }
             else {
                 self.deviceUpdateString = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"InfoEN"][@"__text"];
             }
-            
+
             self.deviceNewVersion = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"return"][@"__text"];
             USER_SET_SaveVersionNewFirmware_NSString(_deviceNewVersion);
-    
+
         }];
+
+        //从服务器获取蓝牙版本信息
+        [JEWebManager loadDataCenter:bleParams methodName:@"SR_GetLastFirmwareInfo" result:^(NSDictionary *resultDic, NSString *error) {
+            if (error) {
+
+                SHOW_HUD_DELAY(JELocalizedString(@"Network Error", nil), self.view, 1);
+
+                return;
+            }
+
+            //强制纠正语言
+            NSArray *languages = [NSLocale preferredLanguages];
+
+            NSString *language = [languages objectAtIndex:0];
+
+            if ([language hasPrefix:@"zh"]) {//检测开头匹配，是否为中文，再决定固件升级内容语言
+                self.bleUpdateString = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"InfoCN"][@"__text"];
+            }
+            else {
+                self.bleUpdateString = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"InfoEN"][@"__text"];
+            }
+
+            self.bleNewVersion = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"return"][@"__text"];
+            USER_SET_SaveVersionNewFirmware_NSString(_bleNewVersion);
+
+        }];
+
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             //查询充电开关机状态
             [[JEBluetoothManager shareBLESingleton] BPCheckChargingState];
@@ -325,11 +378,15 @@ typedef void(^getStillImageBlock)(UIImage *image);
             [[JEBluetoothManager shareBLESingleton] BPGetBLEVersion];
         });
     });
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     //相机停止捕获
     [_stillCamera stopCameraCapture];
+    USER_SET_SaveLastCameraMode_BOOL(_isVideo);
+    NSLog(@"USER_GET_SaveLastCameraMode_BOOL = %d", USER_GET_SaveLastCameraMode_BOOL);
 }
 
 #pragma mark - LazyLoading
@@ -411,6 +468,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
         self.isSubShowing = NO;
     }
     
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
+    }
+    
     _islensSwitching = YES;
     if (isFrontCamera) {
         if ([_stillCamera cameraPosition] == AVCaptureDevicePositionBack) {
@@ -425,12 +488,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
     _islensSwitching = NO;
     
     _isFrontCamera = isFrontCamera;
-    
-    //清空追踪状态
-    if (_middleToolBar.trackStay.isSelected) {
-        _middleToolBar.trackStay.selected = NO;
-        [self cleanTrackState];
-    }
 }
 
 //滤镜菜单
@@ -512,6 +569,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if (_isDeviceSetting == YES) {
         self.isDeviceSetting = NO;
     }
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
+    }
     if (isCameraSetting) {
         [_cameraSettingView cleanCameraSettingOption];
     }
@@ -539,7 +601,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if (!_cameraSettingView) {
         _cameraSettingView = [[JECameraSettingView alloc] initWithFrame:CGRectMake(0, _topToolBar.frame.size.height, _topToolBar.frame.size.width, HEIGHT/2)];
         _cameraSettingView.delegate = self;
-        NSLog(@"_videoResolutionArray = %@", _videoResolutionArray);
         _cameraSettingView.videoResolutionArray = self.videoResolutionArray;
         
         if (_mainRotate != 0) {
@@ -562,6 +623,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if (_isCameraSetting == YES) {
         self.isCameraSetting = NO;
         [_cameraSettingView cleanCameraSettingOption];      //隐藏二级菜单
+    }
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
     }
     self.topToolBarBlackView.hidden = !isDeviceSetting;
     self.cameraSettingView.hidden   = !isDeviceSetting;
@@ -588,7 +654,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         [JEWebManager loadDataCenter:params methodName:@"SR_GetLastFirmwareInfo" result:^(NSDictionary *resultDic, NSString *error) {
             if (error) {
                 
-                SHOW_HUD_DELAY(NSLocalizedString(@"Network Error", nil), self.view, 1);
+                SHOW_HUD_DELAY(JELocalizedString(@"Network Error", nil), self.view, 1);
                 
                 return;
             }
@@ -687,6 +753,14 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if (_isTimeLapseShowing == YES) {
         self.isTimeLapseShowing = NO;
     }
+    if (_isMovingZoomShowing == YES) {
+        self.isMovingZoomShowing = NO;
+    }
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
+    }
     
     self.isClearViewShowing = isFunctionShowing;
     if (isFunctionShowing) {
@@ -726,13 +800,40 @@ typedef void(^getStillImageBlock)(UIImage *image);
         _clearBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
         _clearBackView.backgroundColor = [UIColor blackColor];
         _clearBackView.alpha = 0.3;
+        _clearBackView.hidden = YES;
         [self.view addSubview:_clearBackView];
     }
     return _clearBackView;
 }
 
+//移动变焦菜单
+- (void)setIsMovingZoomShowing:(BOOL)isMovingZoomShowing {
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
+    }
+    self.hitchcockPopView.hidden = !isMovingZoomShowing;
+    _isMovingZoomShowing = isMovingZoomShowing;
+}
+- (JEHitchcockSettingView *)hitchcockPopView {
+    if (!_hitchcockPopView) {
+        _hitchcockPopView = [[JEHitchcockSettingView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 150, self.view.frame.size.width - 100)];
+        _hitchcockPopView.center = self.view.center;
+        [self.view addSubview:_hitchcockPopView];
+        [self screenRotate:nil];
+    }
+    return _hitchcockPopView;
+}
+
 //移动延时菜单
 - (void)setIsMotionLapseShowing:(BOOL)isMotionLapseShowing {
+    
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
+    }
     if (isMotionLapseShowing) {
         //进入移动延时模式
         [[JEBluetoothManager shareBLESingleton] BPEnterMotionLapseMode];
@@ -756,6 +857,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
 
 //普通延时菜单
 - (void)setIsTimeLapseShowing:(BOOL)isTimeLapseShowing {
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
+    }
     self.timeLapsePopView.hidden = !isTimeLapseShowing;
     _isTimeLapseShowing = isTimeLapseShowing;
 }
@@ -771,12 +877,30 @@ typedef void(^getStillImageBlock)(UIImage *image);
 
 //跟踪状态
 - (void)setIsFaceTracking:(BOOL)isFaceTracking {
+    
     _isFaceTracking = isFaceTracking;
+    
+    //将光学防抖关闭
+    [self setVideoStabilizationModeClose];
     
     [_stillCamera.captureSession beginConfiguration];
     if (isFaceTracking) {
         //开始跟踪
         _metaDataOutput = [[AVCaptureMetadataOutput alloc] init];
+        
+        if (_preLayer) {
+            _preLayer.session = _stillCamera.captureSession;
+        }
+        else {
+            self.preLayer = [AVCaptureVideoPreviewLayer layerWithSession:_stillCamera.captureSession];
+            self.preLayer.frame = [UIScreen mainScreen].bounds;
+            self.preLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            self.preLayer.hidden = YES;
+            [self.view.layer addSublayer:self.preLayer];
+            
+            NSLog(@"新添加");
+        }
+        
         [[JEBluetoothManager shareBLESingleton] BPEnterFaceTracking];   //发送进入人脸跟踪指令
         if ([_stillCamera.captureSession canAddOutput:_metaDataOutput]) {
             [_stillCamera.captureSession addOutput:_metaDataOutput];
@@ -816,18 +940,21 @@ typedef void(^getStillImageBlock)(UIImage *image);
             
             [self.stillCamera.inputCamera unlockForConfiguration];
         }
-         
     }
     else {
         //停止跟踪
         for(UIView *view in _faceFramesArray){
             view.hidden = YES;
         }
+        _preLayer.session = nil;
+        
         [_stillCamera.captureSession removeOutput:_metaDataOutput];
         //移除人脸框
         [self removeFaceFocusView];
-        [_cameraOutputView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         [[JEBluetoothManager shareBLESingleton] BPQuitFaceTracking];    //退出跟踪
+        
+        //重新开启光学防抖
+        [self setVideoStabilizationMode];
     }
     [_stillCamera.captureSession commitConfiguration];
 }
@@ -835,7 +962,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
 - (void)setIsObjectTracking:(BOOL)isObjectTracking {
     //如果在 移动延时 && 移动变焦 模式，不允许跟踪
     if (_shootingMode == videoLocusTimeLapse || _shootingMode == videoMovingZoom) {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Tracking will not function in the current mode", nil), [UIApplication sharedApplication].keyWindow, 1);
+        SHOW_HUD_DELAY(JELocalizedString(@"Tracking will not function in the current mode", nil), [UIApplication sharedApplication].keyWindow, 1);
         return;
     }
     
@@ -893,7 +1020,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         _panoHint = [[UILabel alloc] initWithFrame:CGRectMake(_panoWaitingView.frame.size.height*0.2, _panoProgressView.frame.size.height + _panoProgressView.frame.origin.y, [UIScreen mainScreen].bounds.size.height, 60)];
         _panoHint.backgroundColor = [UIColor clearColor];
         _panoHint.textColor = [UIColor whiteColor];
-        _panoHint.text = NSLocalizedString(@"Pano starting...", nil);
+        _panoHint.text = JELocalizedString(@"Pano starting...", nil);
         _panoHint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
         _panoHint.textAlignment = NSTextAlignmentLeft;
         [_panoWaitingView addSubview:_panoHint];
@@ -926,12 +1053,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [self setupMiddleToolBar];
     [self setupBottomToolBar];
     
-    self.preLayer = [AVCaptureVideoPreviewLayer layerWithSession: _stillCamera.captureSession];
-    self.preLayer.frame = [UIScreen mainScreen].bounds;
-    self.preLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    self.preLayer.hidden = YES;
-    [self.view.layer addSublayer:self.preLayer];
-    
     if ([JEBluetoothManager shareBLESingleton].getBLEState == Connect) {
         _middleToolBar.bluetoothSign.selected = YES;
     }
@@ -952,6 +1073,8 @@ typedef void(^getStillImageBlock)(UIImage *image);
     _zoomSliderView.hidden = YES;
     [self.view addSubview:_zoomSliderView];
     
+    //重新开启光学防抖
+    [self setVideoStabilizationMode];
 }
 
 - (void)adjustUI {
@@ -975,7 +1098,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         [self.bottomToolBar.bottomMenu.subVideoMovingZoom removeFromSuperview];
         [self.bottomToolBar.bottomMenu.subVideoTimeLapse removeFromSuperview];
         [self bottomToolBarButtonAction:222];   //默认视频模式
-        [self.bottomToolBar.bottomMenu.subVideoLocusTimeLapse setTitle:NSLocalizedString(@"Path Shoot", nil) forState:UIControlStateNormal];
+        [self.bottomToolBar.bottomMenu.subVideoLocusTimeLapse setTitle:JELocalizedString(@"Path Shoot", nil) forState:UIControlStateNormal];
         
         //辅助线隐藏
         
@@ -997,6 +1120,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     
     self.mainFrameWidth = self.view.frame.size.width;
     self.mainFrameHeight = self.view.frame.size.height;
+    
+    //ota 数据包初始化
+    self.otaDataIndex = 0;
     
     //对焦变焦初始化
     currValue = 0.5;
@@ -1072,6 +1198,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
     //固件升级回执计数初始化
     self.updateFirmwareTimeCount = 0;
     
+    //固件升级状态初始化
+    self.isFirmwareUpdating = NO;
+    self.isBLEUpdating = NO;
+    
 }
 
 //本地化数据初始化
@@ -1106,7 +1236,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
     //视频分辨率数组判断
     if (USER_GET_SaveVideoResolution_Integer >= _videoResolutionArray.count) {
         USER_SET_SaveVideoResolution_Integer(_videoResolutionArray.count - 1);
-    
     }
 }
 
@@ -1391,7 +1520,14 @@ typedef void(^getStillImageBlock)(UIImage *image);
             if ([subView isKindOfClass:[JESearchDevicesView class]]) {
                 [subView.layer pop_addAnimation:ani forKey:Rotation_Key];
             }
-            
+            //全景运行提示
+            if ([subView isKindOfClass:[JEPanoWorkingView class]]) {
+                [subView.layer pop_addAnimation:ani forKey:Rotation_Key];
+            }
+            //移动变焦菜单
+            if ([subView isKindOfClass:[JEHitchcockSettingView class]]) {
+                [subView.layer pop_addAnimation:ani forKey:Rotation_Key];
+            }
         }
         //跟踪按钮
         for (UIView *subView in _middleToolBar.subviews) {
@@ -1617,29 +1753,49 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 
             case picPano90d:
             {
-                [self takePhotoWithPano:90];
-                [self setPanoModeView:YES];
+                if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
+                    [self takePhotoWithPano:90];
+                    [self setPanoModeView:YES];
+                }
+                else {
+                    SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                }
             }
                 break;
                 
             case picPano180d:
             {
-                [self takePhotoWithPano:180];
-                [self setPanoModeView:YES];
+                if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
+                    [self takePhotoWithPano:180];
+                    [self setPanoModeView:YES];
+                }
+                else {
+                    SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                }
             }
                 break;
                 
             case picPano360d:
             {
-                [self takePhotoWithPano:360];
-                [self setPanoModeView:YES];
+                if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
+                    [self takePhotoWithPano:360];
+                    [self setPanoModeView:YES];
+                }
+                else {
+                    SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                }
             }
                 break;
                 
             case picPano3x3:
             {
-                [self takePhotoWithPano:270];
-                [self setPanoModeView:YES];
+                if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
+                    [self takePhotoWithPano:270];
+                    [self setPanoModeView:YES];
+                }
+                else {
+                    SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                }
             }
                 break;
                 
@@ -1717,20 +1873,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
         default:
             break;
     }
-}
-
-/**
- 程序智能退出后保存现有拍摄内容
- */
-- (void)smartQuitCamera {
-    //全景拍摄中，给设备发退出全景模式，并结束全景，不进入全景合成，直接删除全景数组和退出全景模式
-    [[JEBluetoothManager shareBLESingleton] BPQuitPano];
-    self.isPanoing = NO;
-    
-    [self setPanoModeView:NO];
-    [[NSFileManager defaultManager] removeItemAtPath:[FileUtils panoDir]  error:nil];
-    [self.panoImagesArray removeAllObjects];
-    self.panoImagesArray = nil;
 }
 
 //推动速度发送参数包
@@ -1848,6 +1990,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if (_videoCapturing || _isPanoing) {
         [self camStillAction];
     }
+    
+    //保存当前拍摄模式
+    USER_SET_SaveLastCameraMode_BOOL(_isVideo);
 }
 
 //当获取到系统从后台返回的信号
@@ -1970,68 +2115,74 @@ typedef void(^getStillImageBlock)(UIImage *image);
             }
             
             self.pictureCapturing = YES;
+            
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            
             dispatch_async(saveImageQueue, ^{
-                @autoreleasepool {
-                    [_stillCamera capturePhotoAsPNGProcessedUpToFilter:self.captureFilter withOrientation:self.imageOrientation withCompletionHandler:^(NSData *processedPNG, NSError *error) {
-                        UIImage *image = [UIImage imageWithData:processedPNG];
-                        
-                        CGFloat saveImageWidth =  image.size.width/3;
-                        CGFloat saveImageHeight = image.size.height/3;
-                        
-                        CGImageRef cgRef = image.CGImage;
-                        
-                        UIImage *thumbScale9 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth*2,saveImageHeight*2,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName9 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale9 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName9] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale8 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth,saveImageHeight*2,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName8 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale8 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName8] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale7 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(0,saveImageHeight*2,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName7 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale7 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName7] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale6 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth*2,saveImageHeight,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName6 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale6 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName6] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale5 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth,saveImageHeight,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName5 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale5 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName5] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale4 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(0,saveImageHeight,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName4 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale4 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName4] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale3 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth*2,0,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName3 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale3 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName3] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale2 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth,0,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName2 = [JECameraManager shareCAMSingleton].getNowDate;
-                        [[JECameraManager shareCAMSingleton] saveImage:thumbScale2 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName2] withOrientation:self.imageOrientation];
-                        
-                        UIImage *thumbScale1 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(0,0,saveImageWidth, saveImageHeight))];
-                        CGImageRelease(cgRef);
-                        NSString *fileName1 = [JECameraManager shareCAMSingleton].getNowDate;
-                        
-                        if ([[JECameraManager shareCAMSingleton] saveImage:thumbScale1 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName1] withOrientation:self.imageOrientation]) {
-                            self.pictureCapturing = NO;
-                        }
-                        else {
-                            self.pictureCapturing = NO;
-                        }
-                    }];
-                }
+                [_stillCamera capturePhotoAsPNGProcessedUpToFilter:self.captureFilter withOrientation:self.imageOrientation withCompletionHandler:^(NSData *processedPNG, NSError *error) {
+                    
+                    UIImage *image = [UIImage imageWithData:processedPNG];
+                    
+                    CGFloat saveImageWidth =  image.size.width/3;
+                    CGFloat saveImageHeight = image.size.height/3;
+                    
+                    UIImageOrientation ori;
+                    
+                    if (_isFrontCamera) {
+                        ori = UIImageOrientationUpMirrored;
+                    }
+                    else {
+                        ori = UIImageOrientationUp;
+                    }
+                    
+                    CGImageRef cgRef = image.CGImage;
+                    
+                    UIImage *thumbScale9 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth*2,saveImageHeight*2,saveImageWidth, saveImageHeight))];
+                    NSString *fileName9 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale9 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName9] withOrientation:ori];
+                    
+                    UIImage *thumbScale8 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth,saveImageHeight*2,saveImageWidth, saveImageHeight))];
+                    NSString *fileName8 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale8 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName8] withOrientation:ori];
+                    
+                    UIImage *thumbScale7 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(0,saveImageHeight*2,saveImageWidth, saveImageHeight))];
+                    NSString *fileName7 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale7 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName7] withOrientation:ori];
+                    
+                    UIImage *thumbScale6 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth*2,saveImageHeight,saveImageWidth, saveImageHeight))];
+                    NSString *fileName6 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale6 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName6] withOrientation:ori];
+                    
+                    UIImage *thumbScale5 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth,saveImageHeight,saveImageWidth, saveImageHeight))];
+                    NSString *fileName5 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale5 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName5] withOrientation:ori];
+                    
+                    UIImage *thumbScale4 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(0,saveImageHeight,saveImageWidth, saveImageHeight))];
+                    NSString *fileName4 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale4 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName4] withOrientation:ori];
+                    
+                    UIImage *thumbScale3 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth*2,0,saveImageWidth, saveImageHeight))];
+                    NSString *fileName3 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale3 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName3] withOrientation:ori];
+                    
+                    UIImage *thumbScale2 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(saveImageWidth,0,saveImageWidth, saveImageHeight))];
+                    NSString *fileName2 = [JECameraManager shareCAMSingleton].getNowDate;
+                    [[JECameraManager shareCAMSingleton] saveImage:thumbScale2 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName2] withOrientation:ori];
+                    
+                    UIImage *thumbScale1 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(cgRef, CGRectMake(0,0,saveImageWidth, saveImageHeight))];
+                    NSString *fileName1 = [JECameraManager shareCAMSingleton].getNowDate;
+                
+                    CGImageRelease(cgRef);
+                    
+                    if ([[JECameraManager shareCAMSingleton] saveImage:thumbScale1 toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", fileName1] withOrientation:ori]) {
+                        self.pictureCapturing = NO;
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    }
+                    else {
+                        self.pictureCapturing = NO;
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    }
+                }];
             });
         }
             break;
@@ -2045,6 +2196,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
 - (void)takePhotoWithPano:(int)angle {
     if (_isPanoing) {
         [[JEBluetoothManager shareBLESingleton] BPQuitPano];
+        
+        if (self.panoWorkingView) {
+            [self.panoWorkingView removeFromSuperview];
+        }
         self.isPanoing = NO;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -2060,10 +2215,16 @@ typedef void(^getStillImageBlock)(UIImage *image);
         
         [self.countdownBtn startWithTime:3 mainColor:[UIColor clearColor] countColor:[UIColor whiteColor]];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
             [[JEBluetoothManager shareBLESingleton] BPPanoPhoto:angle];
-            
+
             [_bottomToolBar.cameraButton setImage:[UIImage imageNamed:@"icon_shoot_stop"] forState:UIControlStateNormal];
-            
+
+            _panoWorkingView = [[JEPanoWorkingView alloc] initWithFrame:CGRectMake(0, 0, 100, 100) withAngle:angle];
+            _panoWorkingView.center = self.view.center;
+            [self.view addSubview:_panoWorkingView];
+            [self screenRotate:nil];
+
             self.isPanoing = YES;
         });
     }
@@ -2077,19 +2238,25 @@ typedef void(^getStillImageBlock)(UIImage *image);
             [self.panoImagesArray addObject:img];
         }
     } animate:YES];
+    
 }
 
 //停止全景
 - (void)stopPano {
     self.isAutoStitchPanoing = YES;
     
+    if (self.panoWorkingView) {
+        [self.panoWorkingView removeFromSuperview];
+    }
+    
     [_bottomToolBar.cameraButton setImage:[UIImage imageNamed:@"icon_shoot_camera"] forState:UIControlStateNormal];
     
     [self.stillCamera pauseCameraCapture];
     
     [self setPanoModeView:NO];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.0), @"hint":NSLocalizedString(@"Start stitching...", nil)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.0), @"hint":JELocalizedString(@"Start stitching...", nil)}];
         @autoreleasepool {
             
             NSFileManager *fm = [NSFileManager defaultManager];
@@ -2109,7 +2276,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 NSArray *conners = [NSKeyedUnarchiver unarchiveObjectWithFile:[FileUtils connersPath]];
                 NSArray *sizes = [NSKeyedUnarchiver unarchiveObjectWithFile:[FileUtils sizesPath]];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.75), @"hint":NSLocalizedString(@"Blending...", nil)}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.75), @"hint":JELocalizedString(@"Blending...", nil)}];
                 
                 [self Blend:sources maskNames:masks points:conners];
                 
@@ -2122,7 +2289,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 }
                 UIImage *finalImage;
                 if(warpImageCnt>0){
-                    [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.85), @"hint":NSLocalizedString(@"Stiching...", nil)}];
+                    [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.85), @"hint":JELocalizedString(@"Stiching...", nil)}];
                     
                     finalImage = [self Compose:blendedimageName points:conners sizes:sizes];
                 }
@@ -2132,7 +2299,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 UIImage *cropped = [UIImage imageWithCGImage:imageRef];
                 CGImageRelease(imageRef);
                 
-                [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.95), @"hint":NSLocalizedString(@"Saving final image...", nil)}];
+                [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.95), @"hint":JELocalizedString(@"Saving final image...", nil)}];
                 
                 //UIImage压缩
                 NSData *imageData = UIImageJPEGRepresentation(cropped, 0.8);
@@ -2159,7 +2326,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                     
                     //NSLog(@"%@",imageResult);
                     
-                    [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(1.0), @"hint":NSLocalizedString(@"Finished", nil)}];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(1.0), @"hint":JELocalizedString(@"Finished", nil)}];
                     
                     //全景图片手动裁剪
                     CGRect CropRect = CGRectMake(imageResult.size.width*0.05, imageResult.size.height*0.1,  imageResult.size.width*0.95, imageResult.size.height*0.9);
@@ -2178,7 +2345,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Image Compositing Failed\nPlease keep your phone 1 meter or farther away from the shooting object.", comment: @"default"), self.view, 3.0);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Image Compositing Failed\nPlease keep your phone 1 meter or farther away from the shooting object.", comment: @"default"), self.view, 3.0);
                 });
             }
             
@@ -2247,6 +2414,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                         finalImage = [UIImage imageWithData:compressData];
                     }
                 }
+                
                 [self.motionLapsePointArray addObject:[self image:finalImage rotation:_imageOrientation]];
                 _motionLapsePopView.pointPicArray = _motionLapsePointArray;
                 [[JEBluetoothManager shareBLESingleton] BPRecordMotionLapsePosition:_motionLapsePointArray.count StandingTime:0];
@@ -2265,8 +2433,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
 - (void)getStillImageWithBlock:(getStillImageBlock)block animate:(BOOL)animate {
     NSLog(@"全景拍摄中...");
     
-    [self.stillCamera capturePhotoAsImageProcessedUpToFilter:self.normalFilter withOrientation:_imageOrientation withCompletionHandler:^(UIImage *processedImage, NSError *error) {
+    [_stillCamera capturePhotoAsImageProcessedUpToFilter:self.normalFilter withOrientation:_imageOrientation withCompletionHandler:^(UIImage *processedImage, NSError *error) {
         //处理图片 压缩
+        NSLog(@"单张全景照片 = %@", processedImage);
 
         NSInteger maxLength = 250 * 1024;
         CGFloat compression = 1.0;
@@ -2325,103 +2494,105 @@ typedef void(^getStillImageBlock)(UIImage *image);
  @param isStart 是否开始录像
  */
 - (void)takeVideo:(BOOL)isStart {
-    if (isStart) {
-        
-        if (_videoCapturing) {
-            return;
-        }
-        
-        //录像路径
-        self.videoPreviewString = [JECameraManager shareCAMSingleton].getNowDate;
-        self.videoPath = [[JECameraManager shareCAMSingleton] getVideoPathWithName:[NSString stringWithFormat:@"%@.mov", _videoPreviewString]];
-        unlink([_videoPath UTF8String]);
-        NSURL *movieURL = [NSURL fileURLWithPath:_videoPath];
-        
-        NSLog(@"视频路径%@存在? : %d", _videoPath, [[NSFileManager defaultManager] fileExistsAtPath:_videoPath]);
-        if([[NSFileManager defaultManager] fileExistsAtPath:_videoPath]){
-            [[NSFileManager defaultManager] removeItemAtPath:_videoPath error:nil];
-        }
-        if([[NSFileManager defaultManager] fileExistsAtPath:_videoPath]){
-            NSError *err;
-            [[NSFileManager defaultManager] removeItemAtURL:movieURL error:&err];
-            NSLog(@"%@", err);
-        }
-        
-        CGSize captureSize = [self getUserSaveVideoResolution];
-        NSLog(@"captureSize = (%f, %f)", captureSize.width, captureSize.height);
-        NSDictionary *settings;
-        
-        if (captureSize.width == 2160) {
-            //调整编码
-            if (@available(iOS 11.0, *)) {
-                settings = @{AVVideoCodecKey:AVVideoCodecHEVC, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
-            } else {
-                // Fallback on earlier versions
-                SHOW_HUD_DELAY(NSLocalizedString(@"您的手机版本太低，请升级到ios11.0或以上，否则4k录制会丢帧", nil), self.view, 2);
+    @autoreleasepool {
+        if (isStart) {
+            
+            if (_videoCapturing) {
+                return;
+            }
+            
+            //录像路径
+            self.videoPreviewString = [JECameraManager shareCAMSingleton].getNowDate;
+            self.videoPath = [[JECameraManager shareCAMSingleton] getVideoPathWithName:[NSString stringWithFormat:@"%@.mov", _videoPreviewString]];
+            unlink([_videoPath UTF8String]);
+            NSURL *movieURL = [NSURL fileURLWithPath:_videoPath];
+            
+            NSLog(@"视频路径%@存在? : %d", _videoPath, [[NSFileManager defaultManager] fileExistsAtPath:_videoPath]);
+            if([[NSFileManager defaultManager] fileExistsAtPath:_videoPath]){
+                [[NSFileManager defaultManager] removeItemAtPath:_videoPath error:nil];
+            }
+            if([[NSFileManager defaultManager] fileExistsAtPath:_videoPath]){
+                NSError *err;
+                [[NSFileManager defaultManager] removeItemAtURL:movieURL error:&err];
+                NSLog(@"%@", err);
+            }
+            
+            CGSize captureSize = [self getUserSaveVideoResolution];
+            NSLog(@"captureSize = (%f, %f)", captureSize.width, captureSize.height);
+            NSDictionary *settings;
+            
+            if (captureSize.width >= 2160) {
+                //屏幕支持 4k时 调整编码
+                if (@available(iOS 11.0, *)) {
+                    settings = @{AVVideoCodecKey:AVVideoCodecHEVC, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
+                } else {
+                    // Fallback on earlier versions
+                    SHOW_HUD_DELAY(JELocalizedString(@"您的手机版本太低，请升级到ios11.0或以上，否则4k录制会丢帧", nil), self.view, 2);
+                    settings = @{AVVideoCodecKey:AVVideoCodecH264, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
+                }
+            }
+            else {
                 settings = @{AVVideoCodecKey:AVVideoCodecH264, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
             }
+            
+            //初始化
+            self.movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:captureSize fileType:AVFileTypeQuickTimeMovie outputSettings:settings];
+            _movieWriter.encodingLiveVideo = YES;
+            _movieWriter.shouldPassthroughAudio = YES;
+            
+            //设置声道
+            _stillCamera.audioEncodingTarget = _movieWriter;
+            
+            [_captureFilter addTarget:_movieWriter];
+            
+            //开始录制
+            [_movieWriter startRecordingInOrientation:CGAffineTransformRotate(CGAffineTransformIdentity, -_mainRotate)];
+            NSLog(@"开始录像");
+            
+            self.videoCapturing = YES;
         }
         else {
-            settings = @{AVVideoCodecKey:AVVideoCodecH264, AVVideoWidthKey:[NSNumber numberWithInt:captureSize.width], AVVideoHeightKey:[NSNumber numberWithInt:captureSize.height]};
-        }
-        
-        //初始化
-        self.movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:captureSize fileType:AVFileTypeQuickTimeMovie outputSettings:settings];
-        _movieWriter.encodingLiveVideo = YES;
-        _movieWriter.shouldPassthroughAudio = YES;
-        
-        //设置声道
-        _stillCamera.audioEncodingTarget = _movieWriter;
-        
-        [_captureFilter addTarget:_movieWriter];
-        
-        //开始录制
-        [_movieWriter startRecordingInOrientation:CGAffineTransformRotate(CGAffineTransformIdentity, -_mainRotate)];
-        NSLog(@"开始录像");
-    
-        self.videoCapturing = YES;
-    }
-    else {
-        
-        if (!_videoCapturing) {
-            return;
-        }
-        
-        [_movieWriter finishRecording];
-        [_captureFilter removeTarget:_movieWriter];
-        _stillCamera.audioEncodingTarget = nil;
-        NSLog(@"录像结束");
-        
-        //将就用存图片的线程
-        dispatch_async(saveImageQueue, ^{
-            @autoreleasepool {
-                NSURL *movieURL = [NSURL fileURLWithPath:_videoPath];
-                NSLog(@"拍完的视频路径 = %@", movieURL);
-                NSData *movieData = [NSData dataWithContentsOfURL:movieURL];
-                
-                if ([movieData writeToFile:_videoPath atomically:YES]) {
-                    if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:movieURL size:[self getUserSaveVideoResolution]] toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", _videoPreviewString]]) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            SHOW_HUD_DELAY(NSLocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
-                        });
+            
+            if (!_videoCapturing) {
+                return;
+            }
+            
+            [_movieWriter finishRecording];
+            [_captureFilter removeTarget:_movieWriter];
+            _stillCamera.audioEncodingTarget = nil;
+            NSLog(@"录像结束");
+            
+            //将就用存图片的线程
+            dispatch_async(saveImageQueue, ^{
+                @autoreleasepool {
+                    NSURL *movieURL = [NSURL fileURLWithPath:_videoPath];
+                    NSLog(@"拍完的视频路径 = %@", movieURL);
+                    NSData *movieData = [NSData dataWithContentsOfURL:movieURL];
+                    
+                    if ([movieData writeToFile:_videoPath atomically:YES]) {
+                        if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:movieURL size:[self getUserSaveVideoResolution]] toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", _videoPreviewString]]) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                SHOW_HUD_DELAY(JELocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                            });
+                        }
+                        else {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                            });
+                        }
                     }
                     else {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                            SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                         });
                     }
                 }
-                else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
-                    });
-                }
-            }
-        });
-        self.videoCapturing = NO;
+            });
+            self.videoCapturing = NO;
+        }
+        [self setVideoModeView:!_bottomToolBar.cameraButton.isSelected];
+        _bottomToolBar.cameraButton.selected = !_bottomToolBar.cameraButton.isSelected;
     }
-    [self setVideoModeView:!_bottomToolBar.cameraButton.isSelected];
-    _bottomToolBar.cameraButton.selected = !_bottomToolBar.cameraButton.isSelected;
 }
 
 - (void)takeVideoWithMode:(ShootingMode)mode {
@@ -2433,73 +2604,125 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 return;
             }
             else {
-                //调整自动对焦和白平衡
-                NSError *err;
-                
-                [self.stillCamera.inputCamera lockForConfiguration:&err];
-                
-                if(!err){
-                    if([self.stillCamera.inputCamera isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]){
-                        [self.stillCamera.inputCamera setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
-                    }
+                //判断菜单是否调出来
+                if (_isMovingZoomShowing) {
                     
-                    if([self.stillCamera.inputCamera isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance]){
-                        [self.stillCamera.inputCamera setWhiteBalanceMode:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance];
-                    }
+                    self.isMovingZoomShowing = NO;
                     
-                    if([self.stillCamera.inputCamera isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]){
-                        [self.stillCamera.inputCamera setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
-                    }
+                    //调整自动对焦和白平衡
+                    NSError *err;
                     
-                    [self.stillCamera.inputCamera unlockForConfiguration];
-                }
-                
-                [self.countdownBtn startWithTime:3 mainColor:[UIColor clearColor] countColor:[UIColor whiteColor]];
-            
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self takeVideo:YES];
+                    [self.stillCamera.inputCamera lockForConfiguration:&err];
                     
-                    __weak typeof(self) weakSelf = self;
-                    __block CGFloat weakScale = _effectiveScale;
-                    
-                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                        
-                        for (int i = 0; i<200; i++) {
-                            
-                            weakScale = weakScale - 0.01;
-                            
-                            if (weakScale < 1||weakScale == 1) {
-                                
-                                weakScale = 1;
-                                
-                                break;
-                            }
-                            AVCaptureDevice *captureDevice = weakSelf.stillCamera.inputCamera;
-                            NSError *error;
-                            if ([captureDevice lockForConfiguration:&error]) {
-                                [captureDevice rampToVideoZoomFactor:weakScale withRate:0.6f];
-                                [captureDevice unlockForConfiguration];
-                            }
-                            //变焦时间6S，休眠时间越长，变焦时间越长，平均0.005为1s
-                            [NSThread sleepForTimeInterval:0.015];
-                            NSLog(@"变焦");
+                    if(!err){
+                        if([self.stillCamera.inputCamera isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]){
+                            [self.stillCamera.inputCamera setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
                         }
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (_videoCapturing == YES) {
-                                [weakSelf takeVideo:NO];
+                        
+                        if([self.stillCamera.inputCamera isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance]){
+                            [self.stillCamera.inputCamera setWhiteBalanceMode:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance];
+                        }
+                        
+                        if([self.stillCamera.inputCamera isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]){
+                            [self.stillCamera.inputCamera setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
+                        }
+                        
+                        [self.stillCamera.inputCamera unlockForConfiguration];
+                    }
+                    
+                    [self.countdownBtn startWithTime:3 mainColor:[UIColor clearColor] countColor:[UIColor whiteColor]];
+                    NSLog(@"_hitchcockPopView.shootTimeLength = %f, _hitchcockPopView.shootOrientation = %d, _effectiveScale = %f", _hitchcockPopView.shootTimeLength, _hitchcockPopView.shootOrientation, _effectiveScale);
+                    
+                    if (_hitchcockPopView.shootOrientation == 0) {
+                        //放大
+                        if (_effectiveScale != 1.0) {
+                            [self restoreZoom:1.0];
+                        }
+                    }
+                    else {
+                        //缩小
+                        if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
+                            if (_effectiveScale != 2) {
+                                [self restoreZoom:2];
                             }
-                            [CATransaction begin];
-                            [CATransaction setAnimationDuration:0.1];
-                            AVCaptureDevice *captureDevice = weakSelf.stillCamera.inputCamera;
-                            NSError *error;
-                            if ([captureDevice lockForConfiguration:&error]) {
-                                [captureDevice rampToVideoZoomFactor:3.0 withRate:0.6f];
-                                [captureDevice unlockForConfiguration];
+                        }
+                        else {
+                            if (_effectiveScale != 3) {
+                                [self restoreZoom:3];
                             }
-                            [CATransaction commit];
+                        }
+                    }
+                    
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        
+                        [self takeVideo:YES];
+                        
+                        __weak typeof(self) weakSelf = self;
+                        __block CGFloat weakScale = _effectiveScale;
+                        __block CGFloat weakTime = _hitchcockPopView.shootTimeLength;
+                        __block CGFloat weakRate = 0;
+                        __block CGFloat weakDeta = 0;
+                        
+                        if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
+                            weakRate = 0.3;
+                            weakDeta = 0.005;
+                        }
+                        else {
+                            weakRate = 0.6;
+                            weakDeta = 0.01;
+                        }
+                    
+                        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                            
+                            for (int i = 0; i<200; i++) {
+                                
+                                    if (_hitchcockPopView.shootOrientation == 0) {
+                                        weakScale = weakScale + weakDeta;
+                                        
+                                        NSLog(@"放大 %f", weakScale);
+                                        
+                                        if (weakScale > 3||weakScale == 3) {
+                                            
+                                            weakScale = 3;
+                                            
+                                            break;
+                                        }
+                                    }
+                                    else {
+                                        weakScale = weakScale - weakDeta;
+                            
+                                        NSLog(@"缩小 %f", weakScale);
+                                        
+                                        if (weakScale < 1||weakScale == 1) {
+                                            
+                                            weakScale = 1;
+                                            
+                                            break;
+                                        }
+                                    }
+                                    AVCaptureDevice *captureDevice = self.stillCamera.inputCamera;
+                                    
+                                    NSError *error;
+                                    if ([captureDevice lockForConfiguration:&error]) {
+                                        [captureDevice rampToVideoZoomFactor:weakScale withRate:weakRate];
+                                        [captureDevice unlockForConfiguration];
+                                    }
+                                
+                                    //休眠时间越长，变焦时间越长，平均0.005为1s
+                                    [NSThread sleepForTimeInterval:(0.005 * weakTime)];
+                            }
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if (_videoCapturing == YES) {
+                                    [weakSelf takeVideo:NO];
+                                    [weakSelf restoreZoom:1.0];
+                                }
+                            });
                         });
                     });
-                });
+                }
+                else {
+                    SHOW_HUD_DELAY(JELocalizedString(@"Please set shooting parameters", nil), self.view, 1.5);
+                }
             }
         }
             break;
@@ -2536,7 +2759,6 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 [self takeVideoWithTimeLapse:NO];
                 [self setVideoModeView:!_bottomToolBar.cameraButton.isSelected];
                 _bottomToolBar.cameraButton.selected = !_bottomToolBar.cameraButton.isSelected;
-                
             }
             else {
                 //异步处理
@@ -2596,11 +2818,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
                         });
                     }
                     else {
-                        SHOW_HUD_DELAY(NSLocalizedString(@"Two Key Shooting Points Minimum", nil), self.view, 1.5);
+                        SHOW_HUD_DELAY(JELocalizedString(@"Two Key Shooting Points Minimum", nil), self.view, 1.5);
                     }
                 }
                 else {
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
                 }
             }
         }
@@ -2768,18 +2990,18 @@ typedef void(^getStillImageBlock)(UIImage *image);
                         if ([movieData writeToFile:_videoPath atomically:YES]) {
                             if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:movieURL size:[self getUserSaveVideoResolution]] toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", _videoPreviewString]]) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    SHOW_HUD_DELAY(NSLocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                    SHOW_HUD_DELAY(JELocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                 });
                             }
                             else {
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                    SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                 });
                             }
                         }
                         else {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                             });
                         }
                     }
@@ -2859,6 +3081,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         }
         if (_isTimeLapseShowing == YES) {
             self.isTimeLapseShowing = NO;
+        }
+        if (_isMovingZoomShowing == YES) {
+            self.isMovingZoomShowing = NO;
         }
         
         //进入录像模式
@@ -2961,6 +3186,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
     }
     if (_isSubShowing == YES) {
         self.isSubShowing = NO;
+    }
+    if (_isMovingZoomShowing == YES) {
+        self.isMovingZoomShowing = NO;
     }
     if (_isTimeLapseShowing == YES) {
         self.isTimeLapseShowing = NO;
@@ -3071,11 +3299,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
 //提示当前手机蓝牙的状态
 - (void)hintBLEStatus:(bluetoothToolsState)bleStatus {
     if (bleStatus == PoweredOff) {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Bluetooth Required", nil)
-                                                                        message:NSLocalizedString(@"Please turn on the mobile Bluetooth", nil)
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Bluetooth Required", nil)
+                                                                        message:JELocalizedString(@"Please turn on the mobile Bluetooth", nil)
                                                                  preferredStyle:UIAlertControllerStyleAlert];
         
-        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+        [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil)
                                                    style:UIAlertActionStyleCancel
                                                  handler:^(UIAlertAction * _Nonnull action) {
                                                  }]];
@@ -3092,8 +3320,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
  @param msg 指令消息
  */
 - (void)commandDidRecieved:(NSString *)msg {
-    NSLog(@"蓝牙收到的关键命令 : %@", [msg substringWithRange:NSMakeRange(2, 2)]);
-    NSLog(@"接收消息 = %@", msg);
+    if (msg.length < 4) {
+        return;
+    }
     
     /*
      *  蓝牙数据参数包
@@ -3135,7 +3364,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
     if ([[msg substringWithRange:NSMakeRange(2, 2)] isEqualToString:@"2b"]) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
-        SHOW_HUD_DELAY(NSLocalizedString(@"Setting Saved", comment: ""), self.view, 0.5);
+        SHOW_HUD_DELAY(JELocalizedString(@"Setting Saved", comment: ""), self.view, 0.5);
         return;
     }
     
@@ -3219,6 +3448,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
             
             //退出固件升级
             [[JEBluetoothManager shareBLESingleton] BPQuitFirmwareUpdata];
+            self.isFirmwareUpdating = NO;
         }
         if ([_updateFirmwareDataString length] != 0) {
             
@@ -3257,6 +3487,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
             
             //退出固件升级
             [[JEBluetoothManager shareBLESingleton] BPQuitFirmwareUpdata];
+            self.isFirmwareUpdating = NO;
         }
         if ([_updateFirmwareDataString length] != 0) {
             NSString *currDataString = [_updateFirmwareDataString substringWithRange:NSMakeRange(0, 32)];
@@ -3286,12 +3517,51 @@ typedef void(^getStillImageBlock)(UIImage *image);
             _updateFirmwareTimeCount = 0;
         }
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"Firmware Updated", nil) preferredStyle:UIAlertControllerStyleAlert];
+        self.isFirmwareUpdating = NO;
         
-        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Information", nil) message:JELocalizedString(@"Firmware Updated", nil) preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             self.isClearViewShowing = NO;
             //获取固件版本信息
             [[JEBluetoothManager shareBLESingleton] BPGetDeviceVersion];
+            
+            NSMutableArray *params = [NSMutableArray array];
+            
+            if (_controllerMode == cameraM1) {
+                [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"2", @"ProdID", nil]];
+            }
+            else if (_controllerMode == cameraP1) {
+                [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"1", @"ProdID", nil]];
+            }
+            
+            //从服务器获取版本信息
+            [JEWebManager loadDataCenter:params methodName:@"SR_GetLastFirmwareInfo" result:^(NSDictionary *resultDic, NSString *error) {
+                if (error) {
+                    
+                    SHOW_HUD_DELAY(JELocalizedString(@"Network Error", nil), self.view, 1);
+                    
+                    return;
+                }
+                
+                //强制纠正语言
+                NSArray *languages = [NSLocale preferredLanguages];
+                
+                NSString *language = [languages objectAtIndex:0];
+                
+                NSLog(@"system language = %@", language);
+                
+                if ([language hasPrefix:@"zh"]) {//检测开头匹配，是否为中文，再决定固件升级内容语言
+                    self.deviceUpdateString = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"InfoCN"][@"__text"];
+                }
+                else {
+                    self.deviceUpdateString = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"InfoEN"][@"__text"];
+                }
+                
+                self.deviceNewVersion = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareInfoResponse"][@"return"][@"__text"];
+                USER_SET_SaveVersionNewFirmware_NSString(_deviceNewVersion);
+                
+            }];
         }]];
         
         [_updateFirmwareView removeFromSuperview];
@@ -3331,6 +3601,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
             if (_isPanoing) {
                 [[JEBluetoothManager shareBLESingleton] BPQuitPano];
                 self.isPanoing = NO;
+                if (self.panoWorkingView) {
+                    [self.panoWorkingView removeFromSuperview];
+                }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self stopPano];
@@ -3363,11 +3636,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
                             _bottomToolBar.cameraButton.selected = !_bottomToolBar.cameraButton.isSelected;
                         }
                         else {
-                            SHOW_HUD_DELAY(NSLocalizedString(@"Two Key Shooting Points Minimum", nil), self.view, 1.5);
+                            SHOW_HUD_DELAY(JELocalizedString(@"Two Key Shooting Points Minimum", nil), self.view, 1.5);
                         }
                     }
                     else {
-                        SHOW_HUD_DELAY(NSLocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                        SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
                     }
                 }
                 else {
@@ -3379,6 +3652,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 self.timeLapseProgress = (int)_motionLapsePopView.timeScale * 2;
                 [self takeVideoWithMode:videoLocusTimeLapse];
             }
+            return;
         }
         //非全景模式下
         else {
@@ -3398,7 +3672,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         }
         if (_shootingMode == picPano90d || _shootingMode == picPano180d || _shootingMode == picPano360d || _shootingMode == picPano3x3) {
             if (_isPanoing) {
-                [self startPano];
+//                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self startPano];
+//                });
             }
         }
         return;
@@ -3456,6 +3732,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
             return;
         }
         
+        //前置不允许调整对焦
+        if (_isFrontCamera) {
+            SHOW_HUD_DELAY(JELocalizedString(@"The front camera doesn't support focusing", nil), self.view, 0.5);
+            return;
+        }
+        
         _focusingView.alpha = 1;
         _focusingView.hidden = NO;
         currValue = currValue - 0.05;
@@ -3496,6 +3778,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
             return;
         }
         
+        //前置不允许调整对焦
+        if (_isFrontCamera) {
+            SHOW_HUD_DELAY(JELocalizedString(@"The front camera doesn't support focusing", nil), self.view, 0.5);
+            return;
+        }
+        
         _focusingView.alpha = 1;
         
         _focusingView.hidden = NO;
@@ -3517,6 +3805,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
             NSError *error;
             
             if ( [self.stillCamera.inputCamera lockForConfiguration:&error]) {
+                
                 [self.stillCamera.inputCamera setFocusModeLockedWithLensPosition:currValue completionHandler:nil];
                 [self.stillCamera.inputCamera unlockForConfiguration];
                 
@@ -3549,20 +3838,21 @@ typedef void(^getStillImageBlock)(UIImage *image);
         //缩小 反转
         NSString *string_11 = [msg substringWithRange:NSMakeRange(10, 2)];
         float sum = [[self numberHexString:string_11] floatValue];
-        NSLog(@"%.2f",sum);
-        if (sum==1.00) {
-            sum=3.00;
-        }
-        if (sum==2.00) {
-            sum=3.00;
-        }
         flags = sum/30.00;
         curr = curr-flags;
         if (curr<1) {
             curr=1;
         }
+        float rate = sum/10;
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration: 0.5 animations: ^{
+                if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
+                    _zoomSliderView.srSlider.maximumValue = 2.0;
+                }
+                else {
+                    _zoomSliderView.srSlider.maximumValue = 3.0;
+                }
+                
                 [_zoomSliderView.srSlider setValue:curr];
                 _zoomSliderView.srSlider.labelAboveThumb.hidden = YES;
             } completion:nil];
@@ -3572,7 +3862,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         AVCaptureDevice *captureDevice = self.stillCamera.inputCamera;
         NSError *error;
         if ([captureDevice lockForConfiguration:&error]) {
-            [captureDevice rampToVideoZoomFactor:curr withRate:0.6f];
+            [captureDevice rampToVideoZoomFactor:curr withRate:rate];
             [captureDevice unlockForConfiguration];
             POPBasicAnimation *alpAni = [POPBasicAnimation animationWithPropertyNamed:kPOPViewAlpha];
             alpAni.duration = 5.0;
@@ -3603,24 +3893,31 @@ typedef void(^getStillImageBlock)(UIImage *image);
         //放大 正转
         NSString *string_11 = [msg substringWithRange:NSMakeRange(12, 2)];
         float sum = [[self numberHexString:string_11] floatValue];
-        NSLog(@"%.2f",sum);
-        if (sum == 1.00) {
-            sum = 3.00;
-        }
-        if (sum == 2.00) {
-            sum = 3.00;
-        }
         flags = sum/30.00;
         if (curr > 1) {
             curr = curr + flags;
         }else{
             curr = 1.00 + flags;
         }
-        if (curr > 3) {
-            curr = 3;
+        if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
+            if (curr > 2) {
+                curr = 2;
+            }
         }
+        else {
+            if (curr > 3) {
+                curr = 3;
+            }
+        }
+        float rate = sum/10;
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration: 0.5 animations: ^{
+                if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
+                    _zoomSliderView.srSlider.maximumValue = 2.0;
+                }
+                else {
+                    _zoomSliderView.srSlider.maximumValue = 3.0;
+                }
                 [_zoomSliderView.srSlider setValue:curr];
                 _zoomSliderView.srSlider.labelAboveThumb.hidden = YES;
             } completion:nil];
@@ -3630,7 +3927,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         AVCaptureDevice *captureDevice = self.stillCamera.inputCamera;
         NSError *error;
         if ([captureDevice lockForConfiguration:&error]) {
-            [captureDevice rampToVideoZoomFactor:curr withRate:0.6f];
+            [captureDevice rampToVideoZoomFactor:curr withRate:rate];
             [captureDevice unlockForConfiguration];
             
             POPBasicAnimation *alpAni = [POPBasicAnimation animationWithPropertyNamed:kPOPViewAlpha];
@@ -3856,12 +4153,16 @@ typedef void(^getStillImageBlock)(UIImage *image);
             case 12:
             {
                 //启动移动变焦拍摄
+                //清空追踪状态
+                if (_middleToolBar.trackStay.isSelected) {
+                    _middleToolBar.trackStay.selected = NO;
+                    [self cleanTrackState];
+                }
                 if (!_isVideo) {
                     [self bottomToolBarButtonAction:222];
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_bottomToolBar.bottomMenu subViewButtonAction:_bottomToolBar.bottomMenu.subVideoMovingZoom];
-//                    [self camStillAction];
                 });
                 
             }
@@ -3952,13 +4253,13 @@ typedef void(^getStillImageBlock)(UIImage *image);
         dispatch_semaphore_signal(_seam);
     }
     
-    
     return NO;
 }
 
 //获取人脸数据
 - (void)didOutputMetadataObjects:(NSArray *)metadataObjects {
     //每次都去除掉人脸框，便于刷新
+    NSLog(@"metadataObjects = %@", metadataObjects);
     [self removeFaceFocusView];
     if (metadataObjects.count == 0) {
         //人脸丢失
@@ -4115,7 +4416,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         lp = CGPointMake(minY*_mainRatioY, minX*_mainRatioX);
         rp = CGPointMake(maxY*_mainRatioY, maxX*_mainRatioX);
     }
-    else if ([_stillCamera cameraPosition] == AVCaptureDevicePositionBack){
+    else{
         lp = CGPointMake(minY*_mainRatioY, height-minX*_mainRatioX);
         rp = CGPointMake(maxY*_mainRatioY, height-maxX*_mainRatioX);
     }
@@ -4395,20 +4696,20 @@ typedef void(^getStillImageBlock)(UIImage *image);
                         if ([movieData writeToFile:[exporter.outputURL absoluteString] atomically:YES]) {
                             if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:exporter.outputURL size:[self getUserSaveVideoResolution]] toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", _videoPreviewString]]) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    SHOW_HUD_DELAY(NSLocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                    SHOW_HUD_DELAY(JELocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                     NSLog(@"保存成功");
                                 });
                             }
                             else {
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                    SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                     NSLog(@"保存视频预览图失败");
                                 });
                             }
                         }
                         else {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                 NSLog(@"保存原视频失败");
                             });
                         }
@@ -4513,20 +4814,20 @@ typedef void(^getStillImageBlock)(UIImage *image);
                                 if ([movieData writeToFile:[exporter.outputURL absoluteString] atomically:YES]) {
                                     if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:exporter.outputURL size:[self getUserSaveVideoResolution]] toSandboxWithFileName:_videoPreviewString]) {
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            SHOW_HUD_DELAY(NSLocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                            SHOW_HUD_DELAY(JELocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                             NSLog(@"保存成功");
                                         });
                                     }
                                     else {
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                            SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                             NSLog(@"保存视频预览图失败");
                                         });
                                     }
                                 }
                                 else {
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                                        SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
                                         NSLog(@"保存原视频失败");
                                     });
                                 }
@@ -4602,9 +4903,16 @@ typedef void(^getStillImageBlock)(UIImage *image);
 
                 //如果在 移动延时 && 移动变焦 模式，不允许跟踪
                 if (_shootingMode == videoLocusTimeLapse || _shootingMode == videoMovingZoom) {
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Tracking will not function in the current mode", nil), [UIApplication sharedApplication].keyWindow, 1.0);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Tracking will not function in the current mode", nil), [UIApplication sharedApplication].keyWindow, 1.0);
                     return;
                 }
+                
+//                if ([JEGetDeviceVersion deviceVersion] > iPhone_X) {
+//                    if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
+//                        SHOW_HUD_DELAY(JELocalizedString(@"Face tracking in 3840x2160 is temporarily not supported", nil), [UIApplication sharedApplication].keyWindow, 1);
+//                        return;
+//                    }
+//                }
                 
                 if (!_isVideo) {
                     [self bottomToolBarButtonAction:222];
@@ -4633,7 +4941,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 
                 //在非 普通 && 延时拍摄 模式，不允许跟踪
                 if (!(_shootingMode == videoNormal || _shootingMode == videoTimeLapse)) {
-                    SHOW_HUD_DELAY(NSLocalizedString(@"Tracking will not function in the current mode", nil), [UIApplication sharedApplication].keyWindow, 1.0);
+                    SHOW_HUD_DELAY(JELocalizedString(@"Tracking will not function in the current mode", nil), [UIApplication sharedApplication].keyWindow, 1.0);
                     return;
                 }
                 
@@ -4665,19 +4973,17 @@ typedef void(^getStillImageBlock)(UIImage *image);
             if (USER_GET_SaveVideoResolution_Integer == 2) {
                 if ([_stillCamera cameraPosition] == AVCaptureDevicePositionFront) {
                     self.isFrontCamera = NO;
-                    SHOW_HUD_DELAY(NSLocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
+                    SHOW_HUD_DELAY(JELocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
                 }
             }
-            
-            [self changeStillcameraVideoResolution:!_isVideo];  //修改屏幕分辨率
-            
-            [self setVideoStabilizationMode];   //光学防抖
             
             //清空追踪状态
             if (_middleToolBar.trackStay.isSelected) {
                 _middleToolBar.trackStay.selected = NO;
                 [self cleanTrackState];
             }
+            
+            [self changeStillcameraVideoResolution:!_isVideo];  //修改屏幕分辨率
             
             POPBasicAnimation *ani = [POPBasicAnimation animationWithPropertyNamed:kPOPViewFrame];
             ani.duration = 0.5;
@@ -4698,6 +5004,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 else {
                     toValue = CGRectMake(_bottomToolBar.shootSwitchButton.frame.size.width, 0, _bottomToolBar.shootSwitchButton.frame.size.width, _bottomToolBar.shootSwitchButton.frame.size.width);
                 }
+                
             }else{
                 //拍照
                 _bottomToolBar.shootSwitchPhoto.image = [UIImage imageNamed:@"icon_shootSwitchPhoto_select"];
@@ -4720,7 +5027,13 @@ typedef void(^getStillImageBlock)(UIImage *image);
             
             [_bottomToolBar.shootSwitchTone pop_addAnimation:ani forKey:@"rect"];
             
-            [self restoreZoom];
+            //复原到原始大小
+            if (_effectiveScale != 1.0) {
+                [self restoreZoom:1.0];
+            }
+            if (_isMovingZoomShowing == YES) {
+                self.isMovingZoomShowing = NO;
+            }
             if (_isTimeLapseShowing) {
                 self.isTimeLapseShowing = NO;
             }
@@ -4740,6 +5053,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
             NSLog(@"菜单键");
             //拍摄模式菜单
             self.isSubShowing = !_isSubShowing;
+            if (_isMovingZoomShowing) {
+                self.isMovingZoomShowing = NO;
+            }
             if (_isTimeLapseShowing) {
                 self.isTimeLapseShowing = NO;
             }
@@ -4763,7 +5079,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
             NSLog(@"切换镜头");
             //前后置摄像头切换
             if (_stillCamera.captureSessionPreset == AVCaptureSessionPreset3840x2160) {
-                SHOW_HUD_DELAY(NSLocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
+                SHOW_HUD_DELAY(JELocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
                 return;
             }
             
@@ -4896,6 +5212,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         {
             //录像普通
             self.shootingMode = videoNormal;
+            if (_isMovingZoomShowing) {
+                self.isMovingZoomShowing = NO;
+            }
             if (_isTimeLapseShowing) {
                 self.isTimeLapseShowing = NO;
             }
@@ -4906,7 +5225,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 _motionLapsePopView.pointPicArray = _motionLapsePointArray;
                 [_motionLapsePopView.getPointTableView reloadData];
             }
-            [self restoreZoom];
+            //复原到原始大小
+            if (_effectiveScale != 1.0) {
+                [self restoreZoom:1.0];
+            }
         }
             break;
             
@@ -4914,6 +5236,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
         {
             //录像移动变焦
             self.shootingMode = videoMovingZoom;
+            //清空追踪状态
+            if (_middleToolBar.trackStay.isSelected) {
+                _middleToolBar.trackStay.selected = NO;
+                [self cleanTrackState];
+            }
             if (_isTimeLapseShowing) {
                 self.isTimeLapseShowing = NO;
             }
@@ -4925,16 +5252,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 [_motionLapsePopView.getPointTableView reloadData];
             }
             
-            _effectiveScale = 3.0;
-            [CATransaction begin];
-            [CATransaction setAnimationDuration:0.1];
-            AVCaptureDevice *captureDevice = self.stillCamera.inputCamera;
-            NSError *error;
-            if ([captureDevice lockForConfiguration:&error]) {
-                [captureDevice rampToVideoZoomFactor:3.0 withRate:50.0f];
-                [captureDevice unlockForConfiguration];
-            }
-            [CATransaction commit];
+            self.isMovingZoomShowing = !_isMovingZoomShowing;
         }
             break;
             
@@ -4942,6 +5260,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         {
             //录像慢动作
             self.shootingMode = videoSlowMotion;
+            if (_isMovingZoomShowing) {
+                self.isMovingZoomShowing = NO;
+            }
             if (_isTimeLapseShowing) {
                 self.isTimeLapseShowing = NO;
             }
@@ -4952,7 +5273,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 _motionLapsePopView.pointPicArray = _motionLapsePointArray;
                 [_motionLapsePopView.getPointTableView reloadData];
             }
-            [self restoreZoom];
+            //复原到原始大小
+            if (_effectiveScale != 1.0) {
+                [self restoreZoom:1.0];
+            }
         }
             break;
             
@@ -4960,6 +5284,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         {
             //录像轨迹延时
             self.shootingMode = videoLocusTimeLapse;
+            if (_isMovingZoomShowing) {
+                self.isMovingZoomShowing = NO;
+            }
             if (_isTimeLapseShowing) {
                 self.isTimeLapseShowing = NO;
             }
@@ -4971,7 +5298,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 [_motionLapsePopView.getPointTableView reloadData];
             }
             self.isMotionLapseShowing = !_isMotionLapseShowing;
-            [self restoreZoom];
+            //复原到原始大小
+            if (_effectiveScale != 1.0) {
+                [self restoreZoom:1.0];
+            }
         }
             break;
             
@@ -4979,6 +5309,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         {
             //录像延时
             self.shootingMode = videoTimeLapse;
+            if (_isMovingZoomShowing) {
+                self.isMovingZoomShowing = NO;
+            }
             if (_isMotionLapseShowing) {
                 self.isMotionLapseShowing = NO;
                 [[JEBluetoothManager shareBLESingleton] BPQuitMotionLapseMode];
@@ -4987,7 +5320,10 @@ typedef void(^getStillImageBlock)(UIImage *image);
                 [_motionLapsePopView.getPointTableView reloadData];
             }
             self.isTimeLapseShowing = !_isTimeLapseShowing;
-            [self restoreZoom];
+            //复原到原始大小
+            if (_effectiveScale != 1.0) {
+                [self restoreZoom:1.0];
+            }
         }
             break;
         
@@ -5120,9 +5456,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         case 2: {
             //云台校准
             if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Pan-Tilt Calibration", nil) message:NSLocalizedString(@"Cradle head calibration is about to be carried out.", nil) preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Pan-Tilt Calibration", nil) message:JELocalizedString(@"Cradle head calibration is about to be carried out.", nil) preferredStyle:UIAlertControllerStyleAlert];
                 
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     //确定进入陀螺仪校准
                     self.gyroCalibrationVC = [[JEGyroCalibrationViewController alloc] init];
                     self.isGyroCalibrating = YES;
@@ -5132,14 +5468,14 @@ typedef void(^getStillImageBlock)(UIImage *image);
                     }];
                 }]];
                 
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     //取消
                 }]];
                 
                 [self presentViewController:alertC animated:YES completion:nil];
             }
             else {
-                SHOW_HUD_DELAY(NSLocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
             }
         }
             break;
@@ -5147,21 +5483,21 @@ typedef void(^getStillImageBlock)(UIImage *image);
         case 4: {
             //加速度校准
             if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Acceleration Calibration", nil) message:NSLocalizedString(@"The consequences might be quite serious if acceleration calibration failed. Are you sure to continue to calibrate?", nil) preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Acceleration Calibration", nil) message:JELocalizedString(@"The consequences might be quite serious if acceleration calibration failed. Are you sure to continue to calibrate?", nil) preferredStyle:UIAlertControllerStyleAlert];
                 
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     self.accelerationVC = [[SRMotionViewController alloc] init];
                     self.isAccelerating = YES;
                     [self presentViewController:_accelerationVC animated:YES completion:nil];
                 }]];
                 
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+                [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
                 
                 [self presentViewController:alertC animated:YES completion:nil];
                 
             }
             else {
-                SHOW_HUD_DELAY(NSLocalizedString(@"Please connect the device", nil), self.view, 1.5);
+                SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
             }
         }
             break;
@@ -5173,6 +5509,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
 
 //分辨率设置
 - (void)setCameraVideoResMode:(NSInteger)mode {
+    //清空追踪状态
+    if (_middleToolBar.trackStay.isSelected) {
+        _middleToolBar.trackStay.selected = NO;
+        [self cleanTrackState];
+    }
+    
     [self changeStillcameraVideoResolution:_isVideo];
 }
 
@@ -5216,11 +5558,12 @@ typedef void(^getStillImageBlock)(UIImage *image);
                     if (_updateFirmwareDataLength != 0) {
                         //进入固件更新模式
                         [[JEBluetoothManager shareBLESingleton] BPEnterFirmwareUpdate];
+                        blockSelf.isFirmwareUpdating = YES;
                     }
                     else {
                         //固件更新内容为空
                         
-                        SHOW_HUD_DELAY(NSLocalizedString(@"The current firmware upgrade package is empty. Please retrieve server data again.", nil), blockSelf.view, 1.5);
+                        SHOW_HUD_DELAY(JELocalizedString(@"The current firmware upgrade package is empty. Please retrieve server data again.", nil), blockSelf.view, 1.5);
                         
                         return;
                     }
@@ -5237,11 +5580,105 @@ typedef void(^getStillImageBlock)(UIImage *image);
             [self screenRotate:nil];
         }
         else {
-            SHOW_HUD_DELAY(NSLocalizedString(@"Your firmware version is up to date", nil), self.view, 1.0);
+            SHOW_HUD_DELAY(JELocalizedString(@"Your firmware version is up to date", nil), self.view, 1.0);
         }
     }
     else {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Please connect the device", nil), self.view, 1.5);
+        SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
+    }
+}
+
+//蓝牙升级按钮
+- (void)bluetoothUpdateAction {
+    NSLog(@"蓝牙升级");
+    if ([[JEBluetoothManager shareBLESingleton] getBLEState] == Connect) {
+    
+        if (_isDeviceSetting) {
+            self.isDeviceSetting = NO;
+        }
+        
+        _updateFirmwareView = [[JEUpdateFirmwareView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 100, self.view.frame.size.width)];
+        _updateFirmwareView.center = self.view.center;
+        _updateFirmwareView.updateConfirmBtn.hidden = NO;
+        _updateFirmwareView.updateCancelBtn.hidden = NO;
+        _updateFirmwareView.progressView.hidden = YES;
+        self.isClearViewShowing = YES;
+        
+        [_updateFirmwareView.updateTextView setText:self.bleUpdateString];
+        
+        //修改服务为 OTA 服务
+//        [JEBluetoothManager shareBLESingleton].service = [JEBluetoothManager shareBLESingleton].otaService;
+        
+        __block JESmartCameraViewController *blockSelf = self;
+        
+        //固件升级确认
+        _updateFirmwareView.confirmBlock = ^{
+            
+            NSMutableArray *params = [NSMutableArray array];
+            
+            if (_controllerMode == cameraM1) {
+                [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"5", @"ProdID", nil]];
+            }
+            else if (_controllerMode == cameraP1) {
+                [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"8", @"ProdID", nil]];
+            }
+            
+            [JEWebManager loadDataCenter:params methodName:@"SR_GetLastFirmwareBinData" result:^(NSDictionary *resultDic, NSString *error) {
+                
+                if (error) {
+                    
+                    SHOW_HUD_DELAY(JELocalizedString(@"Network Error", nil), blockSelf.view, 1);
+                    
+                    return;
+                }
+                
+                _updateBLEDataString = resultDic[@"SOAP-ENV:Body"][@"NS1:SR_GetLastFirmwareBinDataResponse"][@"return"][@"__text"];
+                _updateBLEDataLength = [_updateBLEDataString length];
+                
+                if (_updateBLEDataLength != 0) {
+                    //进入固件更新模式
+                    [[JEBluetoothManager shareBLESingleton] BPOtaSendUpdateStart];
+                    
+                    blockSelf.isBLEUpdating = YES;
+                    
+                    //隐藏确认和取消键，显示进度条
+                    blockSelf.updateFirmwareView.updateConfirmBtn.hidden = YES;
+                    blockSelf.updateFirmwareView.updateCancelBtn.hidden = YES;
+                    blockSelf.updateFirmwareView.progressView.hidden = NO;
+                    
+                    //进度条开始
+                    [blockSelf.updateFirmwareView.progressView start];
+                    
+                    [blockSelf doSomeWorkWithProgress];
+                    
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        //开始发第一包
+                        [blockSelf bleOTASendData];
+                    });
+                    
+                }
+                else {
+                    //固件更新内容为空
+                    
+                    SHOW_HUD_DELAY(JELocalizedString(@"The current firmware upgrade package is empty. Please retrieve server data again.", nil), blockSelf.view, 1.5);
+                    
+                    return;
+                }
+            }];
+            
+        };
+        
+        //固件升级取消
+        _updateFirmwareView.cancelBlock = ^{
+            [blockSelf.updateFirmwareView removeFromSuperview];
+            blockSelf.isClearViewShowing = NO;
+        };
+        
+        [self.view addSubview:_updateFirmwareView];
+        [self screenRotate:nil];
+    }
+    else {
+        SHOW_HUD_DELAY(JELocalizedString(@"Please connect the device", nil), self.view, 1.5);
     }
 }
 
@@ -5289,6 +5726,124 @@ typedef void(^getStillImageBlock)(UIImage *image);
     [self setupAuxLineView];
 }
 
+#pragma mark - OTAUpdate
+- (void)bleOTASendData {
+    
+    while (_updateBLEDataString.length >= 32) {
+//        if ((_otaDataIndex % 5 == 0) && (_otaDataIndex != 0)) {
+//
+//        }
+        
+        NSString *currDataString = [_updateBLEDataString substringWithRange:NSMakeRange(0, 32)];
+        
+//        [self doSomeWorkWithProgress];
+        
+        {
+            float progress = 1.0f - (float)[_updateBLEDataString length]/(float)_updateBLEDataLength;
+            NSLog(@"progress = %f", progress);
+            [_updateFirmwareView.progressView setProgess:progress];
+        }
+        
+        //计算校验位
+        NSData *currData = [self convertHexStrToData:currDataString];
+        
+        Byte bytes[20];
+        bytes[0] = (_otaDataIndex & 255);
+        bytes[1] = ((_otaDataIndex >> 8) & 255);
+        
+        //转成 byte 数组
+        NSUInteger len = [currData length];
+        Byte *byteData = (Byte*)malloc(len);
+        memcpy(byteData, [currData bytes], len);
+        
+        for (int i = 0; i < currData.length; i++) {
+            bytes[i + 2] = byteData[i];
+        }
+        
+        int crc = [self bleOTACRC16:[NSData dataWithBytes:bytes length:20]];
+        
+        //计算校验位
+        bytes[currData.length + 2] = (crc & 255);
+        bytes[currData.length + 3] = ((crc >> 8) & 255);
+        
+        self.otaDataIndex = self.otaDataIndex + 1;
+        
+        [[JEBluetoothManager shareBLESingleton] sendOTAMsg:[NSData dataWithBytes:bytes length:20]];
+        
+        [_updateBLEDataString deleteCharactersInRange:NSMakeRange(0, 32)]; //删除上一包内容
+        
+        [NSThread sleepForTimeInterval:0.02];
+    }
+    if ((_updateBLEDataString.length < 32) && (_updateBLEDataString.length != 0)) {
+        NSString *currDataString = [_updateBLEDataString substringWithRange:NSMakeRange(0, _updateBLEDataString.length)];
+        
+        //计算校验位
+        NSData *currData = [self convertHexStrToData:currDataString];
+        
+        Byte bytes[currData.length + 4];
+        bytes[0] = (_otaDataIndex & 255);
+        bytes[1] = ((_otaDataIndex >> 8) & 255);
+        
+        //转成 byte 数组
+        NSUInteger len = [currData length];
+        Byte *byteData = (Byte*)malloc(len);
+        memcpy(byteData, [currData bytes], len);
+        
+        for (int i = 0; i < currData.length; i++) {
+            bytes[i + 2] = byteData[i];
+        }
+        
+        int crc = [self bleOTACRC16:[NSData dataWithBytes:bytes length:(currData.length + 4)]];
+        
+        //计算校验位
+        bytes[currData.length + 2] = (crc & 255);
+        bytes[currData.length + 3] = ((crc >> 8) & 255);
+        
+        [[JEBluetoothManager shareBLESingleton] sendOTAMsg:[NSData dataWithBytes:bytes length:((currData.length + 4))]];
+        
+    }
+    if (_updateBLEDataString.length == 0) {
+        self.isBLEUpdating = NO;
+        
+//        UIAlertController *alert = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Information", nil) message:JELocalizedString(@"Firmware Updated", nil) preferredStyle:UIAlertControllerStyleAlert];
+        
+//        [alert addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+//            self.isClearViewShowing = NO;
+        
+            //结束升级
+            [[JEBluetoothManager shareBLESingleton] BPOtasendUpdateEnd];
+        
+//        }]];
+        
+//        [_updateFirmwareView removeFromSuperview];
+        
+//        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+- (int)bleOTACRC16:(NSData *)packet {
+ 
+    NSUInteger length = packet.length - 2;
+    
+    //转成 byte 数组
+    NSUInteger len = [packet length];
+    Byte *byteData = (Byte*)malloc(len);
+    memcpy(byteData, [packet bytes], len);
+    
+    NSArray *poly = @[@0 , @-24575];
+    
+    int crc = 0x0000ffff;
+
+    for (int j = 0; j < length; j++) {
+        int ds = byteData[j];
+        for (int i = 0; i < 8; i++) {
+            crc = (crc >> 1) ^ ([poly[(crc ^ ds) & 1] intValue] & 0x0000ffff);
+            ds >>= 1;
+        }
+    }
+    return crc;
+}
+
 #pragma mark - NSURLSessionDataDelegate
 //1.接收到服务器响应的时候调用该方法
 -(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
@@ -5317,9 +5872,9 @@ typedef void(^getStillImageBlock)(UIImage *image);
         NSString *serverVersionUpdate = [serverStr substringWithRange:NSMakeRange(1, 1)];
         
         if ([USER_GET_SaveVersionNewAPP_NSString compare:USER_GET_SaveVersionAPP_NSString] == NSOrderedDescending) {
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Version update", nil) message:NSLocalizedString(@"There is a new version update.", nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:JELocalizedString(@"Version update", nil) message:JELocalizedString(@"There is a new version update.", nil) preferredStyle:UIAlertControllerStyleAlert];
             
-            [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Confirm", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
                 NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
                 NSString *bundleId = infoDict[@"CFBundleIdentifier"];
@@ -5350,7 +5905,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
             
             if ([serverVersionUpdate isEqualToString:@"F"]) {
                 //非强制升级，增加取消键
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [alertC addAction:[UIAlertAction actionWithTitle:JELocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     
                 }]];
             }
@@ -5372,7 +5927,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
     {
     }
     else {
-        SHOW_HUD_DELAY(NSLocalizedString(@"Failed to request information from server", nil), self.view, 1.5);
+        SHOW_HUD_DELAY(JELocalizedString(@"Failed to request information from server", nil), self.view, 1.5);
     }
 }
 
@@ -5492,11 +6047,13 @@ typedef void(^getStillImageBlock)(UIImage *image);
  判断是否支持光学防抖
  */
 - (void)setVideoStabilizationMode {
+    NSLog(@"开启防抖");
     NSError *error;
     [self.stillCamera.inputCamera lockForConfiguration:&error];
     if (!error) {
         if ([_stillCamera.inputCamera.activeFormat isVideoStabilizationModeSupported:AVCaptureVideoStabilizationModeStandard]) {
             _stillCamera.videoCaptureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeStandard;
+            
             /*
              视频防抖动模式
              typedef NS_ENUM(NSInteger, AVCaptureVideoStabilizationMode) {
@@ -5510,6 +6067,21 @@ typedef void(^getStillImageBlock)(UIImage *image);
         else {
             _stillCamera.videoCaptureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeOff;
         }
+        
+        [self.stillCamera.inputCamera unlockForConfiguration];
+    }
+}
+
+/**
+ 关闭光学防抖
+ */
+- (void)setVideoStabilizationModeClose {
+    NSLog(@"关闭防抖");
+    NSError *error;
+    [self.stillCamera.inputCamera lockForConfiguration:&error];
+    if (!error) {
+        
+        _stillCamera.videoCaptureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeOff;
         
         [self.stillCamera.inputCamera unlockForConfiguration];
     }
@@ -5613,35 +6185,97 @@ typedef void(^getStillImageBlock)(UIImage *image);
  @param video 是否在录像模式
  */
 - (void)changeStillcameraVideoResolution:(BOOL)video {
+    
+    [self.stillCamera stopCameraCapture];
+    
     if (video) {
-        NSInteger videoResolutionInt = USER_GET_SaveVideoResolution_Integer;
-        switch (videoResolutionInt) {
-            case 0:
-                if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset1280x720) {
-                    self.stillCamera.captureSessionPreset = AVCaptureSessionPreset1280x720;
-                }
-                break;
-                
-            case 1:
-                if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset1920x1080) {
-                    self.stillCamera.captureSessionPreset = AVCaptureSessionPreset1920x1080;
-                }
-                break;
-                
-            case 2:
-                if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset3840x2160) {
-                    self.stillCamera.captureSessionPreset = AVCaptureSessionPreset3840x2160;
-                }
-                break;
-                
-            default:
-                break;
+        if (0) {
+//        if ([JEGetDeviceVersion deviceVersion] > iPhone_X) {
+            //x 系列以上重新初始化 解决从 4k 分辨率切换到低分辨率导致花屏的 bug
+            
+            switch (USER_GET_SaveVideoResolution_Integer) {
+                case 0:
+                    self.stillCamera = [[GPUImageStillCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1280x720 cameraPosition:[_stillCamera cameraPosition]];
+                    break;
+
+                case 1:
+                    self.stillCamera = [[GPUImageStillCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1920x1080 cameraPosition:[_stillCamera cameraPosition]];
+                    break;
+
+                case 2:
+                    if (_isFrontCamera) {
+                        SHOW_HUD_DELAY(JELocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
+                        USER_SET_SaveVideoResolution_Integer(1);
+                        [_cameraSettingView.optionsView.tableView reloadData];
+                        break;
+                    }
+                    else {
+                        self.stillCamera = [[GPUImageStillCamera alloc] initWithSessionPreset:AVCaptureSessionPreset3840x2160 cameraPosition:[_stillCamera cameraPosition]];
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            
+            _stillCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+            _stillCamera.horizontallyMirrorFrontFacingCamera = YES;
+            _stillCamera.horizontallyMirrorRearFacingCamera = NO;
+            _stillCamera.delegate = self;
+            [_stillCamera addTarget:_captureFilter];
+            [_captureFilter addTarget:_cameraOutputView];
+            
+            //重新开启光学防抖
+            [self setVideoStabilizationMode];
+            
+        }
+        else {
+            switch (USER_GET_SaveVideoResolution_Integer) {
+                case 0:
+                    if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset1280x720) {
+                        self.stillCamera.captureSessionPreset = AVCaptureSessionPreset1280x720;
+                    }
+                    break;
+                    
+                case 1:
+                    if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset1920x1080) {
+                        self.stillCamera.captureSessionPreset = AVCaptureSessionPreset1920x1080;
+                    }
+                    break;
+                    
+                case 2:
+                    if (_isFrontCamera) {
+                        SHOW_HUD_DELAY(JELocalizedString(@"The front-facing camera does not support 4k resolution", nil), self.view, 2);
+                        break;
+                    }
+                    else {
+                        if (_stillCamera.captureSessionPreset != AVCaptureSessionPreset3840x2160) {
+                            self.stillCamera.captureSessionPreset = AVCaptureSessionPreset3840x2160;
+                        }
+                    }
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
         }
     }
     else {
         if (_isFilm) {
             if (_stillCamera.captureSessionPreset != _highestResolution) {
-                self.stillCamera.captureSessionPreset = _highestResolution;
+                //电影镜头拍照模式下使用录像分辨率 解决屏幕变形问题
+                if (_highestResolution == AVCaptureSessionPreset3840x2160) {
+                    if (_isFrontCamera) {
+                        self.stillCamera.captureSessionPreset = AVCaptureSessionPreset1920x1080;
+                    }
+                    else {
+                        self.stillCamera.captureSessionPreset = _highestResolution;
+                    }
+                }
+                else {
+                    self.stillCamera.captureSessionPreset = _highestResolution;
+                }
             }
         }
         else {
@@ -5650,8 +6284,11 @@ typedef void(^getStillImageBlock)(UIImage *image);
             }
         }
     }
-    //修改跟踪的分辨率
+    
     [self configRatioByNotify];
+    
+    [_stillCamera startCameraCapture];
+
 }
 
 //更改录制时间字符串
@@ -5691,16 +6328,18 @@ typedef void(^getStillImageBlock)(UIImage *image);
 }
 
 //复原zoom的大小 : 1.0表示缩放回原来的大小
-- (void)restoreZoom{
+- (void)restoreZoom:(CGFloat)size {
+    NSLog(@"size = %f", size);
     //显式事务
     //修改执行时间
     [CATransaction begin];
     //动画执行时间
     [CATransaction setAnimationDuration:0.1];
     AVCaptureDevice *captureDevice = self.stillCamera.inputCamera;
+    self.effectiveScale = size;
     NSError *error;
     if ([captureDevice lockForConfiguration:&error]) {
-        [captureDevice rampToVideoZoomFactor:1.0 withRate:50.0f];
+        [captureDevice rampToVideoZoomFactor:size withRate:50.0f];
         [captureDevice unlockForConfiguration];
     }
     [CATransaction commit];
@@ -6072,15 +6711,23 @@ typedef void(^getStillImageBlock)(UIImage *image);
 /**
  更新固件升级进度条
  */
-- (void)doSomeWorkWithProgress{
-    
+- (void)doSomeWorkWithProgress {
+
     dispatch_async(dispatch_get_main_queue(), ^{
+    
+        float progress = 0.0;
         
-        float  progress = 1.0f - (float)[_updateFirmwareDataString length]/(float)_updateFirmwareDataLength;
+        if (_isFirmwareUpdating) {
+            progress = 1.0f - (float)[_updateFirmwareDataString length]/(float)_updateFirmwareDataLength;
+        }
+        else if (_isBLEUpdating) {
+            NSLog(@"_updateBLEDataString.length = %ld, _updateBLEDataLength = %ld", _updateBLEDataString.length, (long)_updateBLEDataLength);
+            progress = 1.0f - (float)[_updateBLEDataString length]/(float)_updateBLEDataLength;
+        }
         
         [_updateFirmwareView.progressView setProgess:progress];
         
-        float por = progress * 100;
+//        float por = progress * 100;
 
     });
 }
@@ -6093,7 +6740,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
     BOOL savePano = [[NSUserDefaults standardUserDefaults]boolForKey:@"SavaOrignPano"];         //保存全景照片原图
     
     if(savePano){
-        [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.05), @"hint":NSLocalizedString(@"SaveingOrigin pano images...", nil)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.05), @"hint":JELocalizedString(@"SaveingOrigin pano images...", nil)}];
         
         NSUInteger panoIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"panoIndex"];
         
@@ -6120,7 +6767,7 @@ typedef void(^getStillImageBlock)(UIImage *image);
         }
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.1), @"hint":NSLocalizedString(@"Preparing images...", nil)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.1), @"hint":JELocalizedString(@"Preparing images...", nil)}];
     
     int panoQ = [[[NSUserDefaults standardUserDefaults] objectForKey:@"panoQ"] intValue];
     CGFloat quality = 0.1;

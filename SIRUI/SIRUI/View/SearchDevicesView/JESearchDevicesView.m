@@ -56,7 +56,7 @@
         _headView.backgroundColor = [UIColor blackColor];
         _headView.alpha = 0.5;
         _headLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _headView.frame.size.width, _headView.frame.size.height)];
-        _headLabel.text = NSLocalizedString(@"Search device", nil);
+        _headLabel.text = JELocalizedString(@"Search device", nil);
         _headLabel.textColor = [UIColor whiteColor];
         _headLabel.textAlignment = NSTextAlignmentCenter;
         _headLabel.backgroundColor = [UIColor clearColor];

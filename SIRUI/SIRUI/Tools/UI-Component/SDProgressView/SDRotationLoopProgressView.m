@@ -38,7 +38,7 @@
     
     CGFloat xCenter = rect.size.width * 0.5;
     CGFloat yCenter = rect.size.height * 0.5;
-    [[UIColor blackColor] set];
+    [[UIColor whiteColor] set];
     
     CGContextSetLineWidth(ctx, 4);
     CGFloat to = - M_PI * 0.06 + _angleInterval; // 初始值0.05
@@ -47,10 +47,10 @@
     CGContextStrokePath(ctx);
     
     // 加载时显示的文字
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    attributes[NSFontAttributeName] = [UIFont boldSystemFontOfSize:13 * SDProgressViewFontScale];
-    attributes[NSForegroundColorAttributeName] = [UIColor blackColor];
-    [self setCenterProgressText:NSLocalizedString(@"In calibration...", nil) withAttributes:attributes];
+//    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+//    attributes[NSFontAttributeName] = [UIFont boldSystemFontOfSize:13 * SDProgressViewFontScale];
+//    attributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
+//    [self setCenterProgressText:JELocalizedString(@"In calibration...", nil) withAttributes:attributes];
 }
 
 @end

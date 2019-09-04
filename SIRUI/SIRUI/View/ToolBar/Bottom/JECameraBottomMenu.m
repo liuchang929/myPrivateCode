@@ -63,7 +63,7 @@
     [_subPicSingle addTarget:self action:@selector(subViewButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [_subPicSingle setImage:[UIImage imageNamed:subPicArray[0]]         forState:UIControlStateNormal];
     [_subPicSingle setImage:[UIImage imageNamed:subPicSelectArray[0]]   forState:UIControlStateSelected];
-    [_subPicSingle setTitle:NSLocalizedString(@"Single", nil) forState:UIControlStateNormal];
+    [_subPicSingle setTitle:JELocalizedString(@"Single", nil) forState:UIControlStateNormal];
     _subPicSingle.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subPicSingle.titleLabel.adjustsFontSizeToFitWidth = YES;
     _subPicSingle.selected = YES;
@@ -78,7 +78,7 @@
     [_subPicPano addTarget:self action:@selector(subViewButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [_subPicPano setImage:[UIImage imageNamed:subPicArray[1]]       forState:UIControlStateNormal];
     [_subPicPano setImage:[UIImage imageNamed:subPicSelectArray[1]] forState:UIControlStateSelected];
-    [_subPicPano setTitle:NSLocalizedString(@"Pano", nil) forState:UIControlStateNormal];
+    [_subPicPano setTitle:JELocalizedString(@"Pano", nil) forState:UIControlStateNormal];
     _subPicPano.titleLabel.textAlignment = NSTextAlignmentCenter;
     _subPicPano.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subPicPano.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -93,7 +93,7 @@
     [_subPicNL addTarget:self action:@selector(subViewButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [_subPicNL setImage:[UIImage imageNamed:subPicArray[2]]         forState:UIControlStateNormal];
     [_subPicNL setImage:[UIImage imageNamed:subPicSelectArray[2]]   forState:UIControlStateSelected];
-    [_subPicNL setTitle:NSLocalizedString(@"Sodoku", nil) forState:UIControlStateNormal];
+    [_subPicNL setTitle:JELocalizedString(@"Sodoku", nil) forState:UIControlStateNormal];
     _subPicNL.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subPicNL.titleLabel.adjustsFontSizeToFitWidth = YES;
     _subPicNL.imageView.contentMode = UIViewContentModeScaleToFill;
@@ -312,7 +312,7 @@
     [_subVideoNormal setImage:[UIImage imageNamed:subVideoArray[0]] forState:UIControlStateNormal];
     [_subVideoNormal setImage:[UIImage imageNamed:subVideoSelectArray[0]] forState:UIControlStateSelected];
     _subVideoNormal.selected = YES;
-    [_subVideoNormal setTitle:NSLocalizedString(@"Normal", nil) forState:UIControlStateNormal];
+    [_subVideoNormal setTitle:JELocalizedString(@"Normal", nil) forState:UIControlStateNormal];
     _subVideoNormal.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subVideoNormal.titleLabel.adjustsFontSizeToFitWidth = YES;
     _subVideoNormal.imageView.contentMode = UIViewContentModeScaleToFill;
@@ -326,7 +326,7 @@
     [_subVideoMovingZoom addTarget:self action:@selector(subViewButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [_subVideoMovingZoom setImage:[UIImage imageNamed:subVideoArray[1]] forState:UIControlStateNormal];
     [_subVideoMovingZoom setImage:[UIImage imageNamed:subVideoSelectArray[1]] forState:UIControlStateSelected];
-    [_subVideoMovingZoom setTitle:NSLocalizedString(@"Motion Zoom", nil) forState:UIControlStateNormal];
+    [_subVideoMovingZoom setTitle:JELocalizedString(@"Motion Zoom", nil) forState:UIControlStateNormal];
     _subVideoMovingZoom.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subVideoMovingZoom.titleLabel.adjustsFontSizeToFitWidth = YES;
     _subVideoMovingZoom.imageView.contentMode = UIViewContentModeScaleToFill;
@@ -341,7 +341,7 @@
     [_subVideoSlowMotion addTarget:self action:@selector(subViewButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [_subVideoSlowMotion setImage:[UIImage imageNamed:subVideoArray[2]] forState:UIControlStateNormal];
     [_subVideoSlowMotion setImage:[UIImage imageNamed:subVideoSelectArray[2]] forState:UIControlStateSelected];
-    [_subVideoSlowMotion setTitle:NSLocalizedString(@"Slow Motion", nil) forState:UIControlStateNormal];
+    [_subVideoSlowMotion setTitle:JELocalizedString(@"Slow Motion", nil) forState:UIControlStateNormal];
     _subVideoSlowMotion.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subVideoSlowMotion.titleLabel.adjustsFontSizeToFitWidth = YES;
     _subVideoSlowMotion.imageView.contentMode = UIViewContentModeScaleToFill;
@@ -356,7 +356,7 @@
     [_subVideoLocusTimeLapse addTarget:self action:@selector(subViewButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [_subVideoLocusTimeLapse setImage:[UIImage imageNamed:subVideoArray[3]] forState:UIControlStateNormal];
     [_subVideoLocusTimeLapse setImage:[UIImage imageNamed:subVideoSelectArray[3]] forState:UIControlStateSelected];
-    [_subVideoLocusTimeLapse setTitle:NSLocalizedString(@"Path Lapse", nil) forState:UIControlStateNormal];
+    [_subVideoLocusTimeLapse setTitle:JELocalizedString(@"Path Lapse", nil) forState:UIControlStateNormal];
     _subVideoLocusTimeLapse.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subVideoLocusTimeLapse.titleLabel.adjustsFontSizeToFitWidth = YES;
     _subVideoLocusTimeLapse.imageView.contentMode = UIViewContentModeScaleToFill;
@@ -370,7 +370,7 @@
     [_subVideoTimeLapse addTarget:self action:@selector(subViewButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [_subVideoTimeLapse setImage:[UIImage imageNamed:subVideoArray[4]] forState:UIControlStateNormal];
     [_subVideoTimeLapse setImage:[UIImage imageNamed:subVideoSelectArray[4]] forState:UIControlStateSelected];
-    [_subVideoTimeLapse setTitle:NSLocalizedString(@"Time Lapse", nil) forState:UIControlStateNormal];
+    [_subVideoTimeLapse setTitle:JELocalizedString(@"Time Lapse", nil) forState:UIControlStateNormal];
     _subVideoTimeLapse.titleLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
     _subVideoTimeLapse.titleLabel.adjustsFontSizeToFitWidth = YES;
     _subVideoTimeLapse.imageView.contentMode = UIViewContentModeScaleToFill;

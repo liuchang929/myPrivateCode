@@ -80,11 +80,11 @@
 }
 #pragma mark - 设置顶部导航栏
 - (void)setNavViewUI {
-    [self addNavViewTitle:NSLocalizedString(@"Image filters",nil)];
+    [self addNavViewTitle:JELocalizedString(@"Image filters",nil)];
     [self addBackButton];
     [self.backBtn addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addNextButton];
-    [self.nextBtn setTitle:NSLocalizedString(@"Save",nil) forState:UIControlStateNormal];
+    [self.nextBtn setTitle:JELocalizedString(@"Save",nil) forState:UIControlStateNormal];
     [self.nextBtn addTarget:self action:@selector(nextBtnClick) forControlEvents:(UIControlEventTouchUpInside)];
 }
 #pragma mark 继续按钮的点击事件
@@ -172,7 +172,7 @@
                         @"CIPhotoEffectTonal",
                                 nil];
         
-        _filtersView.filtersName = @[NSLocalizedString(@"Origin",nil),NSLocalizedString(@"Vintage",nil),NSLocalizedString(@"Black&White",nil),NSLocalizedString(@"Times",nil),NSLocalizedString(@"Fade",nil),NSLocalizedString(@"Developing",nil),NSLocalizedString(@"Chrome Yellow",nil),NSLocalizedString(@"Mono",nil),NSLocalizedString(@"Tone",nil)];
+        _filtersView.filtersName = @[JELocalizedString(@"Origin",nil),JELocalizedString(@"Vintage",nil),JELocalizedString(@"Black&White",nil),JELocalizedString(@"Times",nil),JELocalizedString(@"Fade",nil),JELocalizedString(@"Developing",nil),JELocalizedString(@"Chrome Yellow",nil),JELocalizedString(@"Mono",nil),JELocalizedString(@"Tone",nil)];
         
         _filtersView.imageFilter = self.filtersImg;
     }

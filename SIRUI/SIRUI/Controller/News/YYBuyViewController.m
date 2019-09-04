@@ -33,7 +33,7 @@
     
     [super viewDidLoad];
     
-//    _segment = [[UISegmentedControl alloc]initWithItems:@[NSLocalizedString(@"新闻",nil),NSLocalizedString(@"视频",nil)]];
+//    _segment = [[UISegmentedControl alloc]initWithItems:@[JELocalizedString(@"新闻",nil),JELocalizedString(@"视频",nil)]];
     
 //    _segment.selectedSegmentIndex = 0;
     

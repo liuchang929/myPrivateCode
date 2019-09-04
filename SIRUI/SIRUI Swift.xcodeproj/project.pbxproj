@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E700EC62431E078B09534C6 /* libPods-SIRUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCE0F14F210A4512629AACDF /* libPods-SIRUI.a */; };
+		1FF63ECA8B8CC36BCDD8D203 /* libPods-SIRUI Swift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A544C3727443BD9B9D99D1B /* libPods-SIRUI Swift.a */; };
 		BA00D96622715AAB0096A94F /* JECameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA00D96522715AAB0096A94F /* JECameraManager.m */; };
 		BA0937F12230BE77007AFEA9 /* icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA0937F02230BE77007AFEA9 /* icon.xcassets */; };
 		BA0B1895226978A400D71C53 /* JECustomFunctionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0B1894226978A400D71C53 /* JECustomFunctionView.m */; };
+		BA178F06230E8FD000333905 /* JEChangeLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = BA178F05230E8FD000333905 /* JEChangeLanguage.m */; };
 		BA1A220822802296004B5C12 /* JEPhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1A220622802296004B5C12 /* JEPhotoBrowserViewController.m */; };
 		BA1A222322816918004B5C12 /* UIView+layoutnew.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1A220C22816918004B5C12 /* UIView+layoutnew.m */; };
 		BA1A222422816918004B5C12 /* TOActivityCroppedImageProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1A220E22816918004B5C12 /* TOActivityCroppedImageProvider.m */; };
@@ -86,6 +87,7 @@
 		BA831B0E221F8B5500FB5BCD /* JESearchDevicesView.m in Sources */ = {isa = PBXBuildFile; fileRef = BA831B0D221F8B5500FB5BCD /* JESearchDevicesView.m */; };
 		BA831B12221F9D8A00FB5BCD /* JEBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA831B11221F9D8A00FB5BCD /* JEBluetoothManager.m */; };
 		BA831B15221FA31500FB5BCD /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA831B14221FA31500FB5BCD /* CoreBluetooth.framework */; };
+		BA8BE2FB2317737100DB2EF5 /* JEHitchcockSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8BE2FA2317737100DB2EF5 /* JEHitchcockSettingView.m */; };
 		BA8FE294226873030025AD33 /* JESettingPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8FE293226873030025AD33 /* JESettingPickerView.m */; };
 		BA9AB79622939F09002FA3E1 /* SRTimelapseRecordTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9AB79522939F09002FA3E1 /* SRTimelapseRecordTool.m */; };
 		BAA793CC224C7BC500F0C5E7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAA793CE224C7BC500F0C5E7 /* LaunchScreen.storyboard */; };
@@ -334,6 +336,7 @@
 		BAE97CA022F9740000A60B47 /* SDRotationLoopProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE97C9E22F9740000A60B47 /* SDRotationLoopProgressView.m */; };
 		BAE97CA322F9743200A60B47 /* SDBaseProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE97CA222F9743200A60B47 /* SDBaseProgressView.m */; };
 		BAE97CA522F99FC000A60B47 /* image_gyro_step2.png in Resources */ = {isa = PBXBuildFile; fileRef = BAE97CA422F99FC000A60B47 /* image_gyro_step2.png */; };
+		BAE97CA822FD141300A60B47 /* JEPanoWorkingView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE97CA722FD141300A60B47 /* JEPanoWorkingView.m */; };
 		BAEAF0482251C67B00410EED /* JESmartCameraViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BAEAF0472251C67B00410EED /* JESmartCameraViewController.mm */; };
 		BAEAF04B22520F2400410EED /* JESmartCameraModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEAF04A22520F2400410EED /* JESmartCameraModel.m */; };
 		BAEAF04E22533AE100410EED /* SRGradientbackground.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE8DBE322487A7E00217B0E /* SRGradientbackground.m */; };
@@ -427,12 +430,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		469A59532B175F4787F39ED2 /* Pods-SIRUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SIRUI.release.xcconfig"; path = "Target Support Files/Pods-SIRUI/Pods-SIRUI.release.xcconfig"; sourceTree = "<group>"; };
+		1A544C3727443BD9B9D99D1B /* libPods-SIRUI Swift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SIRUI Swift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B6295919FECA2A8B470CF31 /* Pods-SIRUI Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SIRUI Swift.release.xcconfig"; path = "Target Support Files/Pods-SIRUI Swift/Pods-SIRUI Swift.release.xcconfig"; sourceTree = "<group>"; };
 		BA00D96422715AAB0096A94F /* JECameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JECameraManager.h; sourceTree = "<group>"; };
 		BA00D96522715AAB0096A94F /* JECameraManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JECameraManager.m; sourceTree = "<group>"; };
 		BA0937F02230BE77007AFEA9 /* icon.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icon.xcassets; sourceTree = "<group>"; };
 		BA0B1893226978A400D71C53 /* JECustomFunctionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JECustomFunctionView.h; sourceTree = "<group>"; };
 		BA0B1894226978A400D71C53 /* JECustomFunctionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JECustomFunctionView.m; sourceTree = "<group>"; };
+		BA178F04230E8FD000333905 /* JEChangeLanguage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEChangeLanguage.h; sourceTree = "<group>"; };
+		BA178F05230E8FD000333905 /* JEChangeLanguage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JEChangeLanguage.m; sourceTree = "<group>"; };
 		BA1A220522802296004B5C12 /* JEPhotoBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEPhotoBrowserViewController.h; sourceTree = "<group>"; };
 		BA1A220622802296004B5C12 /* JEPhotoBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JEPhotoBrowserViewController.m; sourceTree = "<group>"; };
 		BA1A220C22816918004B5C12 /* UIView+layoutnew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+layoutnew.m"; sourceTree = "<group>"; };
@@ -635,6 +641,8 @@
 		BA831B10221F9D8A00FB5BCD /* JEBluetoothManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEBluetoothManager.h; sourceTree = "<group>"; };
 		BA831B11221F9D8A00FB5BCD /* JEBluetoothManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JEBluetoothManager.m; sourceTree = "<group>"; };
 		BA831B14221FA31500FB5BCD /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		BA8BE2F92317737100DB2EF5 /* JEHitchcockSettingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEHitchcockSettingView.h; sourceTree = "<group>"; };
+		BA8BE2FA2317737100DB2EF5 /* JEHitchcockSettingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JEHitchcockSettingView.m; sourceTree = "<group>"; };
 		BA8FE292226873030025AD33 /* JESettingPickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JESettingPickerView.h; sourceTree = "<group>"; };
 		BA8FE293226873030025AD33 /* JESettingPickerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JESettingPickerView.m; sourceTree = "<group>"; };
 		BA9AB79422939F08002FA3E1 /* SRTimelapseRecordTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRTimelapseRecordTool.h; sourceTree = "<group>"; };
@@ -1115,6 +1123,8 @@
 		BAE97CA122F9743200A60B47 /* SDBaseProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseProgressView.h; sourceTree = "<group>"; };
 		BAE97CA222F9743200A60B47 /* SDBaseProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBaseProgressView.m; sourceTree = "<group>"; };
 		BAE97CA422F99FC000A60B47 /* image_gyro_step2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image_gyro_step2.png; sourceTree = "<group>"; };
+		BAE97CA622FD141300A60B47 /* JEPanoWorkingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEPanoWorkingView.h; sourceTree = "<group>"; };
+		BAE97CA722FD141300A60B47 /* JEPanoWorkingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JEPanoWorkingView.m; sourceTree = "<group>"; };
 		BAEAF0462251C67B00410EED /* JESmartCameraViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JESmartCameraViewController.h; sourceTree = "<group>"; };
 		BAEAF0472251C67B00410EED /* JESmartCameraViewController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = JESmartCameraViewController.mm; sourceTree = "<group>"; };
 		BAEAF04922520F2400410EED /* JESmartCameraModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JESmartCameraModel.h; sourceTree = "<group>"; };
@@ -1208,8 +1218,7 @@
 		BAFD3BBC2286C04700BB0DE1 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		BAFD3BC42286CEDD00BB0DE1 /* UIButton+Countdown.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+Countdown.h"; sourceTree = "<group>"; };
 		BAFD3BC52286CEDD00BB0DE1 /* UIButton+Countdown.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Countdown.m"; sourceTree = "<group>"; };
-		EF81FCBF37BB711286564CE1 /* Pods-SIRUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SIRUI.debug.xcconfig"; path = "Target Support Files/Pods-SIRUI/Pods-SIRUI.debug.xcconfig"; sourceTree = "<group>"; };
-		FCE0F14F210A4512629AACDF /* libPods-SIRUI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SIRUI.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDBC3CABC89E6AD1D729F879 /* Pods-SIRUI Swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SIRUI Swift.debug.xcconfig"; path = "Target Support Files/Pods-SIRUI Swift/Pods-SIRUI Swift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1229,7 +1238,7 @@
 				BAFC864122447B83004C94EC /* libc++.tbd in Frameworks */,
 				BAC3A895224388AB0004084D /* UIKit.framework in Frameworks */,
 				BAC3A893224388A10004084D /* Foundation.framework in Frameworks */,
-				2E700EC62431E078B09534C6 /* libPods-SIRUI.a in Frameworks */,
+				1FF63ECA8B8CC36BCDD8D203 /* libPods-SIRUI Swift.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1250,11 +1259,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		48EB38496D231A0CF62756CC /* Pods */ = {
+		87123B030A4F709B9E22AA07 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				EF81FCBF37BB711286564CE1 /* Pods-SIRUI.debug.xcconfig */,
-				469A59532B175F4787F39ED2 /* Pods-SIRUI.release.xcconfig */,
+				CDBC3CABC89E6AD1D729F879 /* Pods-SIRUI Swift.debug.xcconfig */,
+				8B6295919FECA2A8B470CF31 /* Pods-SIRUI Swift.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1274,6 +1283,7 @@
 				BA26CDF922A0FDE800D2231F /* WebServices */,
 				BA00D96722715AB70096A94F /* Camera */,
 				BA70736622321E2B00940489 /* BluetoothManager */,
+				BA178F07230E8FD700333905 /* ChangeLanguage */,
 			);
 			path = "Communication-Tools";
 			sourceTree = "<group>";
@@ -1313,6 +1323,15 @@
 				BA0B1894226978A400D71C53 /* JECustomFunctionView.m */,
 			);
 			path = CustomFunction;
+			sourceTree = "<group>";
+		};
+		BA178F07230E8FD700333905 /* ChangeLanguage */ = {
+			isa = PBXGroup;
+			children = (
+				BA178F04230E8FD000333905 /* JEChangeLanguage.h */,
+				BA178F05230E8FD000333905 /* JEChangeLanguage.m */,
+			);
+			path = ChangeLanguage;
 			sourceTree = "<group>";
 		};
 		BA1A220A228022AA004B5C12 /* Album */ = {
@@ -1679,7 +1698,7 @@
 				BA831AFB221EAFD300FB5BCD /* SIRUIUITests */,
 				BA831AD6221EAFD200FB5BCD /* Products */,
 				BA831B13221FA31500FB5BCD /* Frameworks */,
-				48EB38496D231A0CF62756CC /* Pods */,
+				87123B030A4F709B9E22AA07 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1797,9 +1816,18 @@
 				BAC3A894224388AB0004084D /* UIKit.framework */,
 				BAC3A892224388A10004084D /* Foundation.framework */,
 				BA831B14221FA31500FB5BCD /* CoreBluetooth.framework */,
-				FCE0F14F210A4512629AACDF /* libPods-SIRUI.a */,
+				1A544C3727443BD9B9D99D1B /* libPods-SIRUI Swift.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BA8BE2FC2317737600DB2EF5 /* HitchcockSettingView */ = {
+			isa = PBXGroup;
+			children = (
+				BA8BE2F92317737100DB2EF5 /* JEHitchcockSettingView.h */,
+				BA8BE2FA2317737100DB2EF5 /* JEHitchcockSettingView.m */,
+			);
+			path = HitchcockSettingView;
 			sourceTree = "<group>";
 		};
 		BA9AB79722939F0D002FA3E1 /* TimelapseResord */ = {
@@ -2504,6 +2532,8 @@
 		BAD25D93228F9CFD0057F217 /* Panorama */ = {
 			isa = PBXGroup;
 			children = (
+				BAE97CA622FD141300A60B47 /* JEPanoWorkingView.h */,
+				BAE97CA722FD141300A60B47 /* JEPanoWorkingView.m */,
 				BAD25D94228F9D230057F217 /* panoWaitingView2.xib */,
 			);
 			path = Panorama;
@@ -2604,6 +2634,7 @@
 				BAF131FB226AB850007FEE8F /* Bottom */,
 				BAF131F9226AB7F2007FEE8F /* Filter */,
 				BAEC202B22618D6C006631E8 /* Setting */,
+				BA8BE2FC2317737600DB2EF5 /* HitchcockSettingView */,
 				BAF131F8226AB796007FEE8F /* LocusTimeLapseView */,
 				BAC3D6AF2298F6D400996836 /* TimeLapseView */,
 				BAF131FC226AB858007FEE8F /* Background */,
@@ -2731,7 +2762,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BA831B01221EAFD300FB5BCD /* Build configuration list for PBXNativeTarget "SIRUI Swift" */;
 			buildPhases = (
-				06E7CDA3692451D90452E0AD /* [CP] Check Pods Manifest.lock */,
+				ABFE4E1B5B1739568C082E9E /* [CP] Check Pods Manifest.lock */,
 				BA831AD1221EAFD200FB5BCD /* Sources */,
 				BA831AD2221EAFD200FB5BCD /* Frameworks */,
 				BA831AD3221EAFD200FB5BCD /* Resources */,
@@ -2896,7 +2927,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		06E7CDA3692451D90452E0AD /* [CP] Check Pods Manifest.lock */ = {
+		ABFE4E1B5B1739568C082E9E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2911,7 +2942,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SIRUI-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-SIRUI Swift-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3010,6 +3041,7 @@
 				BAEEB3E22266D4AF00466295 /* IF1977Filter.m in Sources */,
 				BA831ADD221EAFD200FB5BCD /* JEMainViewController.m in Sources */,
 				BA1A222D22816918004B5C12 /* TOCropToolbar.m in Sources */,
+				BAE97CA822FD141300A60B47 /* JEPanoWorkingView.m in Sources */,
 				BA8FE294226873030025AD33 /* JESettingPickerView.m in Sources */,
 				BAC3A89C22438A030004084D /* FileUtils.m in Sources */,
 				BA26CE1522ADF2AB00D2231F /* YYBuyViewController.m in Sources */,
@@ -3086,6 +3118,7 @@
 				BAC3AA0D22438A580004084D /* GPUImageHueFilter.m in Sources */,
 				BAC3AA1522438A580004084D /* GPUImageExclusionBlendFilter.m in Sources */,
 				BAC3AA3D22438A580004084D /* GPUImageSourceOverBlendFilter.m in Sources */,
+				BA178F06230E8FD000333905 /* JEChangeLanguage.m in Sources */,
 				BA26CE2422ADF3A500D2231F /* AXWebViewControllerActivitySafari.m in Sources */,
 				BAC3AA7922438A580004084D /* GPUImageNormalBlendFilter.m in Sources */,
 				BAE97C9722F92F7E00A60B47 /* JEGyroCalibrationViewController.m in Sources */,
@@ -3203,6 +3236,7 @@
 				BAC3AA6B22438A580004084D /* GPUImageMedianFilter.m in Sources */,
 				BAC3A9F122438A580004084D /* GPUImageFilterGroup.m in Sources */,
 				BAC3AA5522438A580004084D /* GPUImageContrastFilter.m in Sources */,
+				BA8BE2FB2317737100DB2EF5 /* JEHitchcockSettingView.m in Sources */,
 				BAC3AA1122438A580004084D /* GPUImageBilateralFilter.m in Sources */,
 				BA26CE1422ADF2AB00D2231F /* YYWebViewController.m in Sources */,
 				BAC3AA0722438A580004084D /* GPUImageVignetteFilter.m in Sources */,
@@ -3431,7 +3465,7 @@
 		};
 		BA831B02221EAFD300FB5BCD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EF81FCBF37BB711286564CE1 /* Pods-SIRUI.debug.xcconfig */;
+			baseConfigurationReference = CDBC3CABC89E6AD1D729F879 /* Pods-SIRUI Swift.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3476,7 +3510,7 @@
 		};
 		BA831B03221EAFD300FB5BCD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 469A59532B175F4787F39ED2 /* Pods-SIRUI.release.xcconfig */;
+			baseConfigurationReference = 8B6295919FECA2A8B470CF31 /* Pods-SIRUI Swift.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

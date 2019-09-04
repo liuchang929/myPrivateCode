@@ -65,7 +65,7 @@
         _textView.backgroundColor = [UIColor clearColor];
         _textView.textAlignment = NSTextAlignmentLeft;
         _textView.keyboardType = UIKeyboardTypeDefault;
-        _textView.placeholder = NSLocalizedString(@"随意拖动,输入文字...",nil);
+        _textView.placeholder = JELocalizedString(@"随意拖动,输入文字...",nil);
         _textView.font = [UIFont systemFontOfSize:18.0f];
         [_textView sizeToFit];
          _textView.center = self.view.center;
@@ -83,7 +83,7 @@
     
     self.view.backgroundColor = [UIColor blackColor];
     
-    self.titleArray = @[NSLocalizedString(@"Origin",nil),NSLocalizedString(@"Janpanese&Korean",nil), NSLocalizedString(@"Modern",nil), NSLocalizedString(@"Funk",nil),NSLocalizedString(@"Eastern",nil), NSLocalizedString(@"Black&White",nil), NSLocalizedString(@"Western",nil), NSLocalizedString(@"Old School",nil),NSLocalizedString(@"Glow",nil),NSLocalizedString(@"Sharp",nil),NSLocalizedString(@"Gaussian Blur",nil),NSLocalizedString(@"Distorting Mirror",nil),NSLocalizedString(@"Fisheye",nil),NSLocalizedString(@"Sketch",nil)];
+    self.titleArray = @[JELocalizedString(@"Origin",nil),JELocalizedString(@"Janpanese&Korean",nil), JELocalizedString(@"Modern",nil), JELocalizedString(@"Funk",nil),JELocalizedString(@"Eastern",nil), JELocalizedString(@"Black&White",nil), JELocalizedString(@"Western",nil), JELocalizedString(@"Old School",nil),JELocalizedString(@"Glow",nil),JELocalizedString(@"Sharp",nil),JELocalizedString(@"Gaussian Blur",nil),JELocalizedString(@"Distorting Mirror",nil),JELocalizedString(@"Fisheye",nil),JELocalizedString(@"Sketch",nil)];
     
     self.filterArray = [NSMutableArray array];
         
@@ -296,7 +296,7 @@
         
         [self filterViewHiddenNO];
         
-        self.clProgress.progressHUD.labelText = NSLocalizedString(@"Video Processing...",nil);
+        self.clProgress.progressHUD.labelText = JELocalizedString(@"Video Processing...",nil);
         
         self.clProgress.hidden = NO;
     
@@ -399,20 +399,20 @@
         if ([[JECameraManager shareCAMSingleton] saveVideoPreview:[self firstFrameWithVideoURL:videoUrl size:[self getUserSaveVideoResolution]] toSandboxWithFileName:[NSString stringWithFormat:@"%@.png", videoPreString]]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.clProgress.hidden = YES;
-                SHOW_HUD_DELAY(NSLocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                SHOW_HUD_DELAY(JELocalizedString(@"Saved", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
             });
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.clProgress.hidden = YES;
-                SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+                SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
             });
         }
     }
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.clProgress.hidden = YES;
-            SHOW_HUD_DELAY(NSLocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
+            SHOW_HUD_DELAY(JELocalizedString(@"Failed", comment: ""),[UIApplication sharedApplication].keyWindow, HUD_SHOW_DELAY_TIME);
         });
     }
     

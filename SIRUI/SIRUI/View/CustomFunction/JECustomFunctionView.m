@@ -57,7 +57,7 @@
     _headView.backgroundColor = [UIColor blackColor];
     _headView.alpha = 0.5;
     _headLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _headView.frame.size.width, _headView.frame.size.height)];
-    _headLabel.text = NSLocalizedString(@"Press the Fn button twice to start", nil);
+    _headLabel.text = JELocalizedString(@"Press the Fn button twice to start", nil);
     _headLabel.textColor = [UIColor whiteColor];
     _headLabel.textAlignment = NSTextAlignmentCenter;
     _headLabel.backgroundColor = [UIColor clearColor];
@@ -189,7 +189,7 @@
     if (cellLabel == nil) {
         cellLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, CELL_HEIGHT)];
         cellLabel.center = CGPointMake(cellView.center.x + 20, cellView.center.y);
-        cellLabel.text = NSLocalizedString(_functionArray[row], nil);
+        cellLabel.text = JELocalizedString(_functionArray[row], nil);
         cellLabel.font = [UIFont systemFontOfSize:CELL_FONT];
         [cellLabel setTextAlignment:NSTextAlignmentCenter];
         [cellLabel setBackgroundColor:[UIColor clearColor]];

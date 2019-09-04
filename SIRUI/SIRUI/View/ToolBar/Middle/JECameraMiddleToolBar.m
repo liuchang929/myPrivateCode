@@ -78,10 +78,10 @@
 
 //- (void)bluetoothSignAction {
 //    if (_bluetoothSign.isSelected) {
-//        SHOW_HUD_DELAY(NSLocalizedString(@"Bluetooth connected", nil), [UIApplication sharedApplication].keyWindow, 0.5);
+//        SHOW_HUD_DELAY(JELocalizedString(@"Bluetooth connected", nil), [UIApplication sharedApplication].keyWindow, 0.5);
 //    }
 //    else {
-//        SHOW_HUD_DELAY(NSLocalizedString(@"There is no bluetooth nearby", nil), [UIApplication sharedApplication].keyWindow, 0.5);
+//        SHOW_HUD_DELAY(JELocalizedString(@"There is no bluetooth nearby", nil), [UIApplication sharedApplication].keyWindow, 0.5);
 //    }
 //}
 

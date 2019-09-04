@@ -73,13 +73,13 @@ namespace sr {
         
         Status status;
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.2), @"hint":NSLocalizedString(@"Match images...", nil)}];
+        [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.2), @"hint":JELocalizedString(@"Match images...", nil)}];
 
         
         if ((status = matchImages()) != OK)
             return status;
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.3), @"hint":NSLocalizedString(@"Estimate cameraParams...", nil)}];
+        [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.3), @"hint":JELocalizedString(@"Estimate cameraParams...", nil)}];
 
         
         if ((status = estimateCameraParams()) != OK)
@@ -125,7 +125,7 @@ namespace sr {
             masks[i].setTo(cv::Scalar::all(255));
         }
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.35), @"hint":NSLocalizedString(@"Warp images and their masks...", nil)}];
+        [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.35), @"hint":JELocalizedString(@"Warp images and their masks...", nil)}];
 
         // Warp images and their masks
         cv::Ptr<cv::detail::RotationWarper> w = warper_->create(float(warped_image_scale_ * seam_work_aspect_));
@@ -141,7 +141,7 @@ namespace sr {
             corners[i] = w->warp(seam_est_imgs_[i], K, cameras_[i].R, cv::INTER_LINEAR, cv::BORDER_CONSTANT, images_warped[i]);
             sizes[i] = images_warped[i].size();
             
-            [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.35+i*0.02), @"hint":[NSString stringWithFormat:NSLocalizedString(@"Warping %zu/%zu image...", nil), i, imgs_.size()]}];
+            [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.35+i*0.02), @"hint":[NSString stringWithFormat:JELocalizedString(@"Warping %zu/%zu image...", nil), i, imgs_.size()]}];
 
             w->warp(masks[i], K, cameras_[i].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, masks_warped[i]);
         }
@@ -186,7 +186,7 @@ namespace sr {
         {
             @autoreleasepool {
             
-            [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.55+0.02*img_idx), @"hint":[NSString stringWithFormat:NSLocalizedString(@"Compositing %zu/%zu images...", nil), img_idx, imgs_.size()]}];
+            [[NSNotificationCenter defaultCenter]postNotificationName:PANO_PROGRESS object:@{@"progress":@(0.55+0.02*img_idx), @"hint":[NSString stringWithFormat:JELocalizedString(@"Compositing %zu/%zu images...", nil), img_idx, imgs_.size()]}];
 
             NSLog(@"%@", [NSString stringWithFormat:@"Compositing image #%d", indices_[img_idx] + 1] );
 #if ENABLE_LOG
